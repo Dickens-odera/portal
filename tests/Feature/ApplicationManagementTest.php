@@ -6,7 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Applications;
-class ApplicationManagerTest extends TestCase
+use App\User;
+class ApplicationManagementTest extends TestCase
 {
     use RefreshDatabase;
     /**
@@ -34,4 +35,5 @@ class ApplicationManagerTest extends TestCase
         $response->assertOk();
         $this->assertCount(1, Applications::all());
     }
+  
 }
