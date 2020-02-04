@@ -5,9 +5,12 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-
+use App\User;
+use App\Posts;
 class UserManagementTest extends TestCase
 {
+    use RefreshDatabase;
+    //use DatabaseMigration;
     /**
      * A basic feature test example.
      *
@@ -24,8 +27,9 @@ class UserManagementTest extends TestCase
      */
     public function test_that_new_users_can_be_created()
     {
+        $this->withoutExceptionHandling();
         $users = \factory(\App\User::class, 10)->create();
-        $n = count($users) > 9;
+        $n = count($users) >= 9;
         $this->assertTrue($n);
     }
     /**
@@ -37,4 +41,23 @@ class UserManagementTest extends TestCase
         $name = $user->name;
         $this->assertNotEmpty($name);
     } 
+    /**
+     * @test
+     */
+    public function test_that_a_post_can_be_added()
+    {
+        $this->withoutExceptionHandling();
+        if(\factory(\App\Posts::class,1)->create())
+        {
+            $posts_data = \factory(\App\Posts::class)->make();
+            $response = $this->post('/posts',[
+                'title'=>$posts_data->title,
+                'author'=>$posts_data->author
+            ]);
+            $response->assertOk();
+            $this->assertCount(1, Posts::all());
+        }
+        else
+        return false;
+    }
 }

@@ -8,6 +8,6 @@ use Faker\Generator as Faker;
 $factory->define(Posts::class, function (Faker $faker) {
     return [
         'title'=>$faker->sentence,
-        'author'->$faker->name
+        'author'=>$faker->name
     ];
 });
