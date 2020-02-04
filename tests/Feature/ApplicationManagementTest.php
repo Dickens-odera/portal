@@ -21,19 +21,21 @@ class ApplicationManagementTest extends TestCase
 
         $response->assertStatus(200);
     }
-    /** 
+    /**
      * @test
-     * 
+     *
      */
     public function test_that_an_application_can_be_added()
     {
         $this->withoutExceptionHandling();
-        $response = $this->post('/applications',[
-            'name'=>'Dickens Odera',
-            'email'=>'odickens@student.mmust.ac.ke'
+        $response = $this->post('/applications',
+        [
+            'student_name'=>'Dickens Odera',
+            'reg_number'=>'COM/B/01-02204/2016',
+            'student_phone'=>'0714905613'
         ]);
         $response->assertOk();
         $this->assertCount(1, Applications::all());
     }
-  
+
 }

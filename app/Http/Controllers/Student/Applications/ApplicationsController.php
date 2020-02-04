@@ -36,8 +36,9 @@ class ApplicationsController extends Controller
     public function store(Request $request)
     {
         $data = request()->validate([
-            'name'=>'required',
-            'email'=>'required'
+            'student_name'=>'required',
+            'student_phone'=>'required',
+            'reg_number'=>'required'
         ]);
         Applications::create($data);
     }
