@@ -9,9 +9,9 @@ class PostsController extends Controller
 {
     public function post_data()
     {
-        //Posts::create($this->validate_request());
+        Posts::create($this->validate_request());
     }
-    private function validate_request()
+    protected function validate_request()
     {
        return request()->validate([
             'title'=>'required',
