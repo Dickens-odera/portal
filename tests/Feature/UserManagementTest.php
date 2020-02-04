@@ -40,7 +40,7 @@ class UserManagementTest extends TestCase
         $user = \factory(\App\User::class)->make();
         $name = $user->name;
         $this->assertNotEmpty($name);
-    } 
+    }
     /**
      * @test
      */
