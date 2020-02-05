@@ -47,10 +47,10 @@ class UserManagementTest extends TestCase
     public function test_that_a_post_can_be_added()
     {
         $this->withoutExceptionHandling();
-            $posts_data = \factory(\App\Posts::class)->make();
-            $response = $this->post('/posts',[
-                'title'=>$posts_data->title,
-                'author'=>$posts_data->author
+        $posts_data = \factory(\App\Posts::class)->make();
+        $response = $this->post('/posts',[
+            'title'=>$posts_data->title,
+            'author'=>$posts_data->author
             ]);
             $response->assertOk();
             $this->assertCount(1, Posts::all());

@@ -72,11 +72,10 @@ class ApplicationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Applications $app_id)
     {
-        //
+        $app_id->update($this->validate_request());
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -86,5 +85,13 @@ class ApplicationsController extends Controller
     public function destroy($id)
     {
         //
+    }
+    protected function validate_request()
+    {
+        return request()->validate([
+            'student_name'=>'required',
+            'student_phone'=>'required',
+            'reg_number'=>'required'
+        ]);
     }
 }

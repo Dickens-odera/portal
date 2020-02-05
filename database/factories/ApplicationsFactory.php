@@ -10,6 +10,6 @@ $factory->define(Applications::class, function (Faker $faker) {
     return [
         'student_name'=>$faker->name,
         'student_phone'=>$faker->phoneNumber,
-        'reg_number'=>$faker->text($mxNbChars = 12)
+        'reg_number'=>$faker->text
     ];
 });
