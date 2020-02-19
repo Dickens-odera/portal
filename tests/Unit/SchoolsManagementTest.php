@@ -21,4 +21,10 @@ class SchoolsManagementTest extends TestCase
         $response->assertOk();
         $this->assertCount(1, Schools::all());
     }
+    public function test_if_the_schools_index_page_exists()
+    {
+        $this->withoutExceptionHandling();
+        $response = $this->get('staff/schools');
+        $response->assertStatus(200);
+    }
 }
