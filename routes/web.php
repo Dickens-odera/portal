@@ -11,3 +11,5 @@ Route::post('/applications',['as'=>'applications.submit','uses'=>'Student\Applic
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/posts','Student\Posts\PostsController@post_data')->name('student.post.submit');
 Route::patch('/applications/{app_id}',['as'=>'application.update','uses'=>'Student\Applications\ApplicationsController@update']);
+//schools
+Route::post('/addschool','Staff\Schools\SchoolsController@store')->name('school.submit');
