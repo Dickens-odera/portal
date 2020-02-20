@@ -21,6 +21,9 @@ class CreateStudentsTable extends Migration
             $table->integer('idNumber')->max(8)->unique();
             $table->string('regNumber')->unique();
             $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
