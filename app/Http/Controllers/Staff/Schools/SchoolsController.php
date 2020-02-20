@@ -78,7 +78,7 @@ class SchoolsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $school_id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $school_id)

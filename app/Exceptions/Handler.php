@@ -55,7 +55,9 @@ class Handler extends ExceptionHandler
         return parent::render($request, $exception);
     }
     /**
-     * @return void
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Auth\AuthenticationException $exception
+     * @return mixed
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
