@@ -23,7 +23,7 @@ class RegistrarController extends Controller
             'middleName'=>'string|nullable',
             'lastName'=>'string|nullable',
             'regNumber'=>'required',
-            'email'=>'email|unique:students|required',
+            'email'=>'email|required|unique:students',
             'idNumber'=>'nullable'
         ]);
     }

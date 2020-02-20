@@ -30,18 +30,7 @@ class StudentManagementTest extends TestCase
     public function test_that_a_student_can_be_added()
     {
         $this->withoutExceptionHandling();
-        $data = factory(Student::class)->make();
-        //dd($data);
-        $response = $this->post('/registrar/student-add',[
-            'surname'=>$data->surname,
-            'firstName'=>$data->firstName,
-            'middlename'=>$data->middleName,
-            'lastName'=>$data->lastName,
-            'idNumber'=>$data->idNumber,
-            'email'=>$data->email,
-            'regNumber'=>$data->regNumber,
-            'password'=>$data->password,
-        ]);
+        $response = $this->post('/registrar/student-add',$this->request_data());
         $response->assertOk();
         $this->assertCount(1, Student::all());
     }
@@ -49,26 +38,32 @@ class StudentManagementTest extends TestCase
     public function test_that_email_must_be_provided()
     {
         //$this->withoutExceptionHandling();
+        $response = $this->post('/registrar/student-add',array_merge($this->request_data(),['email'=>'']));
+        $response->assertSessionHasErrors('email');
+    }
+    /**
+     * @test
+    */
+    public function test_that_regNumber_must_be_provided()
+    {
+        $response = $this->post('/registrar/student-add', array_merge($this->request_data(),['regNumber'=>'']));
+        $response->assertSessionHasErrors('regNumber');
+    }
+    /**
+     * @return void
+     */
+    private function request_data()
+    {
         $data = factory(Student::class)->make();
-        $response = $this->post('/registrar/student-add',[
+        return [
             'surname'=>$data->surname,
             'firstName'=>$data->firstName,
             'middleName'=>$data->middleName,
             'lastName'=>$data->lastName,
             'idNumber'=>$data->idNumber,
-            'email'=>'',
             'regNumber'=>$data->regNumber,
+            'email'=>$data->email,
             'password'=>$data->password
-        ]);
-        $response->assertSessionHasErrors('email');
-    }
-    /**
-     *
-     */
-    private function request_data()
-    {
-        return [
-            'name'=>'required'
         ];
     }
 }
