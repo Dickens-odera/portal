@@ -101,7 +101,6 @@ return [
             'driver'=>'eloquent',
             'model'=>App\Registrar::class
         ]
-
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
