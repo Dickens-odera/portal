@@ -5,11 +5,13 @@ namespace Tests\Unit;
 //use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
 use App\Schools;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SchoolsManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    //use RefreshDatabase;
+    use DatabaseMigrations;
     /* @test*/
     public function test_if_a_school_can_be_added()
     {
@@ -65,6 +67,7 @@ class SchoolsManagementTest extends TestCase
         //dd($schools);
         $response = $this->delete('/deleteSchool/'.$schools->school_id);
         $response->assertOk();
-        $this->assertCount(0, Schools::all());
+        //$this->assertCount(0, Schools::all());
+        $this->assertDeleted($data);
     }
 }

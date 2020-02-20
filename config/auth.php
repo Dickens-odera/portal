@@ -1,5 +1,4 @@
 <?php
-
 return [
 
     /*
@@ -40,6 +39,22 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'student'=>[
+            'driver'=>'session',
+            'provider'=>'students'
+        ],
+        'dean'=>[
+            'driver'=>'session',
+            'provider'=>'deans'
+        ],
+        'cod'=>[
+            'driver'=>'session',
+            'provider'=>'cods'
+        ],
+        'registrar'=>[
+            'driver'=>'session',
+            'provider'=>'registrars'
+        ],
 
         'api' => [
             'driver' => 'token',
@@ -68,8 +83,24 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\User::class
         ],
+        'students'=>[
+            'driver'=>'eloquent',
+            'model'=>App\Student::class,
+        ],
+        'deans'=>[
+            'driver'=>'eloquent',
+            'model'=>App\Deans::class
+        ],
+        'cod'=>[
+            'driver'=>'eloquent',
+            'model'=>App\CODs::class
+        ],
+        'registrars'=>[
+            'driver'=>'eloquent',
+            'model'=>App\Registrar::class
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

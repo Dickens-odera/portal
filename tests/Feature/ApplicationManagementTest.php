@@ -7,9 +7,12 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Applications;
 use App\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+
 class ApplicationManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    //use RefreshDatabase;
+    use DatabaseMigrations;
     /**
      * A basic feature test example.
      *
@@ -28,18 +31,16 @@ class ApplicationManagementTest extends TestCase
     public function test_that_an_application_can_be_added()
     {
         $this->withoutExceptionHandling();
-        factory(Applications::class, 1)->create();
-        $this->assertCount(1, Applications::all());
-        /*
+        $data =  factory(Applications::class)->make();
         $response = $this->post('/applications',
         [
-            'student_name'=>'Dickens Odera',
-            'reg_number'=>'COM/B/01-02204/2016',
-            'student_phone'=>'0714905613'
+            'student_name'=>$data->student_name,
+            'reg_number'=>$data->reg_number,
+            'student_phone'=>$data->student_phone
         ]);
         $response->assertOk();
         $this->assertCount(1, Applications::all());
-        */
+
     }
 
 }
