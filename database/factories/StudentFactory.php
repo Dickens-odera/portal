@@ -13,7 +13,7 @@ $factory->define(Student::class, function (Faker $faker) {
         'middleName'=>$faker->firstName,
         'surname'=>$faker->lastName,
         'lastName'=>$faker->lastName,
-        'idNumber'=>$faker->integer,
+        'idNumber'=>$faker->numberBetween(0,8),
         'email'=>$faker->unique()->safeEmail,
         'password'=>Hash::make('password'),
         'regNumber'=>$faker->text,

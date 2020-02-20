@@ -30,8 +30,9 @@ Route::prefix('dean')->group(function()
 Route::prefix('registrar')->group(function()
 {
     Route::get('/login-form',['as'=>'registrat.login.form','uses'=>'Auth\Registrar\RegistratLoginControler@showLoginForm']);
-    Route::pist('/login',['as'=>'registrar.login','uses'=>'Auth\Registrar\RegistrarLoginController@login']);
+    Route::post('/login',['as'=>'registrar.login','uses'=>'Auth\Registrar\RegistrarLoginController@login']);
     Route::get('/dashboard','Auth\Registrar\RegustrarLoginCotroller@index')->name('registrar.dashboard');
+    Route::post('/student-add',['as'=>'registrar.student.add','uses'=>'Registrar\RegistrarController@addStudent']);
 });
 //the chairperson of department
 Route::prefix('cod')->group(function()
