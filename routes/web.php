@@ -14,3 +14,5 @@ Route::patch('/applications/{app_id}',['as'=>'application.update','uses'=>'Stude
 //schools
 Route::get('/staff/schools','Staff\Schools\SchoolsController@index')->name('schools.index');
 Route::post('/addschool','Staff\Schools\SchoolsController@store')->name('school.submit');
+Route::patch('/updateschool/{id}','Staff\Schools\SchoolsController@update')->name('school.update.submit');
+Route::delete('/deleteSchool/{school_id}','Staff\Schools\SchoolsController@destroy')->name('school.delete');

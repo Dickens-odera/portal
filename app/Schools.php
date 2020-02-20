@@ -8,5 +8,5 @@ class Schools extends Model
 {
     protected $table = 'schools';
     protected $fillable = ['school_name'];
-    //protected $guarded = [];
+    protected $guarded = ['school_id'];
 }

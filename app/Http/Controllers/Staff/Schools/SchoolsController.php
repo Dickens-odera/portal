@@ -72,7 +72,7 @@ class SchoolsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Schools::first()->update($this->validate_school_data());
     }
 
     /**
@@ -81,8 +81,19 @@ class SchoolsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $school_id)
     {
-        //
+        $school = Schools::where('school_id','=', $school_id);
+        $school->delete();
+    }
+    /**
+     * validation function
+     * @return void
+     */
+    protected function validate_school_data()
+    {
+        return request()->validate([
+            'school_name'=>'required'
+        ]);
     }
 }
