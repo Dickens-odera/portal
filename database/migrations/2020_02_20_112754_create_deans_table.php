@@ -20,7 +20,7 @@ class CreateDeansTable extends Migration
             $table->string('name')->nullable();
             $table->foreign('school_id')->references('school_id')->on('schools')->onDelete('cascade');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -10,9 +10,7 @@ class Student extends Model
      * @var string
      */
     protected $guard = 'student';
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $hidden = ['password'];
     /** 
      * @var array
