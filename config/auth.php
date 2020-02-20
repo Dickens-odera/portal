@@ -93,7 +93,7 @@ return [
             'driver'=>'eloquent',
             'model'=>App\Deans::class
         ],
-        'cod'=>[
+        'cods'=>[
             'driver'=>'eloquent',
             'model'=>App\CODs::class
         ],
@@ -129,6 +129,30 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'deans'=>[
+            'provider'=>'deans',
+            'table'=>'password_resets',
+            'expire'=>60,
+            'throttle'=>60,
+        ],
+        'students'=>[
+            'provider'=>'students',
+            'table'=>'password_resets',
+            'expire'=>60,
+            'throttle'=>60
+        ],
+        'cods'=>[
+            'provider'=>'cods',
+            'table'=>'password_resets',
+            'expire'=>60,
+            'throttle'=>60
+        ],
+        'registrars'=>[
+            'provider'=>'registrars',
+            'table'=>'password_resets',
+            'expire'=>60,
+            'throttle'=>60
+        ]
     ],
 
     /*
