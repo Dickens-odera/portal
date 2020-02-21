@@ -50,7 +50,7 @@ class StudentManagementTest extends TestCase
         $response->assertSessionHasErrors('regNumber');
     }
     /**
-     * @return void
+     * @return array
      */
     private function request_data()
     {
