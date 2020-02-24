@@ -15,7 +15,7 @@ class RegistrarController extends Controller
     /**
      *@return void
      */
-    protected function validateStudentDetails()
+    private function validateStudentDetails()
     {
         return request()->validate([
             'surname'=>'string|required',

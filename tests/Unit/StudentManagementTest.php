@@ -46,6 +46,7 @@ class StudentManagementTest extends TestCase
     */
     public function test_that_regNumber_must_be_provided()
     {
+       //$this->withoutExceptionHandling();
         $response = $this->post('/registrar/student-add', array_merge($this->request_data(),['regNumber'=>'']));
         $response->assertSessionHasErrors('regNumber');
     }

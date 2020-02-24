@@ -31,7 +31,7 @@
 					<img src="{!! asset('login-page/Login_v1/images/logo/MMUST.jpg" alt="IMG') !!}">
 				</div>
 
-                <form class="login100-form validate-form" method="post" action="{{ url('student.login.submit') }}">
+                <form class="login100-form validate-form" method="post" action="{{ route('student.login.submit') }}">
                     {{ csrf_field() }}
 					<span class="login100-form-title">
 						{{ __('STUDENT LOGIN') }}
@@ -49,7 +49,6 @@
 							<i class="fa fa-envelope" aria-hidden="true"></i>
 						</span>
 					</div>
-
 					<div class="wrap-input100 validate-input">
                         <input class="input100 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" type="password" placeholder="Password" >
                             @error('password')

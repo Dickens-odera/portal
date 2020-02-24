@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\Auth\Student;
+namespace App\Http\Controllers\Auth\Registrar;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class StudentLoginController extends Controller
+class RegistrarLoginController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest:student')->except(['logout']);
+        $this->middleware('guest:registrar')->except(['logout']);
     }
     //show the login page
     public function showLoginForm()
     {
-        return view('auth.student-login');
+        return view('auth.registrar-login');
     }
     public function login(Request $request)
     {
         $this->validateRequest();
-        if(Auth::guard('student')->attempt(['email'=>$request->email,'password'=>$request->password], $request->remember))
+        if(Auth::guard('registrar')->attempt(['email'=>$request->email,'password'=>$request->password], $request->remember))
         {
-            return redirect()->intended(route('student.dashboard'));
+            return redirect()->intended(route('registrar.dashboard'));
         }
         else
         {
@@ -32,10 +32,10 @@ class StudentLoginController extends Controller
     }
     public function logout()
     {
-        Auth::guard('student')->logout();
-        return redirect()->route('student.login');
+        Auth::guard('registrar')->logout();
+        return redirect()->route('registrar.login');
     }
-    /**
+      /**
      * @return array
      */
     private function validateRequest()
