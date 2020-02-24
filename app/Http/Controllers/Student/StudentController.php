@@ -13,6 +13,6 @@ class StudentController extends Controller
     }
     public function index()
     {
-        return view('student.dashboards');
+        return view('student.dashboard');
     }
 }

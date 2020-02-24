@@ -219,18 +219,18 @@
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="/storage/uploads/images/doctors/{{ Auth::user()->avartar}}" alt="Dr'Photo" style="" class="user-image">
+                  <img src="" alt="Dr'Photo" style="" class="user-image">
                 {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="user-image" alt="User Image"> --}}
-                <span class="hidden-xs">{{ Auth::user()->name }}</span>
+                <span class="hidden-xs">{{ Auth::user()->email }}</span>
               </a>
               <ul class="dropdown-menu">
                 <!-- User image -->
                 <li class="user-header">
                   {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="img-circle" alt="User Image"> --}}
-                  <img src="/storage/uploads/images/doctors/{{ Auth::user()->avartar}}" alt="Dr'Photo" style="">
+                  <img src="" alt="Dr'Photo" style="">
                   <p>
-                    {{ Auth::user()->name }}
-                    <small>Doctor</small>
+                    {{ Auth::user()->surname }}
+                    <small>Student</small>
                   </p>
                 </li>
                 <!-- Menu Body -->
