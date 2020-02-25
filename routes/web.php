@@ -26,6 +26,7 @@ Route::prefix('student')->group(function()
     Route::get('/dashboard','Student\StudentController@index')->name('student.dashboard');
     Route::get('/logout','Auth\Student\StudentLoginController@logout')->name('student.logout');
     Route::get('/applications','Student\Applications\ApplicationsController@index')->name('student.application.form');
+    Route::post('/applications','Student\Applications\ApplicationsController@store')->name('student.application.submit');
 });
 //the dean of school
 Route::prefix('dean')->group(function()

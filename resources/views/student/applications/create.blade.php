@@ -4,7 +4,7 @@
     <div class="box">
         <div class="box-header">APPLICATION AREA</div>
             <div class="box-body">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('student.application.submit') }}" method="POST" enctype="multipart/form-data">
                     <div class="col-md-12">
                         <div class="col-md-6">
                             <div class="card">

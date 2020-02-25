@@ -15,7 +15,6 @@ class ApplicationManagementTest extends TestCase
     use DatabaseMigrations;
     /**
      * A basic feature test example.
-     *
      * @return void
      */
     public function testExample()
@@ -40,7 +39,5 @@ class ApplicationManagementTest extends TestCase
         ]);
         $response->assertOk();
         $this->assertCount(1, Applications::all());
-
     }
-
 }
