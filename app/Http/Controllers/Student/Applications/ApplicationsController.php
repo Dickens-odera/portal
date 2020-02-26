@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Student\Applications;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Applications;
+use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
+//use Intervention\Image as Image;
+use Intervention\Image\Facades\Image;
 class ApplicationsController extends Controller
 {
     public function __construct()
@@ -42,14 +45,61 @@ class ApplicationsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = request()->validate([
-            'student_name'=>'required',
-            'student_phone'=>'required',
-            'reg_number'=>'required'
-        ]);
-        Applications::create($data);
+        //$this->validate_request();
+        $application = new Applications;
+        $application->student_name = $request->name;
+        $application->reg_number = $request->reg_number;
+        $application->student_phone = $request->phone;
+        $application->present_program = $request->current_program;
+        $application->present_school = $request->current_school;
+        $application->preffered_program = $request->preffered_program;
+        $application->preffered_school = $request->preffered_school;
+        $application->kcse_index = $request->kcse_index;
+        $application->kcse_year = $request->kcse_year;
+        $application->kuccps_password = $request->kuccps_password;
+        $application->mean_grade = $request->mean_grade;
+        $application->aggregate_points = $request->aggregate;
+        $application->cut_off_points = $request->cut_off_points;
+        $application->weighted_clusters = $request->weighted_clusters;
+        $application->subject_1 = $request->sub_1;
+        $application->subject_2 = $request->sub_2;
+        $application->subject_3 = $request->sub_3;
+        $application->subject_4 = $request->sub_4;
+        $application->subject_5 = $request->sub_5;
+        $application->subject_6 = $request->sub_6;
+        $application->subject_7 = $request->sub_7;
+        $application->subject_8 = $request->sub_8;
+        $application->grade_1 = $request->grade_1;
+        $application->grade_2 = $request->grade_2;
+        $application->grade_3 = $request->grade_3;
+        $application->grade_4 = $request->grade_4;
+        $application->grade_5 = $request->grade_5;
+        $application->grade_6 = $request->grade_6;
+        $application->grade_7 = $request->grade_7;
+        $application->grade_8 = $request->grade_8;
+        $application->transfer_reason = $request->transfer_reason;
+        if($request->file('result_slip'))
+        {
+            $file = $request->file('result_slip');
+            $ext = $file->getClientOriginalExtension();
+            $file_name = $request->kcse_index.'.'.$ext;
+            $path = public_path('uploads/images/applications/result-slips/'.$file_name);
+            Image::make($file->getRealPath())->resize(150,null, function($constraint)
+            {
+                $constraint->aspectRatio();
+            })->save($path);
+            $application->result_slip = $file_name;
+        }
+        if($application->save())
+        {
+            request()->session()->flash('success','Application submitted successfully');
+            return redirect(route('student.dashboard'));
+        }else
+        {
+            request()->session()->flash('error','Unable to submit application, try again');
+            return redirect()->back()->withInput($request->all());
+        }
     }
-
     /**
      * Display the specified resource.
      *
@@ -93,12 +143,85 @@ class ApplicationsController extends Controller
     {
         //
     }
-    protected function validate_request()
+    /**
+     * @return array
+     */
+    private function validate_request()
     {
         return request()->validate([
-            'student_name'=>'required',
-            'student_phone'=>'required',
-            'reg_number'=>'required'
+            'name'=>'required',
+            'reg_number'=>'required|unique:applications',
+            'student_phone'=>'required|phone|unique:applications',
+            'current_program'=>'required',
+            'current_school'=>'required',
+            'preffered_program'=>'required',
+            'preffered_school'=>'required',
+            'kcse_index'=>'required|unique:applications',
+            'kcse_year'=>'required',
+            'kuccps_password'=>'required|unique:applications',
+            'mean_grade'=>'required',
+            'aggregate'=>'required',
+            'cut_off_points'=>'required',
+            'weighted_cluster_points'=>'required',
+            'sub_1'=>'required',
+            'sub_2'=>'required',
+            'sub_3'=>'required',
+            'sub_4'=>'required',
+            'sub_5'=>'required',
+            'sub_6'=>'required',
+            'sub_7'=>'required',
+            'sub_8'=>'required',
+            'grade_1'=>'required',
+            'grade_2'=>'required',
+            'grade_3'=>'required',
+            'grade_4'=>'required',
+            'grade_5'=>'required',
+            'grade_6'=>'required',
+            'grade_7'=>'required',
+            'grade_8'=>'required',
+            'result_slip'=>'nullable|image|mimes:pdf,png,jpg|max:2048',
+            'transfer_reason'=>'required'
         ]);
+    }
+    /**
+     * @param Illuminate\Http\Request $request
+     * @return array
+     */
+    private function requestData(Request $request)
+    {
+       return   [
+            'student_name'=>$request->name,
+            'reg_number'=>$request->reg_number,
+            'student_phone'=>$request->phone,
+            'current_program'=>$request->current_program,
+            'current_school'=>$request->current_school,
+            'preffered_program'=>$request->preffered_program,
+            'preffered_school'=>$request->preffered_school,
+            'kcse_index'=>$request->kcse_index,
+            'kcse_year'=>$request->kcse_year,
+            'kuccps_password'=>$request->kuccps_password,
+            'mean_grade'=>$request->mean_grade,
+            'aggregate'=>$request->aggregate,
+            'cut_off_points'=>$request->cut_off_points,
+            'weighted_clusters'=>$request->weighted_clusters,
+            'sub_1'=>$request->sub_1,
+            'sub_2'=>$request->sub_2,
+            'sub_3'=>$request->sub_3,
+            'sub_4'=>$request->sub_4,
+            'sub_5'=>$request->sub_5,
+            'sub_6'=>$request->sub_6,
+            'sub_7'=>$request->sub_7,
+            'sub_8'=>$request->sub_8,
+            'grade_1'=>$request->grade_1,
+            'grade_2'=>$request->grade_2,
+            'grade_3'=>$request->grade_3,
+            'grade_4'=>$request->grade_4,
+            'grade_5'=>$request->grade_5,
+            'grade_6'=>$request->grade_6,
+            'grade_7'=>$request->grade_7,
+            'grade_8'=>$request->grade_8,
+            'result_slip'=>$request->result_slip,
+            'transfer_reason'=>$request->transfer_reason
+        ];
     }
 }
