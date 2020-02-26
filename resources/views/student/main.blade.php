@@ -2,6 +2,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
   {{-- @include('admin.partials.includes.header') --}}
+    @include('student.header')
     @include('student.sidebar')
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

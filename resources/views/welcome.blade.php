@@ -31,7 +31,7 @@
 					<img src="{!! asset('login-page/Login_v1/images/logo/MMUST.jpg" alt="IMG') !!}">
 				</div>
 
-                <form class="login100-form validate-form" method="post" action="{{ url('student.login.submit') }}">
+                <form class="login100-form validate-form" method="post" action="{{ route('student.login.submit') }}">
                     {{ csrf_field() }}
 					<span class="login100-form-title">
 						{{ __('STUDENT LOGIN') }}

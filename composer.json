@@ -14,6 +14,7 @@
         "intervention/image": "^2.5",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
+        "laravelcollective/html": "^6.0",
         "yajra/laravel-datatables-oracle": "^9.8"
     },
     "require-dev": {
