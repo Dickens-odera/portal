@@ -8,6 +8,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
       {{-- @include('admin.partials.includes.main') --}}
+      @include('includes.errors.custom')
             @yield('content')
     <!-- /.content -->
   </div>

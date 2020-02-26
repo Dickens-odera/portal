@@ -16,7 +16,6 @@
         <div class="box-header"></div>
             <div class="box-body">
                 <div class="col-md-12 text-uppercase text-white text-center bg-warning" style="margin:2em;padding:5px;border-radius:2px">{{ __('student application area') }}</div>
-                @include('includes.errors.custom')
                     {!!Form::open(['action'=>'Student\Applications\ApplicationsController@store','method'=>'post','enctype'=>'multipart/form-data'])!!}
                     <div class="col-md-12 row">
                         <div class="col-md-4">

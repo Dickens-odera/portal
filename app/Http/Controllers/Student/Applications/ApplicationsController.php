@@ -45,7 +45,7 @@ class ApplicationsController extends Controller
      */
     public function store(Request $request)
     {
-        //$this->validate_request();
+        $this->validate_request();
         $application = new Applications;
         $application->student_name = $request->name;
         $application->reg_number = $request->reg_number;
@@ -179,7 +179,7 @@ class ApplicationsController extends Controller
             'grade_6'=>'required',
             'grade_7'=>'required',
             'grade_8'=>'required',
-            'result_slip'=>'nullable|image|mimes:pdf,png,jpg|max:2048',
+            'result_slip'=>'required|image|mimes:pdf,png,jpg|max:2048',
             'transfer_reason'=>'required'
         ]);
     }
