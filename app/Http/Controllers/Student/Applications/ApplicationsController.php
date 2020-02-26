@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Applications;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
 //use Intervention\Image as Image;
 use Intervention\Image\Facades\Image;
 class ApplicationsController extends Controller
@@ -45,7 +46,13 @@ class ApplicationsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate_request();
+        //$this->validate_request();
+        $validator = Validator::make($request->all(),$this->validate_request());
+        if($validator->fails())
+        {
+            $request->session()->flash('error',$validator->errors());
+            return redirect()->back()->withInput($request->all());
+        }
         $application = new Applications;
         $application->student_name = $request->name;
         $application->reg_number = $request->reg_number;
@@ -148,8 +155,8 @@ class ApplicationsController extends Controller
      */
     private function validate_request()
     {
-        return request()->validate([
-            'name'=>'required',
+        return [
+            'student_name'=>'required',
             'reg_number'=>'required|unique:applications',
             'student_phone'=>'required|phone|unique:applications',
             'current_program'=>'required',
@@ -162,7 +169,7 @@ class ApplicationsController extends Controller
             'mean_grade'=>'required',
             'aggregate'=>'required',
             'cut_off_points'=>'required',
-            'weighted_cluster_points'=>'required',
+            'weighted_clusters'=>'required',
             'sub_1'=>'required',
             'sub_2'=>'required',
             'sub_3'=>'required',
@@ -179,9 +186,9 @@ class ApplicationsController extends Controller
             'grade_6'=>'required',
             'grade_7'=>'required',
             'grade_8'=>'required',
-            'result_slip'=>'required|image|mimes:pdf,png,jpg|max:2048',
+            'result_slip'=>'required|image|mimes:png,jpg|max:2048',
             'transfer_reason'=>'required'
-        ]);
+        ];
     }
     /**
      * @param Illuminate\Http\Request $request

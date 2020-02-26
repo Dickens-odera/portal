@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
     #submit-btn{
         width:100%;
         height:auto;
@@ -18,14 +18,15 @@
                 <div class="col-md-12 text-uppercase text-white text-center bg-warning" style="margin:2em;padding:5px;border-radius:2px">{{ __('student application area') }}</div>
                     {!!Form::open(['action'=>'Student\Applications\ApplicationsController@store','method'=>'post','enctype'=>'multipart/form-data'])!!}
                     <div class="col-md-12 row">
+                        @include('includes.errors.custom')
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header text-uppercase text-white text-center bg-success" style="margin-bottom:2em">{{ __('PERSONAL INFORMATION') }}</div>
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        {!! Form::label('name','Name',['class'=>'form-label text-md-right col-md-4']) !!}
+                                        {!! Form::label('student_name','Name',['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!!Form::text('name',Auth::user()->name,['class'=>'form-control'])!!}
+                                            {!!Form::text('student_name',Auth::user()->name,['class'=>'form-control'])!!}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -35,9 +36,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {!! Form::label('phone','Phone No:', ['class'=>'form-label text-md-right col-md-4']) !!}
+                                        {!! Form::label('student_phone','Phone No:', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('phone',old('phone'), ['class'=>'form-control']) !!}
+                                            {!! Form::text('student_phone',old('phone'), ['class'=>'form-control']) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -65,7 +66,7 @@
                                     <div class="form-group row">
                                         <label for="current_school" class="form-label text-md-right col-md-4">{{ __('Present School') }}</label>
                                         <div class="col-md-8">
-                                            {!! Form::select('current_program',
+                                            {!! Form::select('current_school',
                                             [''=>'Select...','sci'=>'School of Computing and Informatics',
                                             'sedu'=>'School of Education',
                                             'som'=>'School of Medicine',
@@ -296,7 +297,7 @@
                                         <div class="form-group row">
                                             {!! Form::label('result_slip','Upload a copy of KCSE result slip', ['class'=>'form-label text-md-right col-md-4 text-danger']) !!}
                                             <div class="col-md-8">
-                                                {!! Form::file('result_slip', ['class'=>'btn btn-success btn-sm','required'=>true]) !!}
+                                                {!! Form::file('result_slip', ['class'=>'btn btn-success btn-sm']) !!}
                                             </div>
                                         </div>
                                     </div>
