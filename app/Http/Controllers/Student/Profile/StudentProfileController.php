@@ -7,7 +7,7 @@ use App\Student;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-
+use Intervention\Image\Facades\Image;
 class StudentProfileController extends Controller
 {
     public function __construct()
@@ -43,6 +43,14 @@ class StudentProfileController extends Controller
             }
             else
             {
+                $avartar = $request->file('avartar');
+                $ext = $avartar->getClientOriginalExtension();
+                $avartar_name = $request->regNumber.'.'.$ext;
+                $path = public_path('uploads/images/students/'.$avartar_name);
+                Image::make($avartar->getRealPath())->resize(200,null, function($constraint)
+                {
+                    $constraint->aspectRatio();
+                })->save($path);
                 if(Student::where('id','=',$id)->first()->update([
                         'surname'=>$request->surname,
                         'middleName'=>$request->middleName,
@@ -50,7 +58,8 @@ class StudentProfileController extends Controller
                         'idNumber'=>$request->idNumber,
                         'email'=>$request->email,
                         'regNumber'=>$request->regNumber,
-                        'username'=>$request->username
+                        'username'=>$request->username,
+                        'avartar'=>$avartar_name
                     ]))
                     {
                         request()->session()->flash('success','Profile updated successfully');
@@ -78,7 +87,8 @@ class StudentProfileController extends Controller
                 'email'=>'required',
                 'regNumber'=>'required',
                 'username'=>'nullable',
-                'password'=>'required'
+                'password'=>'required',
+                'avartar'=>'image|nullable|mimes:jpg,png|max:2048'
             ]
         );
     }
