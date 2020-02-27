@@ -4,6 +4,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Applications;
 class Student extends Authenticatable
 {
     /**
@@ -18,11 +19,17 @@ class Student extends Authenticatable
     /**
      * @var array
      */
-    protected $fillable = ['surname','email'];
+    protected $guarded = [];
     /**
      * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    //student-applications relationship
+    public function applications()
+    {
+        return $this->hasMany(Applications::class,'student_id');
+    }
 }

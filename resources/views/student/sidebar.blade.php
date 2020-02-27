@@ -61,7 +61,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{ route('student.application.form') }}"><i class="fa fa-circle-o"></i> New</a></li>
-            <li><a href=""><i class="fa fa-circle-o"></i> History</a></li>
+            <li><a href="{{ route('student.applications.history') }}"><i class="fa fa-circle-o"></i> History</a></li>
           </ul>
         </li>
          {{-- <li class="treeview">

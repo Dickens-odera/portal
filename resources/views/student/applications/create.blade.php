@@ -26,7 +26,7 @@
                                     <div class="form-group row">
                                         {!! Form::label('student_name','Name',['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!!Form::text('student_name',Auth::user()->name,['class'=>'form-control'])!!}
+                                            {!!Form::text('student_name',old('student_name'),['class'=>'form-control'])!!}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -38,7 +38,7 @@
                                     <div class="form-group row">
                                         {!! Form::label('student_phone','Phone No:', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('student_phone',old('phone'), ['class'=>'form-control']) !!}
+                                            {!! Form::text('student_phone',old('student_phone'), ['class'=>'form-control']) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -67,7 +67,8 @@
                                         <label for="current_school" class="form-label text-md-right col-md-4">{{ __('Present School') }}</label>
                                         <div class="col-md-8">
                                             {!! Form::select('current_school',
-                                            [''=>'Select...','sci'=>'School of Computing and Informatics',
+                                            [''=>'Select...',
+                                            'sci'=>'School of Computing and Informatics',
                                             'sedu'=>'School of Education',
                                             'som'=>'School of Medicine',
                                             'sass'=>'School of Arts and Social Sciences',
@@ -96,7 +97,8 @@
                                         <label for="preffered_school" class="form-label col-md-4 text-md-right">{{ __('Preffered School')}}</label>
                                         <div class="col-md-8">
                                             {!! Form::select('preffered_school',
-                                            [''=>'Select...','sci'=>'School of Computing and Informatics',
+                                            [''=>'Select...',
+                                            'sci'=>'School of Computing and Informatics',
                                             'sedu'=>'School of Education',
                                             'som'=>'School of Medicine',
                                             'sass'=>'School of Arts and Social Sciences',

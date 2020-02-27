@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Student\Applications;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Applications;
+use App\Student;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 //use Intervention\Image as Image;
 use Intervention\Image\Facades\Image;
@@ -24,8 +27,11 @@ class ApplicationsController extends Controller
      */
     public function index()
     {
-        //show the form to open the applications
-        return view('student.applications.create');
+        $applications = Auth::user()->applications;
+        //$applications = Applications::where('student_id','=',Auth::user()->id)->latest()->get();
+        //$applications = DB::select('select * from applications where student_id = :student_id',['student_id'=>Auth::user()->id]);
+        //dd($applications);
+        return view('student.applications.index',compact('applications'));
     }
 
     /**
@@ -35,7 +41,8 @@ class ApplicationsController extends Controller
      */
     public function create()
     {
-        //
+        //show the form to open the applications
+        return view('student.applications.create');
     }
 
     /**
@@ -54,9 +61,9 @@ class ApplicationsController extends Controller
             return redirect()->back()->withInput($request->all());
         }
         $application = new Applications;
-        $application->student_name = $request->name;
+        $application->student_name = $request->student_name;
         $application->reg_number = $request->reg_number;
-        $application->student_phone = $request->phone;
+        $application->student_phone = $request->student_phone;
         $application->present_program = $request->current_program;
         $application->present_school = $request->current_school;
         $application->preffered_program = $request->preffered_program;
@@ -85,6 +92,7 @@ class ApplicationsController extends Controller
         $application->grade_7 = $request->grade_7;
         $application->grade_8 = $request->grade_8;
         $application->transfer_reason = $request->transfer_reason;
+        $application->student_id = Auth::user()->id;
         if($request->file('result_slip'))
         {
             $file = $request->file('result_slip');
