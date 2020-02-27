@@ -56,7 +56,8 @@ class StudentRegisterController extends Controller
             }
             else
             {
-
+                request()->session()->flash('error','Something went wrong, please try again');
+                return redirect()->back()->withInput($request->only('email','reg_number'));
             }
         }
     }
