@@ -52,6 +52,16 @@
                         </tbody>
                     @endforeach
                 </table>
+                @else
+                    <table class="table table-responsive table-dark">
+                        <thead>
+                            <tr>
+                                <td class="">No recent applications made.
+                                    Kindly click<a href="{{ route('student.application.form') }}" class="btn btn-success btn-sm"><i class="fa fa-arrow-left"></i> Here</a> to apply
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
                 @endif
             </div>
         </div>

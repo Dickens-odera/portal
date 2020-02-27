@@ -2,13 +2,16 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+//Auth::routes(['verify'=>true]);
 Auth::routes();
-
 
 Route::get('/', function () {
     return view('welcome');
 });
-
+//Student Registration
+Route::get('/student/new-account','Auth\Student\StudentRegisterController@create')->name('student.account.creation');
+Route::post('/student','Auth\Student\StudentRegisterController@register')->name('student.register');
+//end account creation
 Route::post('/applications',['as'=>'applications.submit','uses'=>'Student\Applications\ApplicationsController@store']);
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/posts','Student\Posts\PostsController@post_data')->name('student.post.submit');
@@ -21,7 +24,7 @@ Route::delete('/deleteSchool/{school_id}','Staff\Schools\SchoolsController@destr
 //the student urls
 Route::prefix('student')->group(function()
 {
-    Route::get('/login-form',['as'=>'student.login','uses'=>'Auth\Student\StudentLoginController@showLoginForm']);
+    Route::get('/login-form','Auth\Student\StudentLoginController@showLoginForm')->name('student.login');
     Route::post('/login','Auth\Student\StudentLoginController@login')->name('student.login.submit');
     Route::get('/dashboard','Student\StudentController@index')->name('student.dashboard');
     Route::get('/logout','Auth\Student\StudentLoginController@logout')->name('student.logout');

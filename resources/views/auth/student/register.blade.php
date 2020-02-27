@@ -28,15 +28,27 @@
 		<div class="container-login100">
 			<div class="wrap-login100">
 				<div class="login100-pic js-tilt" data-tilt>
-					<img src="{!! asset('login-page/Login_v1/images/logo/MMUST.jpg" alt="IMG') !!}">
+                    <img src="{!! asset('login-page/Login_v1/images/logo/MMUST.jpg" alt="IMG') !!}"><br>
+                    {{ config('app.name')}}
 				</div>
 
-                <form class="login100-form validate-form" method="post" action="{{ route('student.login.submit') }}">
+                <form class="login100-form validate-form" method="post" action="{{ route('student.register') }}">
                     {{ csrf_field() }}
 					<span class="login100-form-title">
-						{{ __('STUDENT LOGIN') }}
+						{{ __('STUDENT REGISTRATION') }}
 					</span>
-
+                    <div class="wrap-input100 validate-input $errors->has('reg_number')? 'has-error':''">
+                        <input class="input100 @error('reg_number') is-invalid @enderror" name="reg_number" value="{{ old('reg_number') }}" required autocomplete="reg_number" autofocus type="text" placeholder="Reg No/ Adm">
+                                @error('reg_number')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('reg_number') }}</strong>
+                                    </span>
+                                @enderror
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-user" aria-hidden="true"></i>
+						</span>
+                    </div>
 					<div class="wrap-input100 validate-input $errors->has('email')? 'has-error':''">
                         <input class="input100 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus type="email" placeholder="Email">
                                 @error('email')
@@ -49,9 +61,8 @@
 							<i class="fa fa-envelope" aria-hidden="true"></i>
 						</span>
 					</div>
-
 					<div class="wrap-input100 validate-input">
-                        <input class="input100 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" type="password" placeholder="Password" >
+                        <input class="input100 @error('password') is-invalid @enderror" name="password" required autocomplete="password" type="password" placeholder="Password" >
                             @error('password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -62,40 +73,26 @@
 							<i class="fa fa-lock" aria-hidden="true"></i>
 						</span>
 					</div>
-
-                    <!-- Remember me-->
-                        <div class="wrap-input100 validate-input" data-validate = "Password is required">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                <label class="form-check-label" for="remember">
-                                    {{ __('Remember Me') }}
-                                </label>
-                            </div>
+                    <div class="wrap-input100 validate-input">
+                        <input class="input100 @error('confirm_password') is-invalid @enderror" name="confirm_password" required autocomplete="confirm_password" type="password" placeholder="Confirm Password" >
+                            @error('confirm_password')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
 					</div>
-
-                    <!-- end remember me -->
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn">
-							{{ __('Login') }}
+							{{ __('Register') }}
 						</button>
 					</div>
-
-					<div class="text-center p-t-12">
-						{{-- <span class="txt1">
-							{{ __('Forgot') }}
-						</span> --}}
-						<a class="txt2" href="#">
-                            @if (Route::has('password.request'))
-                            <a class="btn btn-link" href="">
-                                {{ __('Forgot Your Password?') }}
-                            </a>
-                        @endif						</a>
-					</div>
-
-					 <div class="text-center p-t-136">
-						<a class="txt2" href="{{ route('student.account.creation') }}">
-							Create your Account
+					 <div class="text-center p-t-5">
+						<a class="txt2" href="{{ route('student.login') }}">
+							Login Here
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
 						</a>
 					</div>
@@ -103,10 +100,6 @@
 			</div>
 		</div>
 	</div>
-
-
-
-
 <!--===============================================================================================-->
 	<script src="{!! asset('login-page/Login_v1/vendor/jquery/jquery-3.2.1.min.js') !!}"></script>
 <!--===============================================================================================-->
@@ -116,12 +109,12 @@
 	<script src="{!! asset('login-page/Login_v1/vendor/select2/select2.min.js') !!}"></script>
 <!--===============================================================================================-->
 	<script src="{!! asset('login-page/Login_v1/vendor/tilt/tilt.jquery.min.js') !!}"></script>
-	<script >
+	<script>
 		$('.js-tilt').tilt({
 			scale: 1.1
-		})
+		});
 	</script>
-<!--===============================================================================================-->
+<!--=============================================================================================== -->
 	<script src="{!! asset('login-page/Login_v1/js/main.js') !!}"></script>
 
 </body>
