@@ -28,9 +28,6 @@ class ApplicationsController extends Controller
     public function index()
     {
         $applications = Auth::user()->applications;
-        //$applications = Applications::where('student_id','=',Auth::user()->id)->latest()->get();
-        //$applications = DB::select('select * from applications where applications.student_id = :student_id',['student_id'=>Auth::user()->id]);
-        //dd($applications);
         return view('student.applications.index',compact('applications'));
     }
 
