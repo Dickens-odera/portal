@@ -67,6 +67,7 @@ class ApplicationsController extends Controller
         $application->present_program = $request->current_program;
         $application->present_school = $request->current_school;
         $application->preffered_program = $request->preffered_program;
+        $application->cluster_no = $request->cluster_no;
         $application->preffered_school = $request->preffered_school;
         $application->kcse_index = $request->kcse_index;
         $application->kcse_year = $request->kcse_year;
@@ -108,7 +109,7 @@ class ApplicationsController extends Controller
         if($application->save())
         {
             //send and sms to the student with information of a successfull application
-            $message = "Hello ".$request->student_name.' '.'Your application has been a success. You shall be notified soon on the progress';
+            $message = "Hello there ".$request->student_name.' '.'Your application has been a success. You shall be notified soon on the progress';
             $postData = array(
                 'username'=>env('USERNAME'),
                 'api_key'=>env('APIKEY'),
@@ -231,9 +232,9 @@ class ApplicationsController extends Controller
     private function requestData(Request $request)
     {
        return   [
-            'student_name'=>$request->name,
+            'student_name'=>$request->student_name,
             'reg_number'=>$request->reg_number,
-            'student_phone'=>$request->phone,
+            'student_phone'=>$request->student_phone,
             'current_program'=>$request->current_program,
             'current_school'=>$request->current_school,
             'preffered_program'=>$request->preffered_program,

@@ -21,7 +21,7 @@
                         @include('includes.errors.custom')
                         <div class="col-md-4">
                             <div class="card">
-                                <div class="card-header text-uppercase text-white text-center bg-success" style="margin-bottom:2em">{{ __('PERSONAL INFORMATION') }}</div>
+                                <div class="table-responsive card-header text-uppercase text-white text-center bg-success" style="margin-bottom:2em">{{ __('PERSONAL INFORMATION') }}</div>
                                 <div class="card-body">
                                     <div class="form-group row">
                                         {!! Form::label('student_name','Name',['class'=>'form-label text-md-right col-md-4']) !!}
@@ -54,10 +54,10 @@
                                     <div class="col-md-8">
                                        {!! Form::select('current_program',
                                        [''=>'Select...',
-                                       'com'=>'Bsc Computer Science',
-                                       'it'=>'Bsc Information Technology',
-                                       'ets'=>'Bsc Education Technolofy Computer Studies',
-                                       'sik'=>'Bsc Information Systems and Knowledge Management'
+                                       'Bsc Computer Science'=>'Bsc Computer Science',
+                                       'Bsc Information Technology'=>'Bsc Information Technology',
+                                       'Bsc Education Technolofy Computer Studies'=>'Bsc Education Technolofy Computer Studies',
+                                       'Bsc Information Systems and Knowledge Management'=>'Bsc Information Systems and Knowledge Management'
                                     ],
                                         old('current_program'),
                                         ['class'=>'form-control']) !!}
@@ -68,43 +68,49 @@
                                         <div class="col-md-8">
                                             {!! Form::select('current_school',
                                             [''=>'Select...',
-                                            'sci'=>'School of Computing and Informatics',
-                                            'sedu'=>'School of Education',
-                                            'som'=>'School of Medicine',
-                                            'sass'=>'School of Arts and Social Sciences',
-                                            'sonas'=>'School of Natural Sciences',
-                                            'sobe'=>'School of Business',
-                                            'sidhma'=>'School of Disaster and Humanitarian Assisstance'],
+                                            'SCI'=>'School of Computing and Informatics',
+                                            'SEDU'=>'School of Education',
+                                            'SOM'=>'School of Medicine',
+                                            'SASS'=>'School of Arts and Social Sciences',
+                                            'SONAS'=>'School of Natural Sciences',
+                                            'SOBE'=>'School of Business',
+                                            'SIDHMA'=>'School of Disaster and Humanitarian Assisstance'],
                                              old('current_school'),
                                              ['class'=>'form-control']) !!}
                                          </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="preffered_program" class="form-label col-md-4 text-md-right">{{ __('Preffered Program') }}</label>
+                                        {!! Form::label('prefferd_program','Preffered Program', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {!! Form::select('preffered_program',
                                             [''=>'Select...',
-                                            'com'=>'Bsc Computer Science',
-                                            'it'=>'Bsc Information Technology',
-                                            'ets'=>'Bsc Education Technolofy Computer Studies',
-                                            'sik'=>'Bsc Information Systems and Knowledge Management'
-                                         ],
+                                       'Bsc Computer Science'=>'Bsc Computer Science',
+                                       'Bsc Information Technology'=>'Bsc Information Technology',
+                                       'Bsc Education Technolofy Computer Studies'=>'Bsc Education Technolofy Computer Studies',
+                                       'Bsc Information Systems and Knowledge Management'=>'Bsc Information Systems and Knowledge Management'
+                                    ],
                                              old('preffered_program'),
                                              ['class'=>'form-control']) !!}
                                          </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="preffered_school" class="form-label col-md-4 text-md-right">{{ __('Preffered School')}}</label>
+                                        {!! Form::label('cluster_no','Cluster No', ['class'=>'form-label text-md-right col-md-4']) !!}
+                                        <div class="col-md-8">
+                                            {!! Form::number('cluster_no',old('cluster_no'), ['class'=>'form-control']) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        {!! Form::label('preffered_school','Preffered School', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
                                             {!! Form::select('preffered_school',
                                             [''=>'Select...',
-                                            'sci'=>'School of Computing and Informatics',
-                                            'sedu'=>'School of Education',
-                                            'som'=>'School of Medicine',
-                                            'sass'=>'School of Arts and Social Sciences',
-                                            'sonas'=>'School of Natural Sciences',
-                                            'sobe'=>'School of Business',
-                                            'sidhma'=>'School of Disaster and Humanitarian Assisstance'],
+                                            'SCI'=>'School of Computing and Informatics',
+                                            'SEDU'=>'School of Education',
+                                            'SOM'=>'School of Medicine',
+                                            'SASS'=>'School of Arts and Social Sciences',
+                                            'SONAS'=>'School of Natural Sciences',
+                                            'SOBE'=>'School of Business',
+                                            'SIDHMA'=>'School of Disaster and Humanitarian Assisstance'],
                                              old('preffered_school'),
                                              ['class'=>'form-control']) !!}
                                          </div>
