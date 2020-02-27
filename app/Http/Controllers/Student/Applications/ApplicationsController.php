@@ -91,7 +91,7 @@ class ApplicationsController extends Controller
             $ext = $file->getClientOriginalExtension();
             $file_name = $request->kcse_index.'.'.$ext;
             $path = public_path('uploads/images/applications/result-slips/'.$file_name);
-            Image::make($file->getRealPath())->resize(150,null, function($constraint)
+            Image::make($file->getRealPath())->resize(null,200, function($constraint)
             {
                 $constraint->aspectRatio();
             })->save($path);
@@ -99,6 +99,32 @@ class ApplicationsController extends Controller
         }
         if($application->save())
         {
+            //send and sms to the student with information of a successfull application
+            $message = "Hello ".$request->student_name.' '.'Your application has been a success. You shall be notified soon on the progress';
+            $postData = array(
+                'username'=>env('USERNAME'),
+                'api_key'=>env('APIKEY'),
+                'sender'=>env('SENDERID'),
+                'to'=>$request->student_phone,
+                'message'=>$message,
+                'msgtype'=>env('MSGTYPE'),
+                'dlr'=>env('DLR')
+            );
+            $ch = curl_init();
+            curl_setopt_array($ch, array(
+                CURLOPT_URL => env('URL'),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $postData
+            ));
+            curl_setopt($ch,CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+            $output = curl_exec($ch);
+            if(curl_errno($ch))
+            {
+                $output = curl_error($ch);
+            }
+            curl_close($ch);
             request()->session()->flash('success','Application submitted successfully');
             return redirect(route('student.dashboard'));
         }else
