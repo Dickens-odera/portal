@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use PHPMailer\PHPMailer;
+
 use Illuminate\Support\Facades\Validator;
 //use Intervention\Image as Image;
 use Intervention\Image\Facades\Image;
+
 class ApplicationsController extends Controller
 {
     public function __construct()
@@ -60,7 +63,7 @@ class ApplicationsController extends Controller
         $application = new Applications;
         $application->student_name = $request->student_name;
         $application->reg_number = $request->reg_number;
-        $application->student_phone = $request->student_phone;
+        $application->student_phone = $this->validate_phone();
         $application->present_program = $request->current_program;
         $application->present_school = $request->current_school;
         $application->preffered_program = $request->preffered_program;
@@ -111,7 +114,7 @@ class ApplicationsController extends Controller
                 'username'=>env('USERNAME'),
                 'api_key'=>env('APIKEY'),
                 'sender'=>env('SENDERID'),
-                'to'=>$request->student_phone,
+                'to'=>$this->validate_phone(),
                 'message'=>$message,
                 'msgtype'=>env('MSGTYPE'),
                 'dlr'=>env('DLR')
@@ -190,7 +193,7 @@ class ApplicationsController extends Controller
         return [
             'student_name'=>'required',
             'reg_number'=>'required|unique:applications',
-            'student_phone'=>'required|phone|unique:applications',
+            'student_phone'=>'required|unique:applications',
             'current_program'=>'required',
             'current_school'=>'required',
             'preffered_program'=>'required',
@@ -218,7 +221,7 @@ class ApplicationsController extends Controller
             'grade_6'=>'required',
             'grade_7'=>'required',
             'grade_8'=>'required',
-            'result_slip'=>'required|image|mimes:png,jpg|max:2048',
+            'result_slip'=>'required|image|max:2048',
             'transfer_reason'=>'required'
         ];
     }
@@ -262,5 +265,31 @@ class ApplicationsController extends Controller
             'result_slip'=>$request->result_slip,
             'transfer_reason'=>$request->transfer_reason
         ];
+    }
+
+    private function validate_phone()
+    {
+        $pluscode=  substr(request()->student_phone,0,5);
+        $pluscode2= substr(request()->student_phone,0,4);
+        $pluscode3=  request()->student_phone[0];
+    if($pluscode=='+2547'){
+        $phonenumber =   substr(request()->student_phone, strpos(request()->student_phone, "+") + 1);     
+    }
+    if($pluscode2=='2547'){
+        $phonenumber=request()->student_phone;
+    }
+    if($pluscode=='+2540'){
+        $phonenumber2=substr(request()->student_phone,5);
+        $phonenumber='254'.$phonenumber2;   
+    }
+    if($pluscode2=='2540'){
+        $phonenumber2=substr(request()->student_phone,4);
+        $phonenumber='254'.$phonenumber2;
+    }
+    if($pluscode3=='0'){
+        $phonenumber2=substr(request()->student_phone,1);
+        $phonenumber='254'.$phonenumber2;
+    }
+    return $phonenumber;
     }
 }
