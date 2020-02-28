@@ -221,7 +221,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src="" alt="Dr'Photo" style="" class="user-image">
                 {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="user-image" alt="User Image"> --}}
-                <span class="hidden-xs">{{ Auth::user()->email }}</span>
+                <span class="hidden-xs">{{ Auth::user()->surname.' '.Auth::user()->middleName.' '.Auth::user()->lastName }}</span>
               </a>
               <ul class="dropdown-menu">
                 <!-- User image -->
@@ -229,7 +229,7 @@
                   {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="img-circle" alt="User Image"> --}}
                   <img src="" alt="Dr'Photo" style="">
                   <p>
-                    {{ Auth::user()->surname }}
+                    {{-- {{ Auth::user()->surname }} --}}
                     <small>Student</small>
                   </p>
                 </li>

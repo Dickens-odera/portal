@@ -22,7 +22,8 @@ class StudentProfileController extends Controller
 
     }
     /**
-     * @param Illuminate\Support\Facades\Request $request
+     *@param $id
+     * @param Illuminate\Support\Facades\Request $request 
      * @return void
      */
     public function update(Request $request, $id)

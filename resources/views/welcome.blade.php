@@ -93,7 +93,7 @@
                         @endif						</a>
 					</div>
 
-					 <div class="text-center p-t-136">
+					 <div class="text-center p-t-10">
 						<a class="txt2" href="{{ route('student.account.creation') }}">
 							Create your Account
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>

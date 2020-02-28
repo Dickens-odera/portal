@@ -45,8 +45,8 @@
                                 <td>{{ $value->cut_off_points }}</td>
                                 <td>{{ $value->weighted_clusters}}</td>
                                 <td class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i>Edit</a>
-                                    <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> View</a>
+                                    <a href="{{ route('student.application.show',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>View</a>
+                                    <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-lock"></i> Cancel</a>
                                 </td>
                             </tr>
                         </tbody>

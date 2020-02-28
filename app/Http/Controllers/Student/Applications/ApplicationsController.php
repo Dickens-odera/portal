@@ -61,14 +61,23 @@ class ApplicationsController extends Controller
             return redirect()->back()->withInput($request->all());
         }
         $application = new Applications;
+        $current_program = $request->current_program;
+        $preffered_program = $request->preffered_program;
+        $current_school = $request->current_school;
+        $preffered_school = $request->preffered_school;
+        if($current_program === $preffered_program)
+        {
+            request()->session()->flash('error','You cannot transfer to the same program, kindly select another program');
+            return redirect()->back()->withInput($request->all());
+        }
         $application->student_name = $request->student_name;
         $application->reg_number = $request->reg_number;
         $application->student_phone = $this->validate_phone();
-        $application->present_program = $request->current_program;
-        $application->present_school = $request->current_school;
-        $application->preffered_program = $request->preffered_program;
+        $application->present_program = $current_program;
+        $application->present_school = $current_school;
+        $application->preffered_program = $preffered_program;
         $application->cluster_no = $request->cluster_no;
-        $application->preffered_school = $request->preffered_school;
+        $application->preffered_school = $preffered_school;
         $application->kcse_index = $request->kcse_index;
         $application->kcse_year = $request->kcse_year;
         $application->kuccps_password = $request->kuccps_password;
@@ -148,9 +157,36 @@ class ApplicationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($app_id = null)
     {
-        //
+        $app_id = request()->app_id;
+        if(!$app_id)
+        {
+            request()->session()->flash('error','Invalid request format');
+            return redirect()->back();
+        }
+        else
+        {
+            $validator = Validator::make(request()->all(),['app_id'=>'required']);
+            if($validator->fails())
+            {
+                request()->session()->flash('error',$validator->errors());
+                return redirect()->back();
+            }
+            else
+            {
+                $application = Applications::where('app_id','=', $app_id)->first();
+                if(!$application)
+                {
+                    request()->session()->flash('error','Application not found');
+                    return redirect()->back();
+                }
+                else
+                {
+                    return view('student.applications.show', compact('application'));
+                }
+            }
+        }
     }
 
     /**
@@ -273,14 +309,14 @@ class ApplicationsController extends Controller
         $pluscode2= substr(request()->student_phone,0,4);
         $pluscode3=  request()->student_phone[0];
     if($pluscode=='+2547'){
-        $phonenumber =   substr(request()->student_phone, strpos(request()->student_phone, "+") + 1);     
+        $phonenumber =   substr(request()->student_phone, strpos(request()->student_phone, "+") + 1);
     }
     if($pluscode2=='2547'){
         $phonenumber=request()->student_phone;
     }
     if($pluscode=='+2540'){
         $phonenumber2=substr(request()->student_phone,5);
-        $phonenumber='254'.$phonenumber2;   
+        $phonenumber='254'.$phonenumber2;
     }
     if($pluscode2=='2540'){
         $phonenumber2=substr(request()->student_phone,4);
