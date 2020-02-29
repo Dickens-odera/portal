@@ -16,7 +16,7 @@
         <div class="box-header"></div>
             <div class="box-body">
                 <div class="col-md-12 text-uppercase text-white text-center bg-warning" style="margin:2em;padding:5px;border-radius:2px">{{ __('student application (Edit To Update)') }}</div>
-                    {!!Form::open(['action'=>'Student\Applications\ApplicationsController@store','method'=>'post','enctype'=>'multipart/form-data'])!!}
+                    {!!Form::open(['action'=>['Student\Applications\ApplicationsController@update','app_id'=>$application->app_id],'method'=>'post','enctype'=>'multipart/form-data'])!!}
                     <div class="col-md-12 row">
                         @include('includes.errors.custom')
                         <div class="col-md-4">
@@ -311,7 +311,7 @@
                                     </div>
                                     <div class="col-md-12 text-center text-white">
                                         <button class="btn btn-sm btn-primary text-center" type="submit" id="submit-btn">
-                                            {{ __('SUBMIT') }}
+                                            {{ __('UPDATE') }}
                                         </button>
                                     </div>
                                 </div>

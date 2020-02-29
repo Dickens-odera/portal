@@ -109,7 +109,7 @@ class ApplicationsController extends Controller
             $ext = $file->getClientOriginalExtension();
             $file_name = $request->kcse_index.'.'.$ext;
             $path = public_path('uploads/images/applications/result-slips/'.$file_name);
-            Image::make($file->getRealPath())->resize(null,200, function($constraint)
+            Image::make($file->getRealPath())->resize(10,10, function($constraint)
             {
                 $constraint->aspectRatio();
             })->save($path);
@@ -171,7 +171,7 @@ class ApplicationsController extends Controller
             if($validator->fails())
             {
                 request()->session()->flash('error',$validator->errors());
-                return redirect()->back();
+                return redirect()->back()->withInput(request()->all());
             }
             else
             {
@@ -179,7 +179,7 @@ class ApplicationsController extends Controller
                 if(!$application)
                 {
                     request()->session()->flash('error','Application not found');
-                    return redirect()->back();
+                    return redirect()->back()->withInput(request()->all());
                 }
                 else
                 {
@@ -207,9 +207,38 @@ class ApplicationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Applications $app_id)
+    public function update($app_id = null)
     {
-        $app_id->update($this->validate_request());
+        $app_id = request()->app_id;
+        if(!$app_id)
+        {
+            request()->session()->flash('error','Invalid Request Format');
+            return redirect()->back()->withInput(request()->all());
+        }
+        else
+        {
+            $validator = Validator::make(request()->all(),$this->update_validation(), array_merge($this->update_validation(),['app_id'=>'required']));
+            if($validator->fails())
+            {
+                request()->session()->flash('error',$validator->errors());
+                return redirect()->back()->withInput(request()->all());
+            }
+            else
+            {
+                if(Applications::where('app_id','=',$app_id)->update($this->requestData(request()), array_merge($this->requestData(request()),['result_slip'=>$this->image()])))
+                {
+                    //upon successfull update of the application
+                    request()->session()->flash('success','Application updated successfully');
+                    return redirect()->back();
+                }
+                else
+                {
+                    //failed to update application
+                    request()->session()->flash('error','Unable to update the application, try again later');
+                    return redirect()->back()->withInput(request()->all());
+                }
+            }
+        }
     }
     /**
      * Remove the specified resource from storage.
@@ -224,6 +253,46 @@ class ApplicationsController extends Controller
     /**
      * @return array
      */
+    /**
+    *@return array
+    */
+    private function update_validation()
+    {
+        return [
+            'student_name'=>'required',
+            'reg_number'=>'required',
+            'student_phone'=>'required',
+            'current_program'=>'required',
+            'current_school'=>'required',
+            'preffered_program'=>'required',
+            'preffered_school'=>'required',
+            'kcse_index'=>'required',
+            'kcse_year'=>'required',
+            'kuccps_password'=>'required',
+            'mean_grade'=>'required',
+            'aggregate'=>'required',
+            'cut_off_points'=>'required',
+            'weighted_clusters'=>'required',
+            'sub_1'=>'required',
+            'sub_2'=>'required',
+            'sub_3'=>'required',
+            'sub_4'=>'required',
+            'sub_5'=>'required',
+            'sub_6'=>'required',
+            'sub_7'=>'required',
+            'sub_8'=>'required',
+            'grade_1'=>'required',
+            'grade_2'=>'required',
+            'grade_3'=>'required',
+            'grade_4'=>'required',
+            'grade_5'=>'required',
+            'grade_6'=>'required',
+            'grade_7'=>'required',
+            'grade_8'=>'required',
+            'result_slip'=>'required|image|max:2048',
+            'transfer_reason'=>'required'
+        ];
+    }
     private function validate_request()
     {
         return [
@@ -267,29 +336,30 @@ class ApplicationsController extends Controller
      */
     private function requestData(Request $request)
     {
-       return   [
+       return  [
             'student_name'=>$request->student_name,
             'reg_number'=>$request->reg_number,
             'student_phone'=>$request->student_phone,
-            'current_program'=>$request->current_program,
-            'current_school'=>$request->current_school,
+            'present_program'=>$request->current_program,
+            'present_school'=>$request->current_school,
             'preffered_program'=>$request->preffered_program,
             'preffered_school'=>$request->preffered_school,
             'kcse_index'=>$request->kcse_index,
             'kcse_year'=>$request->kcse_year,
+            'cluster_no'=>$request->cluster_no,
             'kuccps_password'=>$request->kuccps_password,
             'mean_grade'=>$request->mean_grade,
-            'aggregate'=>$request->aggregate,
+            'aggregate_points'=>$request->aggregate,
             'cut_off_points'=>$request->cut_off_points,
             'weighted_clusters'=>$request->weighted_clusters,
-            'sub_1'=>$request->sub_1,
-            'sub_2'=>$request->sub_2,
-            'sub_3'=>$request->sub_3,
-            'sub_4'=>$request->sub_4,
-            'sub_5'=>$request->sub_5,
-            'sub_6'=>$request->sub_6,
-            'sub_7'=>$request->sub_7,
-            'sub_8'=>$request->sub_8,
+            'subject_1'=>$request->sub_1,
+            'subject_2'=>$request->sub_2,
+            'subject_3'=>$request->sub_3,
+            'subject_4'=>$request->sub_4,
+            'subject_5'=>$request->sub_5,
+            'subject_6'=>$request->sub_6,
+            'subject_7'=>$request->sub_7,
+            'subject_8'=>$request->sub_8,
             'grade_1'=>$request->grade_1,
             'grade_2'=>$request->grade_2,
             'grade_3'=>$request->grade_3,
@@ -327,5 +397,28 @@ class ApplicationsController extends Controller
         $phonenumber='254'.$phonenumber2;
     }
     return $phonenumber;
+    }
+    /**
+     * @return Ulluminate\Support\Facades\Response 
+     */
+    protected function image()
+    {
+        $file_name = null;
+         //determine if an image has been provided
+         if(request()->file('avartar'))
+         {
+             $file = request()->file('avartar');
+             $ext = $file->getClientOriginalExtension();
+             $file_name = request()->reg_number.'.'.$ext;
+             $path = public_path('uploads/images/applications/result-slips/'.$file_name);
+             Image::make($file->getRealPath())->resize(200, null, function($constraint)
+             {
+                 $constraint->aspectRation();
+                 $constraint->upSize();
+             })->save($path);
+         }
+
+         return  $file_name;
+
     }
 }
