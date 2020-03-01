@@ -242,7 +242,7 @@ class ApplicationsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $app_id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request,$app_id = null)
@@ -516,7 +516,7 @@ class ApplicationsController extends Controller
          return  $file_name;
     }
     private function case_insensitive_in_array($needle, $haystack)
-        {   
+        {
             return in_array(strtolower($needle), array_map('strtolower',$haystack));
         }
 }
