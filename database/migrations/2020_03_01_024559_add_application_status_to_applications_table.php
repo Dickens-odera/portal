@@ -14,7 +14,7 @@ class AddApplicationStatusToApplicationsTable extends Migration
     public function up()
     {
         Schema::table('applications', function (Blueprint $table) {
-            $table->enum('status',['default','initiated','partialy-complete','complete'])->default('default');
+            $table->enum('status',['default','initiated','partialy-complete','complete','cancelled'])->default('default');
         });
     }
 

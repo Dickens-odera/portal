@@ -4,6 +4,7 @@
         <div class="box-header bg-warning text-center text-uppercase">{{ __('student application history') }}</div>
         <div class="box-body">
             <div class="col-md-12 row table-responsive">
+                @include('includes.errors.custom')
                 @if(count($applications) > 0)
                 <table class="table table-bordered table-hover table-dark" style="width:100%">
                     <thead class="thead-dark !important" style="color:#fff; background:#000">
@@ -48,7 +49,12 @@
                                 <td>{{ $value->status}}</td>
                                 <td class="btn-group btn-group-sm">
                                     <a href="{{ route('student.application.show',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>View</a>
-                                    <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-lock"></i> Cancel</a>
+                                    <form action="{{ route('student.application.cancel',['app_id'=>$value->app_id]) }}" method="post">
+                                               {{ csrf_field() }}
+                                                <button class="btn btn-sm btn-danger" type="submit">
+                                                        <i class="fa fa-window-close"></i>Cancel
+                                                </button>
+                                    </form>
                                 </td>
                             </tr>
                         </tbody>

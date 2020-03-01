@@ -33,6 +33,7 @@ Route::prefix('student')->group(function()
     Route::get('/applications-history','Student\Applications\ApplicationsController@index')->name('student.applications.history');
     Route::get('/application','Student\Applications\ApplicationsController@show')->name('student.application.show');
     Route::post('/application/update','Student\Applications\ApplicationsController@update')->name('student.application.update');
+    Route::post('/application/cancel','Student\Applications\ApplicationsController@cancel')->name('student.application.cancel');
 });
 //the dean of school
 Route::prefix('dean')->group(function()

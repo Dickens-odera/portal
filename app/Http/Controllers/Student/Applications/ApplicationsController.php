@@ -287,6 +287,53 @@ class ApplicationsController extends Controller
         }
     }
     /**
+     * Cancel the application
+     * @param int $app_id
+     * @return \Illuminate\Http\Response
+     */
+    public function cancel($app_id = null)
+    {
+        $app_id = request()->app_id;
+        if(!$app_id)
+        {
+            request()->session()->flash('error','Invalid Reqest Format');
+            return redirect()->back();
+        }
+        else
+        {
+            $validator = Validator::make(request()->all(),['app_id'=>'required']);
+            if($validator->fails())
+            {
+                request()->session()->flash('error',$validator->errors());
+                return redirect()->back();
+            }
+            else
+            {
+                $application = Applications::where('app_id','=',$app_id)->where('student_id','=',Auth::user()->id);
+                $status = $application->first()->status;
+                //dd($status);
+                if($status === "initiated" || $status === "partialy-complete" || $status === "complete")
+                {
+                    request()->session()->flash('error','Action not allowed as the tranfer application status is '.' '.$status);
+                    return redirect()->back();
+                }
+                else
+                {
+                    if($application->update(['status'=>'cancelled']))
+                    {
+                        request()->session()->flash('success','Application cancelled successfully');
+                        return redirect()->back();
+                    }
+                    else
+                    {
+                        request()->session()->flash('error','Application could not be cancelled, try again later');
+                        return redirect()->back();
+                    }
+                }
+            }
+        }
+    }
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
