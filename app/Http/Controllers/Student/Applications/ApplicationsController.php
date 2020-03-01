@@ -22,6 +22,7 @@ class ApplicationsController extends Controller
     {
         $this->middleware(['auth:student']);
     }
+
     /**
      *
      * Display a listing of the resource.
@@ -61,6 +62,27 @@ class ApplicationsController extends Controller
             return redirect()->back()->withInput($request->all());
         }
         $application = new Applications;
+
+        $schools_program = array([
+            'sobe'=>[
+                'hshshshshhs',
+                'mdmdmdmdmmdmdd',
+                'mdmdmmdmdmdmmdmdmd',
+                'mdmdhdfufffiiffi'
+            ],
+            'sci'=>'School Of Computing and Informatics',
+            'sebe'=>'School of Engineering and Built Environment',
+            'sedu'=>'School of Education',
+            'som'=>'School of Medicine',
+            'sidmha'=>'School od Disaster Management and Humanitarian Assistance'
+        ]);
+        $subjects =  array('English','Kiswahili','Mathematics',
+                    'Geography','Chemistry','Biology',
+                    'Business Studies','Christian Religious Education',
+                    'History & Government','Computer Studies',
+                    'Home Science','Music','Physics'
+                    );
+        $sub_values = array($request->sub_1,$request->sub_2,$request->sub_3,$request->sub_4,$request->sub_5,$request->sub_6,$request->sub_7,$request->sub_8);
         $current_program = $request->current_program;
         $preffered_program = $request->preffered_program;
         $current_school = $request->current_school;
@@ -69,6 +91,15 @@ class ApplicationsController extends Controller
         {
             request()->session()->flash('error','You cannot transfer to the same program, kindly select another program');
             return redirect()->back()->withInput($request->all());
+        }
+        //determine whether the subjects keyed in by the student are among the array declared above
+        for($i = 0; $i < count($sub_values); $i++)
+        {
+            if(!($this->case_insensitive_in_array($sub_values[$i], $subjects)))
+                {
+                    request()->session()->flash('error','The subject'.' '.$sub_values[$i].' '.'not within the carriculum');
+                    return redirect()->back()->withInput(request()->all());
+                }
         }
         $application->student_name = $request->student_name;
         $application->reg_number = $request->reg_number;
@@ -80,11 +111,11 @@ class ApplicationsController extends Controller
         $application->preffered_school = $preffered_school;
         $application->kcse_index = $request->kcse_index;
         $application->kcse_year = $request->kcse_year;
-        $application->kuccps_password = $request->kuccps_password;
+        $application->kuccps_password = (int)$request->kuccps_password;
         $application->mean_grade = $request->mean_grade;
-        $application->aggregate_points = $request->aggregate;
-        $application->cut_off_points = $request->cut_off_points;
-        $application->weighted_clusters = $request->weighted_clusters;
+        $application->aggregate_points = (float)$request->aggregate;
+        $application->cut_off_points = (float)$request->cut_off_points;
+        $application->weighted_clusters = (float)$request->weighted_clusters;
         $application->subject_1 = $request->sub_1;
         $application->subject_2 = $request->sub_2;
         $application->subject_3 = $request->sub_3;
@@ -109,7 +140,7 @@ class ApplicationsController extends Controller
             $ext = $file->getClientOriginalExtension();
             $file_name = $request->kcse_index.'.'.$ext;
             $path = public_path('uploads/images/applications/result-slips/'.$file_name);
-            Image::make($file->getRealPath())->resize(10,10, function($constraint)
+            Image::make($file->getRealPath())->resize(200,200, function($constraint)
             {
                 $constraint->aspectRatio();
             })->save($path);
@@ -207,7 +238,7 @@ class ApplicationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($app_id = null)
+    public function update(Request $request,$app_id = null)
     {
         $app_id = request()->app_id;
         if(!$app_id)
@@ -225,18 +256,19 @@ class ApplicationsController extends Controller
             }
             else
             {
-                if(Applications::where('app_id','=',$app_id)->update($this->requestData(request()), array_merge($this->requestData(request()),['result_slip'=>$this->image()])))
-                {
-                    //upon successfull update of the application
-                    request()->session()->flash('success','Application updated successfully');
-                    return redirect()->back();
-                }
-                else
-                {
-                    //failed to update application
-                    request()->session()->flash('error','Unable to update the application, try again later');
-                    return redirect()->back()->withInput(request()->all());
-                }
+               $application = Applications::where('app_id','=',$app_id)->where('student_id','=',Auth::user()->id);
+               $image = $application->first()->result_slip;
+               //dd($image);
+               if($application->update($this->requestData(request()),array_merge($this->requestData(request()),['result_slip'=>$this->imageUpload(request()->file('result_slip'))])))
+               {
+                request()->session()->flash('success','Application successfully updated');
+                return redirect()->back();
+               }
+               else
+               {
+                request()->session()->flash('error','Unable to update application, try again');
+                return redirect()->back()->withInput($request->all());
+               }
             }
         }
     }
@@ -289,8 +321,8 @@ class ApplicationsController extends Controller
             'grade_6'=>'required',
             'grade_7'=>'required',
             'grade_8'=>'required',
-            'result_slip'=>'required|image|max:2048',
-            'transfer_reason'=>'required'
+            'transfer_reason'=>'required',
+            'result_slip'=>'image|nullable|'
         ];
     }
     private function validate_request()
@@ -350,8 +382,8 @@ class ApplicationsController extends Controller
             'kuccps_password'=>$request->kuccps_password,
             'mean_grade'=>$request->mean_grade,
             'aggregate_points'=>$request->aggregate,
-            'cut_off_points'=>$request->cut_off_points,
-            'weighted_clusters'=>$request->weighted_clusters,
+            'cut_off_points'=>(float)$request->cut_off_points,
+            'weighted_clusters'=>(float)$request->weighted_clusters,
             'subject_1'=>$request->sub_1,
             'subject_2'=>$request->sub_2,
             'subject_3'=>$request->sub_3,
@@ -399,26 +431,31 @@ class ApplicationsController extends Controller
     return $phonenumber;
     }
     /**
-     * @return Ulluminate\Support\Facades\Response 
+     * @return string|mixed
      */
-    protected function image()
+    private function imageUpload($file_name = null)
     {
-        $file_name = null;
          //determine if an image has been provided
-         if(request()->file('avartar'))
+         if(request()->file('result_slip'))
          {
-             $file = request()->file('avartar');
+             $file = request()->file('result_slip');
              $ext = $file->getClientOriginalExtension();
-             $file_name = request()->reg_number.'.'.$ext;
+             $file_name = request()->kcse_index.'.'.$ext;
              $path = public_path('uploads/images/applications/result-slips/'.$file_name);
              Image::make($file->getRealPath())->resize(200, null, function($constraint)
              {
-                 $constraint->aspectRation();
+                 $constraint->aspectRatio();
                  $constraint->upSize();
              })->save($path);
          }
-
+         else
+         {
+             $file_name = Applications::where('app_id','=',request()->app_id)->pluck('result_slip');
+         }
          return  $file_name;
-
     }
+    private function case_insensitive_in_array($needle, $haystack)
+        {   
+            return in_array(strtolower($needle), array_map('strtolower',$haystack));
+        }
 }

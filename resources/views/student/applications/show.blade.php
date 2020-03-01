@@ -303,9 +303,10 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row">
-                                            {!! Form::label('result_slip','Upload a copy of KCSE result slip', ['class'=>'form-label text-md-right col-md-4 text-danger']) !!}
+                                             {!! Form::label('result_slip','Upload a copy of KCSE result slip', ['class'=>'form-label text-md-right col-md-4 text-danger']) !!} 
                                             <div class="col-md-8">
-                                                {!! Form::file('result_slip', ['class'=>'btn btn-success btn-sm']) !!}
+                                                <img src="/storage/uploads/images/applications/result-slips/{{ $application->result_slip}}" alt="No image" style=""><br>
+                                                 {!! Form::file('result_slip', ['class'=>'btn btn-success btn-sm']) !!} 
                                             </div>
                                         </div>
                                     </div>
