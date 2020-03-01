@@ -54,6 +54,13 @@ class ApplicationsController extends Controller
      */
     public function store(Request $request)
     {
+        //check if the student had made a previous application
+        $app = Applications::where('student_id','=',Auth::user()->id)->first();
+        if($app)
+        {
+            request()->session()->flash('error','You had previously made an application, kindly wait for the response');
+            return redirect(route('student.dashboard'));
+        }
         //$this->validate_request();
         $validator = Validator::make($request->all(),$this->validate_request());
         if($validator->fails())
@@ -80,7 +87,7 @@ class ApplicationsController extends Controller
                     'Geography','Chemistry','Biology',
                     'Business Studies','Christian Religious Education',
                     'History & Government','Computer Studies',
-                    'Home Science','Music','Physics'
+                    'Home Science','Music','Physics','Agriculture','Art'
                     );
         $sub_values = array($request->sub_1,$request->sub_2,$request->sub_3,$request->sub_4,$request->sub_5,$request->sub_6,$request->sub_7,$request->sub_8);
         $current_program = $request->current_program;
