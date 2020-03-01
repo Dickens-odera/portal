@@ -69,7 +69,7 @@ class ApplicationsController extends Controller
             return redirect()->back()->withInput($request->all());
         }
         $application = new Applications;
-
+        $grades = array('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E');
         $schools_program = array([
             'sobe'=>[
                 'hshshshshhs',
@@ -99,6 +99,7 @@ class ApplicationsController extends Controller
             request()->session()->flash('error','You cannot transfer to the same program, kindly select another program');
             return redirect()->back()->withInput($request->all());
         }
+
         //determine whether the subjects keyed in by the student are among the array declared above
         for($i = 0; $i < count($sub_values); $i++)
         {
@@ -108,6 +109,14 @@ class ApplicationsController extends Controller
                     return redirect()->back()->withInput(request()->all());
                 }
         }
+
+        //check that the entered mean grade value is valid
+        if(!(in_array($request->mean_grade,$grades)))
+        {
+            request()->session()->flash('error','The mean grade'.' '.$request->mean_grade.' '.'is invalid');
+            return redirect()->back()->withInput($request->all());
+        }
+
         $application->student_name = $request->student_name;
         $application->reg_number = $request->reg_number;
         $application->student_phone = $this->validate_phone();
