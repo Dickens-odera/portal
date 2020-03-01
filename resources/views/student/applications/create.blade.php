@@ -32,7 +32,7 @@
                                     <div class="form-group row">
                                         {!!Form::label('reg_number','Reg No/Adm',['class'=>'form-label text-md-right col-md-4'])!!}
                                         <div class="col-md-8">
-                                            {!!Form::text('reg_number',Auth::user()->regNumber,['class'=>'form-control','placeholder'=>'Reg No/Adm'])!!}
+                                            {!!Form::text('reg_number',Auth::user()->regNumber,['class'=>'form-control','placeholder'=>'Reg No/Adm','disabled'])!!}
                                         </div>
                                     </div>
                                     <div class="form-group row">
