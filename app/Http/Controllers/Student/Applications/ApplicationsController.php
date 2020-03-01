@@ -264,6 +264,13 @@ class ApplicationsController extends Controller
             else
             {
                $application = Applications::where('app_id','=',$app_id)->where('student_id','=',Auth::user()->id);
+               $status = $application->first()->status;
+               //throw an error if the application procesing has began
+               if($status === 'initiated' || $status === 'partialy-complete' || $status === 'complete')
+               {
+                   request()->session()->flash('error','You cannot update an already'.' '.$status.' '.'application');
+                   return redirect()->back();
+               }
                $image = $application->first()->result_slip;
                //dd($image);
                if($application->update($this->requestData(request()),array_merge($this->requestData(request()),['result_slip'=>$this->imageUpload(request()->file('result_slip'))])))
