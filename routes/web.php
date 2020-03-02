@@ -48,8 +48,8 @@ Route::prefix('dean')->group(function()
 {
     Route::get('/login-form','Auth\Dean\DeanLoginController@showLoginForm')->name('dean.login');
     Route::post('/login','Auth\Dean\DeanLoginController@login')->name('dean.login.submit');
+    Route::get('/dashboard','Dean\DeanController@index')->name('dean.dashboard');
     Route::get('/logout','Auth\Dean\DeanLoginController@logout')->name('dean.logout');
-    Route::get('/dashboard','Dean\DeanLoginController@index')->name('dean.dashboard');
 });
 //the registrar
 Route::prefix('registrar')->group(function()
