@@ -50,6 +50,9 @@ Route::prefix('dean')->group(function()
     Route::post('/login','Auth\Dean\DeanLoginController@login')->name('dean.login.submit');
     Route::get('/dashboard','Dean\DeanController@index')->name('dean.dashboard');
     Route::get('/logout','Auth\Dean\DeanLoginController@logout')->name('dean.logout');
+    Route::get('/programs','Dean\DeanController@showProgramsForm')->name('dean.programs');
+    Route::post('/programs','Dean\DeanController@addProgram')->name('dean.program.add');
+    Route::post('/programs/import','Dean\DeanController@importPrograms')->name('dean.programs.import');
 });
 //the registrar
 Route::prefix('registrar')->group(function()
