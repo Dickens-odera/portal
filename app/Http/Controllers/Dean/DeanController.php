@@ -67,8 +67,16 @@ class DeanController extends Controller
      */
     public function importPrograms()
     {
-        Excel::import(new ProgramsImport, request()->file('excel_program_file'));
-        return back();
+        if(Excel::import(new ProgramsImport, request()->file('excel_program_file')))
+        {
+            request()->session()->flash('success','Programs uploaded successfully via the excel file');
+            return back();
+        }
+        else
+        {
+            request()->session()->flash('error','Failed to upload excel file, kindlyc check on the format');
+            return redirect()->back();
+        }
     }
     /**
      * @return array

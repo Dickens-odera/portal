@@ -8,6 +8,10 @@ class Registrar extends Authenticatable
 {
     use Notifiable;
     /**
+     * @var string $table
+     */
+    protected $table = "registrars";
+    /**
      * @var string
      */
     protected $guard = 'registrar';
