@@ -19,7 +19,7 @@ class Deans extends Authenticatable
     /**
      * @var array
      */
-    protected $fillable = ['name','email'];
+    protected $fillable = ['name','email','school_id'];
     /**
      * @var array
      */

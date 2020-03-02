@@ -4,7 +4,7 @@
         @include('includes.errors.custom')
         <div class="box-header">
             <div class="box-body">
-                test
+                {{ Auth::user()->name }}
             </div>
             <div class="box-footer">
                 test
