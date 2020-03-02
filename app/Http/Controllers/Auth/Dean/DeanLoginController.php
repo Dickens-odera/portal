@@ -20,7 +20,7 @@ class DeanLoginController extends Controller
     public function login(Request $request)
     {
         $this->validateRequest();
-        if(Auth::guard('dean')->attempt(['email'=>$request->email,'password'=>$request->password], $request->remember))
+        if(Auth::guard('dean')->attempt($this->data(), $request->remember))
         {
             return redirect()->intended(route('dean.dashboard'));
         }
@@ -32,7 +32,7 @@ class DeanLoginController extends Controller
     }
     public function logout()
     {
-        Auth::guard('registrar')->logout();
+        Auth::guard('dean')->logout();
         return redirect()->route('dean.login');
     }
       /**
@@ -40,11 +40,13 @@ class DeanLoginController extends Controller
      */
     private function validateRequest()
     {
-        return request()->validate(
-            [
-                'email'=>'email|required',
-                'password'=>'required'
-            ]
-        );
+        return request()->validate(array('email'=>'email|required','password'=>'required'));
+    }
+    /**
+     * @return array
+     */
+    private function data()
+    {
+        return array('email'=>request()->email,'password'=>request()->password);
     }
 }

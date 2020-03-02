@@ -46,9 +46,10 @@ Route::prefix('student')->group(function()
 //the dean of school
 Route::prefix('dean')->group(function()
 {
-    Route::get('/login-form',['as'=>'dean.login','uses'=>'Auth\Deans\DeanLoginController@showLoginForm']);
-    Route::post('/login',['as'=>'dean.login.submit','uses'=>'Auth\Deans\DeanLoginController@login']);
-    Route::get('/dashboard',['as'=>'dean.dashboard','uses'=>'Auth\Deans\DeanLoginController@index']);
+    Route::get('/login-form','Auth\Dean\DeanLoginController@showLoginForm')->name('dean.login');
+    Route::post('/login','Auth\Dean\DeanLoginController@login')->name('dean.login.submit');
+    Route::get('/logout','Auth\Dean\DeanLoginController@logout')->name('dean.logout');
+    Route::get('/dashboard','Dean\DeanLoginController@index')->name('dean.dashboard');
 });
 //the registrar
 Route::prefix('registrar')->group(function()
