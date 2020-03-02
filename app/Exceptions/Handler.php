@@ -69,6 +69,9 @@ class Handler extends ExceptionHandler
         $guard = Arr::get($exception->guards(), 0);
         switch($guard)
         {
+            case 'admin':
+                $login = 'admin.login';
+            break;
             case 'student':
                 $login = 'student.login';
             break;

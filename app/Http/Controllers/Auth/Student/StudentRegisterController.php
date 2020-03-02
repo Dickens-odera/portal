@@ -6,7 +6,7 @@ use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use PHPMailer\PHPMailer;
 class StudentRegisterController extends Controller
 {
     public function __construct()
@@ -71,6 +71,15 @@ class StudentRegisterController extends Controller
             'email'=>'required|email|domain_email',
             'password'=>'required'
         ];
+    }
+    /**
+     * @param $email
+     * @param $token
+     * @return Illiminate\Http\Response
+     */
+    private function sendMainToVerifyEmail($email, $token)
+    {
+
     }
 }
 ?>

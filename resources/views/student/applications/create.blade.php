@@ -32,7 +32,7 @@
                                     <div class="form-group row">
                                         {!!Form::label('reg_number','Reg No/Adm',['class'=>'form-label text-md-right col-md-4'])!!}
                                         <div class="col-md-8">
-                                            {!!Form::text('reg_number',Auth::user()->regNumber,['class'=>'form-control','placeholder'=>'Reg No/Adm','disabled'])!!}
+                                            {!!Form::text('reg_number',Auth::user()->regNumber,['class'=>'form-control','placeholder'=>'Reg No/Adm'])!!}
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -53,7 +53,7 @@
                                         {!! Form::label('current_program','Present Program', ['class'=>'form-label text-md-right col-md-4']) !!}
                                     <div class="col-md-8">
                                        {!! Form::select('current_program',
-                                       [''=>'Select...',
+                                    [''=>'Select...',
                                        'Bsc Computer Science'=>'Bsc Computer Science',
                                        'Bsc Information Technology'=>'Bsc Information Technology',
                                        'Bsc Education Technolofy Computer Studies'=>'Bsc Education Technolofy Computer Studies',
@@ -68,13 +68,17 @@
                                         <div class="col-md-8">
                                             {!! Form::select('current_school',
                                             [''=>'Select...',
-                                            'SCI'=>'School of Computing and Informatics',
-                                            'SEDU'=>'School of Education',
-                                            'SOM'=>'School of Medicine',
-                                            'SASS'=>'School of Arts and Social Sciences',
-                                            'SONAS'=>'School of Natural Sciences',
-                                            'SOBE'=>'School of Business',
-                                            'SIDHMA'=>'School of Disaster and Humanitarian Assisstance'],
+                                                    'SCI'=>'School of Computing and Informatics',
+                                                    'SEDU'=>'School of Education',
+                                                    'SOM'=>'School of Medicine',
+                                                    'SASS'=>'School of Arts and Social Sciences',
+                                                    'SONAS'=>'School of Natural Sciences',
+                                                    'SOBE'=>'School of Business',
+                                                    'SIDHMA'=>'School of Disaster and Humanitarian Assisstance',
+                                                    'SONMAPS'=>'School of Nursing and Paramedic Sciences',
+                                                    'SAVET'=>'School of Agriculture,Vetenery Siences and Technology',
+                                                    'SPNH'=>'School of Public Health'
+                                            ],
                                              old('current_school'),
                                              ['class'=>'form-control']) !!}
                                          </div>
@@ -84,13 +88,14 @@
                                         <div class="col-md-8">
                                             {!! Form::select('preffered_program',
                                             [''=>'Select...',
-                                       'Bsc Computer Science'=>'Bsc Computer Science',
-                                       'Bsc Information Technology'=>'Bsc Information Technology',
-                                       'Bsc Education Technolofy Computer Studies'=>'Bsc Education Technolofy Computer Studies',
-                                       'Bsc Information Systems and Knowledge Management'=>'Bsc Information Systems and Knowledge Management'
-                                    ],
+                                                'Bsc Computer Science'=>'Bsc Computer Science',
+                                                'Bsc Information Technology'=>'Bsc Information Technology',
+                                                'Bsc Education Technolofy Computer Studies'=>'Bsc Education Technolofy Computer Studies',
+                                                'Bsc Information Systems and Knowledge Management'=>'Bsc Information Systems and Knowledge Management'
+                                            ],
                                              old('preffered_program'),
-                                             ['class'=>'form-control']) !!}
+                                             ['class'=>'form-control'])
+                                             !!}
                                          </div>
                                     </div>
                                     <div class="form-group row">
@@ -110,9 +115,13 @@
                                             'SASS'=>'School of Arts and Social Sciences',
                                             'SONAS'=>'School of Natural Sciences',
                                             'SOBE'=>'School of Business',
-                                            'SIDHMA'=>'School of Disaster and Humanitarian Assisstance'],
+                                            'SIDHMA'=>'School of Disaster and Humanitarian Assisstance',
+                                            'SONMAPS'=>'School of Nursing and Paramedic Sciences',
+                                            'SAVET'=>'School of Agriculture,Vetenery Siences and Technology',
+                                            'SPNH'=>'School of Public Health'],
                                              old('preffered_school'),
-                                             ['class'=>'form-control']) !!}
+                                             ['class'=>'form-control'])
+                                             !!}
                                          </div>
                                     </div>
                                 </div>

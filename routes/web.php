@@ -22,6 +22,14 @@ Route::post('/addschool','Staff\Schools\SchoolsController@store')->name('school.
 Route::patch('/updateschool/{id}','Staff\Schools\SchoolsController@update')->name('school.update.submit');
 Route::delete('/deleteSchool/{school_id}','Staff\Schools\SchoolsController@destroy')->name('school.delete');
 //the student urls
+Route::prefix('admin')->group(function()
+{
+    Route::get('/admin-user','Auth\Admins\AdminLoginController@showLoginForm')->name('admin.login');
+    Route::post('/login','Auth\Admins\AdminLoginController@login')->name('admin.login.submit');
+    Route::get('/dashboard','Admin\AdminController@index')->name('admin.dashboard');
+    Route::get('/logout','Auth\Admins\AdminLoginController@logout')->name('admin.logout');
+
+});
 Route::prefix('student')->group(function()
 {
     Route::get('/login-form','Auth\Student\StudentLoginController@showLoginForm')->name('student.login');

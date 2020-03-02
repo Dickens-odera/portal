@@ -20,7 +20,9 @@ class ApplicationsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:student']);
+        $this->middleware('auth:student');
+        $this->middleware('signed')->only('verify');
+        $this->middleware('throttle:6,1')->only('verify','resend');
     }
 
     /**
@@ -70,19 +72,25 @@ class ApplicationsController extends Controller
         }
         $application = new Applications;
         $grades = array('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E');
-        $schools_program = array([
-            'sobe'=>[
-                'hshshshshhs',
-                'mdmdmdmdmmdmdd',
-                'mdmdmmdmdmdmmdmdmd',
-                'mdmdhdfufffiiffi'
-            ],
-            'sci'=>'School Of Computing and Informatics',
-            'sebe'=>'School of Engineering and Built Environment',
-            'sedu'=>'School of Education',
-            'som'=>'School of Medicine',
-            'sidmha'=>'School od Disaster Management and Humanitarian Assistance'
-        ]);
+        //map schools to programs
+        $schools_program = array(
+            'sobe'=>array(),
+            'sci'=>array(
+                'IT'=>'Bsc Informatuon Technology',
+                'COM'=>'Bsc Computer Science',
+                'SIK'=>'Bsc Information Systems and Knowledge Management',
+                'ETS'=>'Bsc Education Technology Computer Studies'
+            ),
+            'sebe'=>array(),
+            'sedu'=>array(),
+            'som'=>array(),
+            'sidmha'=>array(),
+            'savet'=>array(),
+            'sass'=>array(),
+            'sonmaps'=>array(),
+            'sonas'=>array(),
+            'spbh'=>array()
+        );
         $subjects =  array('English','Kiswahili','Mathematics',
                     'Geography','Chemistry','Biology',
                     'Business Studies','Christian Religious Education',

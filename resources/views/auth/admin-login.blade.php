@@ -31,13 +31,11 @@
                     <img src="{!! asset('login-page/Login_v1/images/logo/MMUST.jpg" alt="IMG') !!}"><br>
                     {{ config('app.name')}}
 				</div>
-
-                <form class="login100-form validate-form" method="post" action="{{ route('student.login.submit') }}">
+                <form class="login100-form validate-form" method="post" action="{{ route('admin.login.submit') }}">
                     {{ csrf_field() }}
 					<span class="login100-form-title">
-						{{ __('STUDENT LOGIN') }}
+						{{ __('ADMIN LOGIN') }}
 					</span>
-
 					<div class="wrap-input100 validate-input $errors->has('email')? 'has-error':''">
                         <input class="input100 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus type="email" placeholder="Email">
                                 @error('email')
@@ -92,12 +90,12 @@
                             </a>
                         @endif						</a>
 					</div>
-					 <div class="text-center p-t-5">
+					 {{-- <div class="text-center p-t-5">
 						<a class="txt2" href="{{ route('student.account.creation') }}">
 							Create your Account Here
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
 						</a>
-					</div>
+					</div> --}}
 				</form>
 			</div>
 		</div>
