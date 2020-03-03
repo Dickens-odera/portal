@@ -208,6 +208,6 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-@include('admin.partials.includes.js-links')
+{{-- @include('admin.partials.includes.js-links') --}}
 </body>
 </html>

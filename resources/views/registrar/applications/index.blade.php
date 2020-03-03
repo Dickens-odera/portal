@@ -1,12 +1,14 @@
 @extends('registrar.main')
 @section('content')
     <div class="box">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
         <div class="box-header bg-warning text-center text-uppercase">{{ __('student application history') }}</div>
         <div class="box-body">
             <div class="col-md-12 row table-responsive">
                 @include('includes.errors.custom')
-                @if(count($applications) > 0)
-                <table class="table table-bordered table-hover table-dark" style="width:100%">
+                {{-- @if(count($applications) > 0) --}}
+                <table class="table table-bordered table-hover table-dark" style="width:100%" id="table-data">
                     <thead class="thead-dark !important" style="color:#fff; background:#000">
                         <tr>
                             <th>#</th>
@@ -28,7 +30,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    @foreach($applications as $key=>$value)
+                    {{-- @foreach($applications as $key=>$value)
                         <tbody>
                             <tr>
                                 <td>{{$value->app_id}}</td>
@@ -47,7 +49,7 @@
                                 <td>{{ $value->cut_off_points }}</td>
                                 <td>{{ $value->weighted_clusters}}</td>
                                 <td>{{ $value->status}}</td>
-                                <td class="btn-group btn-group-sm">
+                                {{-- <td class="btn-group btn-group-sm">
                                     <a href="{{ route('student.application.show',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>View</a>
                                     <form action="{{ route('student.application.cancel',['app_id'=>$value->app_id]) }}" method="post">
                                                {{ csrf_field() }}
@@ -55,12 +57,13 @@
                                                         <i class="fa fa-window-close"></i>Approve
                                                 </button>
                                     </form>
-                                </td>
+                                </td> 
                             </tr>
                         </tbody>
-                    @endforeach
+                    @endforeach 
+                    --}}
                 </table>
-                @else
+                {{-- @else
                     {{-- <table class="table table-responsive table-dark">
                         <thead>
                             <tr>
@@ -69,10 +72,44 @@
                                 </td>
                             </tr>
                         </thead>
-                    </table> --}}
-                @endif
+                    </table> 
+                @endif --}}
             </div>
         </div>
         <div class="box-footer"></div>
     </div>
+    <script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#table-data').DataTable({
+                "processing":true,
+                "serverSide":true,
+                "ajax":"{{ route('registrar.applications.view.data') }}",
+                        "type":'GET',
+                "columns":[
+                    {data:'app_id', name:'app_id'},
+                    {data:'student_name', name:'student_name'},
+                    {data:'reg_number',name:'reg_number'},
+                    {data:'student_phone',name:'student_phone'},
+                    {data:'present_program',name:'present_program'},
+                    {data:'present_school',name:'present_school'},
+                    {data:'preffered_program',name:'preffered_program'},
+                    {data:'preffered_school',name:'preffered_school'},
+                    {data:'kcse_index',name:'kcse_index'},
+                    {data:'kcse_year',name:'kcse_year'},
+                    {data:'kuccps_password',name:'kuccps_password'},
+                    {data:'mean_grade',name:'mean_grade'},
+                    {data:'aggregate_points',name:'aggregate_points'},
+                    {data:'cut_off_points',name:'cut_off_points'},
+                    {data:'weighted_clusters',name:'weighted_clusters'},
+                    {data:'status',name:'status'},
+                    {data:'action',name:'action', orderable:false, searchable:false}
+                ]
+            });
+        });
+    </script>
+
+        {{-- <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script> --}}
 @endsection

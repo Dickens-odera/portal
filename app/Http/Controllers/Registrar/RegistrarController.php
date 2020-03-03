@@ -6,7 +6,7 @@ use App\Applications;
 use App\Http\Controllers\Controller;
 use App\Student;
 use Illuminate\Http\Request;
-
+use Yajra\DataTables\Facades\DataTables;
 class RegistrarController extends Controller
 {
     public function __construct()
@@ -23,9 +23,23 @@ class RegistrarController extends Controller
      */
     public function getApplication(Request $request)
     {
-        $applications = Applications::latest()->get();
-        return view('registrar.applications.index',compact('applications'));
+        //$applications = Applications::latest()->get();
+        //return view('registrar.applications.index',compact('applications'));
+        return view('registrar.applications.index');
+
     }
+    public function getApplicationsTables()
+    {
+        $applications = Applications::all();
+        return DataTables::of($applications)->addColumn('action', function($row){
+            return "<a href='{{ route('student.application.show',$row->app_id) }}' class='btn btn-sm btn-success'<i class='fa fa-eye'</i>View More</a>";
+                    "<a href='{{ route('student.application.show',$row->app_id) }}' class='btn btn-sm btn-success'<i class='fa fa-eye'</i>View More</a>";
+        })->make();
+    }
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Support\Facades\Response
+     */
     public function addStudent(Request $request)
     {
         Student::create($this->validateStudentDetails());
