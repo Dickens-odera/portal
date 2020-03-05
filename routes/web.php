@@ -64,7 +64,6 @@ Route::prefix('registrar')->group(function()
     Route::get('/applications','Registrar\RegistrarController@getApplication')->name('registrar.applications.view');
     Route::post('/student-add',['as'=>'registrar.student.add','uses'=>'Registrar\RegistrarController@addStudent']);
     Route::get('/logout','Auth\Registrar\RegistrarLoginController@logout')->name('registrar.logout');
-
 });
 //the chairperson of department
 Route::prefix('cod')->group(function()

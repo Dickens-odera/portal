@@ -23,11 +23,14 @@ class RegistrarController extends Controller
      */
     public function getApplication(Request $request)
     {
-        //$applications = Applications::latest()->get();
-        //return view('registrar.applications.index',compact('applications'));
-        return view('registrar.applications.index');
+        $applications = Applications::latest()->get();
+        return view('registrar.applications.index',compact('applications'));
+        //return view('registrar.applications.index');
 
     }
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
     public function getApplicationsTables()
     {
         $applications = Applications::all();

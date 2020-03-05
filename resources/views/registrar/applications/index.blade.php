@@ -1,13 +1,13 @@
 @extends('registrar.main')
 @section('content')
     <div class="box">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+        {{-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css"> --}}
         <div class="box-header bg-warning text-center text-uppercase">{{ __('student application history') }}</div>
         <div class="box-body">
             <div class="col-md-12 row table-responsive">
                 @include('includes.errors.custom')
-                {{-- @if(count($applications) > 0) --}}
+                @if(count($applications) > 0)
                 <table class="table table-bordered table-hover table-dark" style="width:100%" id="table-data">
                     <thead class="thead-dark !important" style="color:#fff; background:#000">
                         <tr>
@@ -30,7 +30,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    {{-- @foreach($applications as $key=>$value)
+                     @foreach($applications as $key=>$value)
                         <tbody>
                             <tr>
                                 <td>{{$value->app_id}}</td>
@@ -49,7 +49,7 @@
                                 <td>{{ $value->cut_off_points }}</td>
                                 <td>{{ $value->weighted_clusters}}</td>
                                 <td>{{ $value->status}}</td>
-                                {{-- <td class="btn-group btn-group-sm">
+                                 <td class="btn-group btn-group-sm">
                                     <a href="{{ route('student.application.show',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>View</a>
                                     <form action="{{ route('student.application.cancel',['app_id'=>$value->app_id]) }}" method="post">
                                                {{ csrf_field() }}
@@ -57,14 +57,14 @@
                                                         <i class="fa fa-window-close"></i>Approve
                                                 </button>
                                     </form>
-                                </td> 
+                                </td>
                             </tr>
                         </tbody>
-                    @endforeach 
-                    --}}
+                    @endforeach
+
                 </table>
-                {{-- @else
-                    {{-- <table class="table table-responsive table-dark">
+                 @else
+                     <table class="table table-responsive table-dark">
                         <thead>
                             <tr>
                                 <td class="">No recent applications made.
@@ -72,13 +72,13 @@
                                 </td>
                             </tr>
                         </thead>
-                    </table> 
-                @endif --}}
+                    </table>
+                @endif
             </div>
         </div>
         <div class="box-footer"></div>
     </div>
-    <script src="https://code.jquery.com/jquery.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery.js"></script>
 <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript">
@@ -109,7 +109,7 @@
                 ]
             });
         });
-    </script>
+    </script> --}}
 
         {{-- <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script> --}}
 @endsection

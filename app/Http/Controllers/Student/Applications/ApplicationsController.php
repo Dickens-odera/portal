@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 use PHPMailer\PHPMailer;
 
 use Illuminate\Support\Facades\Validator;
-//use Intervention\Image as Image;
 use Intervention\Image\Facades\Image;
 
 class ApplicationsController extends Controller
@@ -72,6 +71,8 @@ class ApplicationsController extends Controller
         }
         $application = new Applications;
         $grades = array('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E');
+        //calculate the clusters
+
         //map schools to programs
         $schools_program = array(
             'sobe'=>array(),
