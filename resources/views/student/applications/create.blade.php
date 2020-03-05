@@ -41,6 +41,12 @@
                                             {!! Form::text('student_phone',old('student_phone'), ['class'=>'form-control']) !!}
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        {!! Form::label('student_id','ID No:', ['class'=>'form-label text-md-right col-md-4']) !!}
+                                        <div class="col-md-8">
+                                            {!! Form::text('student_id',old('student_id'), ['class'=>'form-control']) !!}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-footer"></div>
                             </div>

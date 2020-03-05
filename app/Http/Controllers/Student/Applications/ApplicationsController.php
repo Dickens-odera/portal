@@ -129,6 +129,7 @@ class ApplicationsController extends Controller
         $application->student_name = $request->student_name;
         $application->reg_number = $request->reg_number;
         $application->student_phone = $this->validate_phone();
+        $application->idNumber = $request->student_id;
         $application->present_program = $current_program;
         $application->present_school = $current_school;
         $application->preffered_program = $preffered_program;
@@ -410,6 +411,7 @@ class ApplicationsController extends Controller
             'student_name'=>'required',
             'reg_number'=>'required|unique:applications',
             'student_phone'=>'required|unique:applications',
+            'student_id'=>'required|unique:applications',
             'current_program'=>'required',
             'current_school'=>'required',
             'preffered_program'=>'required',
@@ -451,6 +453,7 @@ class ApplicationsController extends Controller
             'student_name'=>$request->student_name,
             'reg_number'=>$request->reg_number,
             'student_phone'=>$request->student_phone,
+            'idNumber'=>$request->student_id,
             'present_program'=>$request->current_program,
             'present_school'=>$request->current_school,
             'preffered_program'=>$request->preffered_program,
