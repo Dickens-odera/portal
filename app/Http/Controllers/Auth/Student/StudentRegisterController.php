@@ -6,7 +6,10 @@ use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use PHPMailer\PHPMailer;
+//use PHPMailer\PHPMailer\PHPMailer as PHPMailerPHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 class StudentRegisterController extends Controller
 {
     public function __construct()
@@ -51,8 +54,9 @@ class StudentRegisterController extends Controller
             if($student->save())
             {
                 //send mail to comfirm email address in the near future
-                request()->session()->flash('success','Account created successfully, please login');
-                return redirect(route('student.login'));
+                $this->sendMailToNewStudentAccount();
+                request()->session()->flash('success','Account created successfully, please check your email and verify your count before login');
+                return redirect()->back();
             }
             else
             {
@@ -68,7 +72,7 @@ class StudentRegisterController extends Controller
     {
         return [
             'reg_number'=>'required',
-            'email'=>'required|email|domain_email',
+            'email'=>'required|email',
             'password'=>'required'
         ];
     }
@@ -77,9 +81,47 @@ class StudentRegisterController extends Controller
      * @param $token
      * @return Illiminate\Http\Response
      */
-    private function sendMainToVerifyEmail($email, $token)
+    private function sendMailToNewStudentAccount()
     {
-
+        require '../../vendor/autoload.php';
+        //require 'PHPMailerAutoload.php';
+        $mail  = new PHPMailer(true);
+        try
+        {
+            //$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->isSMTP();
+            //$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;// Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
+            $mail->Charset = 'utf-8';
+            $mail->SMTPAuth = true;
+            $mail->Host = env('MAIL_HOST');
+            $mail->Port = env('MAIL_PORT');
+            $mail->Username = env('MAIL_USERNAME');
+            $mail->Password = env('MAIL_PASSWORD');
+            $mail->From = env('MAIL_FROM_ADDRESS');
+            $mail->FromName = config('app.name');
+            $mail->Subject = 'ACCOUNT VERIFICATION';
+            $mail->MsgHTML("Dear"." ".request()->reg_number ." "
+            ."User Thank you for registering with us".
+            "<a href='{{ route('student.login') }}' here for login</a>");
+            $mail->addAddress(request()->email, request()->reg_number);
+            set_time_limit(60);
+            if($mail->send())
+            {
+                request()->session()->flash('success','Verification Email sent to '.' '.request()->email.' '.'Kindly check your inbox');
+                return redirect()->back();
+            }
+            else
+            {
+                request()->session()->flash('error','Failed to snd email, try again later');
+                return redirect()->back();
+            }
+        }catch(Exception $e)
+        {
+            dd($e);
+            // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
     }
 }
 ?>
