@@ -74,7 +74,7 @@ class DeanController extends Controller
         }
         else
         {
-            request()->session()->flash('error','Failed to upload excel file, kindlyc check on the format');
+            request()->session()->flash('error','Failed to upload excel file, kindly check on the format');
             return redirect()->back();
         }
     }
