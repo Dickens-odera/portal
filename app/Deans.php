@@ -26,4 +26,12 @@ class Deans extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function school()
+    {
+        $this->belongsTo('App\Schools::class');
+    }
 }
+

@@ -12,6 +12,6 @@ class ProgramsExport implements FromCollection
     */
     public function collection()
     {
-        return Programs::all();
+        return Programs::select('school_id','name','description')->get();
     }
 }

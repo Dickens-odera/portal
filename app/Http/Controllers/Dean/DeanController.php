@@ -79,6 +79,24 @@ class DeanController extends Controller
         }
     }
     /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function exportPrograms()
+    {
+        $school = Auth::user()->school;
+        dd($school);
+        //return Excel::download(new ProgramsExport, 'school-programs.xlsx');
+    }
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function viewAllPrograms(Request $request)
+    {
+        $programs = Programs::where('school_id','=',Auth::user()->school_id)->get();
+        return view('dean.programs.index', compact('programs'));
+    }
+    /**
      * @return array
      */
     private function data()
