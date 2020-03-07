@@ -84,8 +84,8 @@ class DeanController extends Controller
     public function exportPrograms()
     {
         $school = Auth::user()->school;
-        dd($school);
-        //return Excel::download(new ProgramsExport, 'school-programs.xlsx');
+        //dd($school);
+        return Excel::download(new ProgramsExport, 'school-programs.xlsx');
     }
     /**
      * @param \Illuminate\Http\Request $request
