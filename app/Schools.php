@@ -23,14 +23,28 @@ class Schools extends Model
      */
     public function programs()
     {
-        $this->hasMany('App\Programs::class','program_id');
+       return $this->hasMany(Programs::class,'school_id','program_id');
     }
     /**
      * @return \Illuminate\Support\Facades\Response
      */
     public function dean()
     {
-        $this->hasMany('App\Deans::class','school_id');
+       return $this->hasOne(Deans::class,'school_id');
+    }
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function cod()
+    {
+       return $this->hasMany(CODs::class,'school_id');
+    }
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function department()
+    {
+        return $this->hasMany(Departments::class,'school_id');
     }
 }
 

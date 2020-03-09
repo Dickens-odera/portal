@@ -1,34 +1,34 @@
-@extends('student.main')
+@extends('cod.main')
+
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">{{ __('student application history') }}</div>
+        <div class="box-header bg-warning text-center text-uppercase">{{ __('applications for transfer (Computer Science)') }}</div>
         <div class="box-body">
-            <div class="col-md-12 row table-responsive">
-                @include('includes.errors.custom')
-                @if(count($applications) > 0)
-                <table class="table table-bordered table-hover table-dark" style="width:100%">
-                    <thead class="thead-dark !important" style="color:#fff; background:#000">
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Reg No</th>
-                            <th>Phone</th>
-                            <th>Current Program</th>
-                            <th>Current School</th>
-                            <th>Preffered Program</th>
-                            <th>Preffered School</th>
-                            <th>KCSE Index</th>
-                            <th>KCSE Year</th>
-                            <th>KUCCPS Password</th>
-                            <th>Mean Grade</th>
-                            <th>Aggregate Points</th>
-                            <th>Cut Off Points</th>
-                            <th>Weighted Clusters</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    @foreach($applications as $key=>$value)
+            <div class="vol-md-12 table-responsive">
+            @if(count($applications) > 0)
+                    <table class="table table-bordered table-dark">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Reg No</th>
+                                <th>Phone</th>
+                                <th>Current Program</th>
+                                <th>Current School</th>
+                                <th>Preffered Program</th>
+                                <th>Preffered School</th>
+                                <th>KCSE Index</th>
+                                <th>KCSE Year</th>
+                                <th>KUCCPS Password</th>
+                                <th>Mean Grade</th>
+                                <th>Aggregate Points</th>
+                                <th>Cut Off Points</th>
+                                <th>Weighted Clusters</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        @foreach($applications as $key=>$value)
                         <tbody>
                             <tr>
                                 <td>{{$value->app_id}}</td>
@@ -59,20 +59,10 @@
                             </tr>
                         </tbody>
                     @endforeach
-                    {{-- {{$applications->links()}} --}}
-                </table>
-                @else
-                    <table class="table table-responsive table-dark">
-                        <thead>
-                            <tr>
-                                <td class="">No recent applications made.
-                                    Kindly click<a href="{{ route('student.application.form') }}" class="btn btn-success btn-sm"><i class="fa fa-arrow-left"></i> Here</a> to apply
-                                </td>
-                            </tr>
-                        </thead>
                     </table>
-                @endif
-            </div>
+                    {{$applications->links()}}
+            @endif
+        </div>
         </div>
         <div class="box-footer"></div>
     </div>

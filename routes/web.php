@@ -74,5 +74,6 @@ Route::prefix('cod')->group(function()
     Route::post('/login','Auth\COD\CODLoginController@login')->name('cod.login.submit');
     Route::get('/logout','Auth\COD\CODLoginController@logout')->name('cod.logout');
     Route::get('/dashboard','COD\CODController@index')->name('cod.dashboard');
+    Route::get('/applications','COD\CODController@getAllApplications')->name('cod.applications.view.all');
 });
 

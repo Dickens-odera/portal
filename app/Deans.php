@@ -31,7 +31,7 @@ class Deans extends Authenticatable
      */
     public function school()
     {
-        $this->belongsTo('App\Schools::class');
+        return $this->belongsTo('App\Schools::class');
     }
 }
 

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\COD;
 
+use App\Applications;
+use App\CODs;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CODController extends Controller
 {
@@ -20,7 +23,34 @@ class CODController extends Controller
     {
         return view('cod.dashboard');
     }
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function getAllApplications()
+    {
+        $program = "";
+        $cod = CODs::where('id','=',Auth::user()->id)->first();
+        $school = $cod->school;
+        $school_name = $school->school_name;
+        //dd($school_name);
+        $department = $cod->department;
+        $department_name = $department->name;
+        dd($department->school->programs);
+        $applications = Applications::where('preffered_school','=',$school_name)
+                                    // ->where('preffered_program','LIKE','%'.$department->programs.'%')
+                                    ->latest()
+                                    ->paginate(5);
 
+        if(!$applications)
+        {
+            request()->session()->flash('error','No applications found');
+            return redirect()->back();
+        }
+        else
+        {
+            return view('cod.applications.index', compact('applications'));
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

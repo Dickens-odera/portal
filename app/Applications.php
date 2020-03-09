@@ -16,6 +16,6 @@ class Applications extends Model
 
     public function students()
     {
-        $this->belongsTo('App\Students::class');
+      return $this->belongsTo('App\Students::class');
     }
 }

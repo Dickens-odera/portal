@@ -19,6 +19,13 @@ class Programs extends Model
      */
     public function school()
     {
-        $this->belongsTo('App\Schools:class','school_id');
+       return $this->belongsTo(Schools::class,'school_id','school_id');
+    }
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function department()
+    {
+        return $this->belongsTo(Departments::class,'dep_id');
     }
 }

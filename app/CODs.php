@@ -3,7 +3,7 @@
 namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use App\Schools;
 class CODs extends Authenticatable
 {
     use Notifiable;
@@ -35,6 +35,13 @@ class CODs extends Authenticatable
      */
     public function department()
     {
-        $this->belongsTo('App\Departments::class','dep_id');
+       return $this->belongsTo(Departments::class,'dep_id','dep_id');
+    }
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function school()
+    {
+       return $this->belongsTo(Schools::class,'school_id','school_id');
     }
 }
