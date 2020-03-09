@@ -25,7 +25,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li class="header">You have...</li>
-                <li> 
+                <li>
                 </li>
                 <li class="footer"><a href="">View all</a></li>
               </ul>
