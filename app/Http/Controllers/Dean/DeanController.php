@@ -83,7 +83,7 @@ class DeanController extends Controller
      */
     public function exportPrograms()
     {
-        $school = Auth::user()->school;
+        $school = Schools::where('school_id','=',Auth::user()->school_id)->first();
         //dd($school);
         return Excel::download(new ProgramsExport, 'school-programs.xlsx');
     }

@@ -25,8 +25,6 @@ class RegistrarController extends Controller
     {
         $applications = Applications::latest()->get();
         return view('registrar.applications.index',compact('applications'));
-        //return view('registrar.applications.index');
-
     }
     /**
      * @return \Illuminate\Support\Facades\Response
