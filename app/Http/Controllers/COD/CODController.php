@@ -35,9 +35,9 @@ class CODController extends Controller
         //dd($school_name);
         $department = $cod->department;
         $department_name = $department->name;
-        dd($department->school->programs);
+        dd($department->programs);
         $applications = Applications::where('preffered_school','=',$school_name)
-                                    // ->where('preffered_program','LIKE','%'.$department->programs.'%')
+                                    //->where('preffered_program','LIKE','%'.$department->programs.'%')
                                     ->latest()
                                     ->paginate(5);
 
