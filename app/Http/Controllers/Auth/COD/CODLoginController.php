@@ -20,7 +20,7 @@ class CODLoginController extends Controller
     public function login(Request $request)
     {
         $this->validateRequest();
-        if(Auth::guard('cod')->attempt(['email'=>$request->email,'password'=>$request->password], $request->remember))
+        if(Auth::guard('cod')->attempt($this->data(), $request->remember))
         {
             return redirect()->intended(route('cod.dashboard'));
         }
@@ -46,5 +46,12 @@ class CODLoginController extends Controller
                 'password'=>'required'
             ]
         );
+    }
+    /**
+     * @return array
+     */
+    private function data()
+    {
+        return array('email'=>request()->email,'password'=>request()->password);
     }
 }

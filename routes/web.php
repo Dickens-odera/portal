@@ -70,8 +70,9 @@ Route::prefix('registrar')->group(function()
 //the chairperson of department
 Route::prefix('cod')->group(function()
 {
-    Route::get('/login-form',['as'=>'cod.login','uses'=>'Auth\COD\CODLoginController@showLoginForm']);
-    Route::post('/login',['as'=>'cod.login.submit','uses'=>'Auth\COD\CODLoginController@login']);
-    Route::get('/dashboard',['as'=>'cod.dashboard','uses'=>'Auth\COD\CODLoginController@index']);
+    Route::get('/login-form','Auth\COD\CODLoginController@showLoginForm')->name('cod.login');
+    Route::post('/login','Auth\COD\CODLoginController@login')->name('cod.login.submit');
+    Route::get('/logout','Auth\COD\CODLoginController@logout')->name('cod.logout');
+    Route::get('/dashboard','COD\CODController@index')->name('cod.dashboard');
 });
 
