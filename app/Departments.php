@@ -13,7 +13,7 @@ class Departments extends Model
     /**
      * @var array
      */
-    protected $fillable = array('school_id','programs','chair');
+    protected $fillable = array('school_id','programs','chair','name');
     /**
      * @return \Illuminate\Support\Facades\Response
      */
@@ -26,7 +26,7 @@ class Departments extends Model
      */
     public function school()
     {
-        return $this->belongsTo(\App\Schools::class,'school_id','school_id');
+        return $this->belongsTo(Schools::class,'school_id','school_id');
     }
     /**
      * @return \Illuminate\Support\Facades\Response

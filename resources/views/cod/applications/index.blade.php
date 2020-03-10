@@ -2,12 +2,16 @@
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">{{ __('applications for transfer (Computer Science)') }}</div>
+        <div class="box-header bg-warning text-center text-uppercase">{{ __('applications for transfer') }} ({{ Auth::user()->department->name}} {{ __('department') }})</div>
         <div class="box-body">
-            <div class="vol-md-12 table-responsive">
+            <div class="col-md-12 table-responsive">
+                <div class="col-md-12 row">
+                <input type="text" class="col-md-10 form-control mb-2" name="term" style="width:80%" placeholder="Search by program name">
+                <button class="col-md-2 btn btn-sm btn-success" style="width:20%"><i class="fa fa-search"></i></button>
+            </div>
             @if(count($applications) > 0)
                     <table class="table table-bordered table-dark">
-                        <thead>
+                        <thead style="background:#000; color:#fff">
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>

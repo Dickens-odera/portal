@@ -13,7 +13,7 @@ class Programs extends Model
     /**
      * @var array $fillable
      */
-    protected $fillable = ['name','description','school_id'];
+    protected $fillable = ['name','description','school_id','dep_id'];
     /**
      * @return \Illuminate\Support\Facades\Response
      */
@@ -26,6 +26,6 @@ class Programs extends Model
      */
     public function department()
     {
-        return $this->belongsTo(Departments::class,'dep_id');
+        return $this->belongsTo(Departments::class,'dep_id','dep_id');
     }
 }

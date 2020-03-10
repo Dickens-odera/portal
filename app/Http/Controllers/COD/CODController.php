@@ -4,10 +4,13 @@ namespace App\Http\Controllers\COD;
 
 use App\Applications;
 use App\CODs;
+use App\Departments;
 use App\Http\Controllers\Controller;
+use App\Programs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
 class CODController extends Controller
 {
     public function __construct()
@@ -28,18 +31,25 @@ class CODController extends Controller
      */
     public function getAllApplications()
     {
-        $program = "";
         $cod = CODs::where('id','=',Auth::user()->id)->first();
         $school = $cod->school;
-        $school_name = $school->school_name;
+        //$school_name = $school->school_name;
         //dd($school_name);
         $department = $cod->department;
+        $school_name = $department->school->school_name;
         $department_name = $department->name;
-        dd($department->programs);
+        //dd($department->program);
+        $dep = Departments::where('dep_id','=',Auth::user()->department->dep_id)->first();
+        $test_programs = DB::select('select name from programs where programs.dep_id = :id',['id'=>Auth::user()->department->dep_id]);
+        $p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
+        //dd($p);
+        //dd($test_programs);
+        //dd($dep->program);
+
         $applications = Applications::where('preffered_school','=',$school_name)
-                                    //->where('preffered_program','LIKE','%'.$department->programs.'%')
+                                    ->whereIn('preffered_program',$p)
                                     ->latest()
-                                    ->paginate(5);
+                                    ->paginate(2);
 
         if(!$applications)
         {

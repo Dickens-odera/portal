@@ -21,7 +21,7 @@ class Schools extends Model
     /**
      * @return \Illuminate\Support\Facades\Response
      */
-    public function programs()
+    public function program()
     {
        return $this->hasMany(Programs::class,'school_id','program_id');
     }
@@ -30,21 +30,21 @@ class Schools extends Model
      */
     public function dean()
     {
-       return $this->hasOne(Deans::class,'school_id');
+       return $this->hasOne(Deans::class,'school_id','id');
     }
     /**
      * @return \Illuminate\Support\Facades\Response
      */
     public function cod()
     {
-       return $this->hasMany(CODs::class,'school_id');
+       return $this->hasMany(CODs::class,'school_id','id');
     }
     /**
      * @return \Illuminate\Support\Facades\Response
      */
     public function department()
     {
-        return $this->hasMany(Departments::class,'school_id');
+        return $this->hasMany(Departments::class,'school_id','dep_id');
     }
 }
 

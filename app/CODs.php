@@ -23,7 +23,7 @@ class CODs extends Authenticatable
     /**
      * @var array
      */
-    protected $fillable = ['name','email','dep_id'];
+    protected $fillable = ['name','email','dep_id','school_id'];
     /**
      * @var array
      */
