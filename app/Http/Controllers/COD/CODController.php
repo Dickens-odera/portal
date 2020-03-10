@@ -7,10 +7,13 @@ use App\CODs;
 use App\Departments;
 use App\Http\Controllers\Controller;
 use App\Programs;
+use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
+
 class CODController extends Controller
 {
     public function __construct()
@@ -45,7 +48,6 @@ class CODController extends Controller
         //dd($p);
         //dd($test_programs);
         //dd($dep->program);
-
         $applications = Applications::where('preffered_school','=',$school_name)
                                     ->whereIn('preffered_program',$p)
                                     ->latest()
@@ -62,68 +64,40 @@ class CODController extends Controller
         }
     }
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param string $application_id
+     * @return \Illuminate\Support\Facades\Response
      */
-    public function create()
+    public function getApplication($application_id = null)
     {
-        //
+        $application_id = request()->app_id;
+        if(!$application_id)
+        {
+            request()->session()->flash('error','Invalid Request Format');
+            return redirect()->back()->withInput(request()->all());
+        }
+        else
+        {
+            $validator = Validator::make(request()->all(),array('app_id'=>'required'));
+            if($validator->fails())
+            {
+                request()->session()->flash('error',$validator->errors());
+            }
+            else
+            {
+                $application = Applications::where('app_id','=',$application_id)->first();
+                if(!$application)
+                {
+                    request()->session()->flash('error','Application Not Found');
+                    return redirect()->back();
+                }
+                else
+                {
+                    //$email = $application->students->email;
+                    //dd($email);
+                    return view('cod.applications.show',compact('application'));
+                }
+            }
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

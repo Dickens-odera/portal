@@ -6,6 +6,7 @@
         <div class="box-body">
             <div class="col-md-12 table-responsive">
                 <div class="col-md-12 row">
+                    @include('includes.errors.custom')
                 <input type="text" class="col-md-10 form-control mb-2" name="term" style="width:80%" placeholder="Search by program name">
                 <button class="col-md-2 btn btn-sm btn-success" style="width:20%"><i class="fa fa-search"></i></button>
             </div>
@@ -52,7 +53,7 @@
                                 <td>{{ $value->weighted_clusters}}</td>
                                 <td>{{ $value->status}}</td>
                                 <td class="btn-group btn-group-sm">
-                                    <a href="{{ route('student.application.show',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View</a>
+                                    <a href="{{ route('cod.application.view',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View</a>
                                     <form action="{{ route('student.application.cancel',['app_id'=>$value->app_id]) }}" method="post">
                                                {{ csrf_field() }}
                                                 <button class="btn btn-sm btn-danger" type="submit">

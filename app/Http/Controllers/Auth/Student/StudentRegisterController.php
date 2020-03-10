@@ -72,7 +72,7 @@ class StudentRegisterController extends Controller
     {
         return [
             'reg_number'=>'required',
-            'email'=>'required|email',
+            'email'=>'required|email|domain_email',
             'password'=>'required'
         ];
     }

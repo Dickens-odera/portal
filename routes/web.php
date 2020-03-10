@@ -75,5 +75,6 @@ Route::prefix('cod')->group(function()
     Route::get('/logout','Auth\COD\CODLoginController@logout')->name('cod.logout');
     Route::get('/dashboard','COD\CODController@index')->name('cod.dashboard');
     Route::get('/applications','COD\CODController@getAllApplications')->name('cod.applications.view.all');
+    Route::get('/application','COD\CODController@getApplication')->name('cod.application.view');
 });
 
