@@ -146,10 +146,19 @@
                     <div class="box-header bg-success text-center text-uppercase">{{ __('cod comments section') }}</div>
                     <div class="box-body">
                         {!! Form::open() !!}
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
 
                         </div>
-                        <div class="col-md-4"></div>
+                        <div class="col-md-4"></div> --}}
+                        <div class="form-group row">
+                            {!! Form::label('comment','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
+                            <div class="col-md-8">
+                                {!! Form::textarea('comments',old('comments'), ['class'=>'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-md-offset-4">
+                            {!! Form::submit('submit', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!}
+                        </div>
                         {!! Form::close() !!}
                     </div>
                     <div class="box-footer"></div>
