@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Dean;
 
+use App\Applications;
+use App\Deans;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Schools;
@@ -25,6 +27,7 @@ class DeanController extends Controller
     {
         return view('dean.dashboard');
     }
+    /************************* PROGRAMS MODULE ****************/
     /**
      * @return \Illuminate\Support\Facades\Response
      */
@@ -96,6 +99,61 @@ class DeanController extends Controller
         $programs = Programs::where('school_id','=',Auth::user()->school_id)->get();
         return view('dean.programs.index', compact('programs'));
     }
+    /****************************** END OF PROGRAMS MODULE *****************/
+
+    /******************************** START OF APPLICATIONS MODULE  *************/
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function getAllIncomingApplications()
+    {
+        $dean = Deans::where('id','=',Auth::user()->id)->first();
+        $school = $dean->school->school_name;
+        //dd($school);
+        $applications = Applications::where('preffered_school','=',$school)
+                                        ->latest()
+                                        ->paginate(3);
+        //dd($applications);
+        // $count = $applications->get()->all();
+        if(!$applications)
+        {
+            request()->session()->flash('error','Applications Not Found');
+            return redirect()->back();
+        }
+        else
+        {
+            return view('dean.applications.incoming', compact('applications','count'));
+        }
+    }
+    /**
+     * @param string|null $app_id
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function getAnIncomingApplication($app_id = null)
+    {
+        $app_id = request()->app_id;
+        if(!$app_id)
+        {
+            request()->session()->flash('error','Invalid Request Format');
+            return redirect()->back();
+        }
+        else
+        {
+            $this->validate(request(),array('app_id'=>'required'));
+            //get cod comments for both the current and receiving cods
+            $application = Applications::where('app_id','=',$app_id)->first();
+            if(!$application)
+            {
+                request()->session()->flash('error','Requested application not found');
+                return redirect()->back();
+            }
+            else
+            {
+                return view('dean.applications.incoming-single-view', compact('application'));
+            }
+        }
+    }
+    /******************************** END OF APPLICATIONS MODULE ********************/
     /**
      * @return array
      */

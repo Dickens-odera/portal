@@ -17,6 +17,19 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
         <li class="treeview">
+            <a href="#">
+              <i class="fa fa-pie-chart"></i>
+              <span>Applications</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{{ route('dean.applications.incoming.all') }}"><i class="fa fa-circle-o"></i> Incoming</a></li>
+              <li><a href=""><i class="fa fa-circle-o"></i> Outgoing</a></li>
+            </ul>
+          </li>
+        <li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
             <span>Programs</span>

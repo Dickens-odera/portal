@@ -6,11 +6,11 @@
     $email = null;
     @endif
 </div> --}}
-@extends('cod.main')
+@extends('dean.main')
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">application sr no: {{ $application->app_id }} - {{ Auth::user()->department->name}} {{ __('department') }}</div>
+        <div class="box-header bg-warning text-center text-uppercase">application sr no: {{ $application->app_id }} - {{ Auth::user()->school->school_name}}</div>
         <div class="box-body">
             <div class="col-md-12 row">
                 <div class="col-md-4">
@@ -50,7 +50,7 @@
                                 </div>
                             {!! Form::close() !!}
                         </div>
-                        <div class="box-footer bg-default"></div>
+                        {{-- <div class="box-footer bg-default"></div> --}}
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -90,7 +90,7 @@
                                 </div>
                             {!! Form::close() !!}
                         </div>
-                        <div class="box-footer bg-default"></div>
+                        {{-- <div class="box-footer bg-default"></div> --}}
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -136,16 +136,15 @@
                                 </div>
                             {!! Form::close() !!}
                         </div>
-                        <div class="box-footer bg-default"></div>
+                        {{-- <div class="box-footer bg-default"></div> --}}
                     </div>
                 </div>
             </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-8 row">
+            <div class="col-md-12 row">
                 <div class="box">
-                    <div class="box-header bg-success text-center text-uppercase">{{ __('cod comments section') }}</div>
+                    <div class="box-header bg-success text-center text-uppercase">{{ __('cod and dean comments section') }}</div>
                     <div class="box-body">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="box">
                                 <div class="box-header bg-warning text-center text-uppercase">{{ __('current cod') }}</div>
                                 <div class="box-body">
@@ -158,10 +157,10 @@
                                     </div>
                                     {!! Form::close() !!}
                                 </div>
-                                <div class="box-footer"></div>
+                                {{-- <div class="box-footer"></div> --}}
                             </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3 row">
                         <div class="box">
                             <div class="box-header bg-warning text-center text-uppercase">{{ __('receiving cod') }}</div>
                             <div class="box-body">
@@ -169,22 +168,59 @@
                                 <div class="form-group row">
                                     {!! Form::label('comments','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
                                     <div class="col-md-8">
-                                        {!! Form::textarea('comments',old('comments'), ['class'=>'form-control']) !!}
+                                        {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-md-offset-4">
-                                    {!! Form::submit('submit', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!}
+                                    {{-- {!! Form::submit('submit', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!} --}}
                                 </div>
+                                {!! Form::close() !!}
+                            </div>
+                            {{-- <div class="box-footer"></div> --}}
+                        </div>
+                    </div>
+                    <div class="col-md-3 row">
+                        <div class="box">
+                            <div class="box-header bg-warning text-center text-uppercase">{{ __('current dean') }}</div>
+                            <div class="box-body">
+                                {!! Form::open() !!}
+                                <div class="form-group row">
+                                    {!! Form::label('comments','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
+                                    <div class="col-md-8">
+                                        {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-md-offset-4">
+                                    {{-- {!! Form::submit('submit', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!} --}}
+                                </div>
+                                {!! Form::close() !!}
+                            </div>
+                            {{-- <div class="box-footer"></div> --}}
+                        </div>
+                    </div>
+                    <div class="col-md-3 row">
+                        <div class="box">
+                            <div class="box-header bg-warning text-center text-uppercase">{{ __('receiving dean') }}</div>
+                            <div class="box-body">
+                                {!! Form::open() !!}
+                                    <div class="form-group row">
+                                        {!! Form::label('comments','Comments', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        <div class="col-md-8">
+                                            {!! Form::textarea('comments',old('comments'), ['class'=>'form-control']) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 col-md-offset-4">
+                                        {!! Form::submit('submit', ['class'=>'text-center text-uppercase btn btn-sm btn-success']) !!}
+                                    </div>
                                 {!! Form::close() !!}
                             </div>
                             <div class="box-footer"></div>
                         </div>
                     </div>
                     </div>
-                    <div class="box-footer"></div>
+                    {{-- <div class="box-footer"></div> --}}
                 </div>
             </div>
-            <div class="col-md-2"></div>
         </div>
         <div class="box-footer"></div>
     </div>
