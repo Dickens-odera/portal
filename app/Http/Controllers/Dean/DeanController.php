@@ -126,7 +126,7 @@ class DeanController extends Controller
         }
     }
     /**
-     * @param string|null $app_id
+     * @param int $app_id
      * @return \Illuminate\Support\Facades\Response
      */
     public function getAnIncomingApplication($app_id = null)
@@ -152,6 +152,35 @@ class DeanController extends Controller
                 return view('dean.applications.incoming-single-view', compact('application'));
             }
         }
+    }
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function submitFeedbackOnIncomingApp()
+    {
+
+    }
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function getAllOutgoingApplications()
+    {
+
+    }
+    /**
+     * @param int $app_id
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function getAnOutGoingApplication($app_id = null)
+    {
+
+    }
+    /**
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function submitFeedbackOnOutgoingApp()
+    {
+        //do something here
     }
     /******************************** END OF APPLICATIONS MODULE ********************/
     /**

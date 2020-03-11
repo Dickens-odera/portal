@@ -144,7 +144,7 @@
                 <div class="box">
                     <div class="box-header bg-success text-center text-uppercase">{{ __('cod and dean comments section') }}</div>
                     <div class="box-body">
-                        <div class="col-md-3">
+                        <div class="col-md-3 row">
                             <div class="box">
                                 <div class="box-header bg-warning text-center text-uppercase">{{ __('current cod') }}</div>
                                 <div class="box-body">

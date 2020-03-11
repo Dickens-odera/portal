@@ -56,7 +56,12 @@ Route::prefix('dean')->group(function()
     Route::get('/programs/export','Dean\DeanController@exportPrograms')->name('dean.programs.export');
     Route::get('/programs/all','Dean\DeanController@viewAllPrograms')->name('dean.programs.view.all');
     Route::get('/applications/incoming','Dean\DeanController@getAllIncomingApplications')->name('dean.applications.incoming.all');
+    Route::get('/applications/outgoing','Dean\DeanController@getAllOutgoingApplications')->name('dean.applications.outgoing.all');
     Route::get('/application/incoming','Dean\DeanController@getAnIncomingApplication')->name('dean.application.incoming.view');
+    Route::get('/application/outgoing','Dean\DeanController@getAnOutGoingApplication')->name('dean.application.outgoing.view');
+    Route::post('/application/icoming/comment','Dean\DeanController@submitFeedbackOnIncomingApp')->name('dean.application.incoming.comment.submit');
+    Route::post('/application/outgoing/comment','Dean\DeanController@submitFeedbackOnOutgoingApp')->name('dean.application.outgoing.comment.submit');
+
 });
 //the registrar
 Route::prefix('registrar')->group(function()
