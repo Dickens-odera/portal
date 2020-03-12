@@ -225,4 +225,3 @@
         <div class="box-footer"></div>
     </div>
 @endsection
-
