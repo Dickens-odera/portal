@@ -10,7 +10,7 @@
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">Incoming application sr no: {{ $application->app_id }} - {{ Auth::user()->school->school_name}}</div>
+        <div class="box-header bg-warning text-center text-uppercase">Outgoing application sr no: {{ $application->app_id }} - {{ Auth::user()->school->school_name}}</div>
         <div class="box-body">
             <div class="col-md-12 row">
                 <div class="col-md-4">
@@ -187,11 +187,11 @@
                                 <div class="form-group row">
                                     {!! Form::label('comments','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
                                     <div class="col-md-8">
-                                        {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
+                                        {!! Form::textarea('comments',old('comments'), ['class'=>'form-control']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-md-offset-4">
-                                    {{-- {!! Form::submit('submit', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!} --}}
+                                    {!! Form::submit('submit', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!}
                                 </div>
                                 {!! Form::close() !!}
                             </div>
@@ -206,11 +206,11 @@
                                     <div class="form-group row">
                                         {!! Form::label('comments','Comments', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::textarea('comments',old('comments'), ['class'=>'form-control']) !!}
+                                            {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-md-offset-4">
-                                        {!! Form::submit('submit', ['class'=>'text-center text-uppercase btn btn-sm btn-success']) !!}
+                                        {{-- {!! Form::submit('submit', ['class'=>'text-center text-uppercase btn btn-sm btn-success']) !!} --}}
                                     </div>
                                 {!! Form::close() !!}
                             </div>

@@ -165,7 +165,19 @@ class DeanController extends Controller
      */
     public function getAllOutgoingApplications()
     {
-
+        $dean = Deans::where('id','=',Auth::user()->id)->first();
+        $applications = Applications::where('present_school','=',$dean->school->school_name)
+                                        ->latest()
+                                        ->paginate(5);
+        if(!$applications)
+        {
+            request()->session()->flash('error','Applications not found');
+            return redirect()->back();
+        }
+        else
+        {
+            return view('dean.applications.outgoing', compact('applications'));
+        }
     }
     /**
      * @param int $app_id
@@ -173,7 +185,26 @@ class DeanController extends Controller
      */
     public function getAnOutGoingApplication($app_id = null)
     {
-
+        $app_id = request()->app_id;
+        if(!$app_id)
+        {
+            request()->session()->flash('error','Invalid request Format');
+            return redirect()->back();
+        }
+        else
+        {
+            $this->validateApplication();
+            $application = Applications::where('app_id','=',$app_id)->first();
+            if(!$application)
+            {
+                request()->session()->flash('error','The requested application could not be found');
+                return redirect()->back();
+            }
+            else
+            {
+                return view('dean.applications.outgoing-single-view',compact('application'));
+            }
+        }
     }
     /**
      * @return \Illuminate\Support\Facades\Response
@@ -204,5 +235,12 @@ class DeanController extends Controller
     {
         return  array('school_name'=>Auth::user()->school_id);
 
+    }
+    /**
+     * @return array
+     */
+    private function validateApplication()
+    {
+        return $this->validate(request(),array('app_id'=>'required'));
     }
 }
