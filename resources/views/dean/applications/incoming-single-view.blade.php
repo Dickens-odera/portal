@@ -1,3 +1,4 @@
+<!--git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/mastergit fetch --prunegit gc-->
 {{-- <div class="hidden">
     $email = null;
     @if($application->students->email)
