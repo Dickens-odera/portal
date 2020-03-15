@@ -151,6 +151,12 @@
                                 <div class="box-body">
                                     {!! Form::open() !!}
                                     <div class="form-group row">
+                                        {!! Form::label('status','Status', ['class'=>'col-md-4 form-label text-md-right']) !!}
+                                        <div class="col-md-8">
+                                            {!! Form::select('status',['','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control','disabled']) !!}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         {!! Form::label('comment','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
                                         <div class="col-md-8">
                                             {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
@@ -166,6 +172,12 @@
                             <div class="box-header bg-warning text-center text-uppercase">{{ __('receiving cod') }}</div>
                             <div class="box-body">
                                 {!! Form::open() !!}
+                                <div class="form-group row">
+                                    {!! Form::label('status','Status', ['class'=>'col-md-4 form-label text-md-right']) !!}
+                                    <div class="col-md-8">
+                                        {!! Form::select('status',['','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control','disabled']) !!}
+                                    </div>
+                                </div>
                                 <div class="form-group row">
                                     {!! Form::label('comments','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
                                     <div class="col-md-8">
@@ -186,6 +198,12 @@
                             <div class="box-body">
                                 {!! Form::open() !!}
                                 <div class="form-group row">
+                                    {!! Form::label('status','Status', ['class'=>'col-md-4 form-label text-md-right']) !!}
+                                    <div class="col-md-8">
+                                        {!! Form::select('status',['','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control','disabled']) !!}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     {!! Form::label('comments','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
                                     <div class="col-md-8">
                                         {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
@@ -205,6 +223,12 @@
                             <div class="box-body">
                                 {!! Form::open() !!}
                                     <div class="form-group row">
+                                        <div class="form-group row">
+                                            {!! Form::label('status','Status', ['class'=>'col-md-4 form-label text-md-right']) !!}
+                                            <div class="col-md-8">
+                                                {!! Form::select('status',['Select ...','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control']) !!}
+                                            </div>
+                                        </div>
                                         {!! Form::label('comments','Comments', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {!! Form::textarea('comments',old('comments'), ['class'=>'form-control']) !!}

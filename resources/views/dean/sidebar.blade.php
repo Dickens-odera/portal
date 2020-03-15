@@ -25,8 +25,10 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="{{ route('dean.applications.incoming.all') }}"><i class="fa fa-circle-o"></i> Incoming</a></li>
-              <li><a href="{{ route('dean.applications.outgoing.all') }}"><i class="fa fa-circle-o"></i> Outgoing</a></li>
+                <li><a href="{{ route('dean.applications.incoming.all') }}"><i class="fa fa-circle-o"></i> Incoming</a></li>
+                <li><a href="{{ route('dean.applications.outgoing.all') }}"><i class="fa fa-circle-o"></i> Outgoing</a></li>
+                <li><a href=""><i class="fa fa-circle-o"></i> Approved</a></li>
+                <li><a href=""><i class="fa fa-circle-o"></i> Not Approved</a></li>
             </ul>
           </li>
         <li class="treeview">

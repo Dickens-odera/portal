@@ -50,8 +50,8 @@
                                 <td>{{ $value->weighted_clusters}}</td>
                                 <td>{{ $value->status}}</td>
                                  <td class="btn-group btn-group-sm">
-                                    <a href="{{ route('student.application.show',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>View</a>
-                                    <form action="{{ route('student.application.cancel',['app_id'=>$value->app_id]) }}" method="post">
+                                    <a href="" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>View</a>
+                                    <form action="" method="post">
                                                {{ csrf_field() }}
                                                 <button class="btn btn-sm btn-primary" type="submit">
                                                         <i class="fa fa-window-close"></i>Approve
@@ -61,8 +61,8 @@
                             </tr>
                         </tbody>
                     @endforeach
-
                 </table>
+                {{ $applications->links() }}
                  @else
                      <table class="table table-responsive table-dark">
                         <thead>

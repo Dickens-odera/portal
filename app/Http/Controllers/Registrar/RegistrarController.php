@@ -23,7 +23,7 @@ class RegistrarController extends Controller
      */
     public function getApplication(Request $request)
     {
-        $applications = Applications::latest()->get();
+        $applications = Applications::latest()->paginate(5);
         return view('registrar.applications.index',compact('applications'));
     }
     /**

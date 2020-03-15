@@ -27,6 +27,11 @@
           <ul class="treeview-menu">
             {{-- <li><a href=""><i class="fa fa-circle-o"></i> New</a></li> --}}
             <li><a href="{{ route('cod.applications.view.all') }}"><i class="fa fa-circle-o"></i> All</a></li>
+            <li><a href="{{ route('cod.applications.outgoing.all') }}"><i class="fa fa-circle-o"></i> Outgoing</a></li>
+            <li><a href="{{ route('cod.applications.incoming.all') }}"><i class="fa fa-circle-o"></i> Incoming</a></li>
+            <li><a href=""><i class="fa fa-circle-o"></i> Approved</a></li>
+            <li><a href=""><i class="fa fa-circle-o"></i> Not Approved</a></li>
+
           </ul>
         </li>
           </ul>

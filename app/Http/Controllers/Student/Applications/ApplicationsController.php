@@ -11,10 +11,10 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use PHPMailer\PHPMailer;
-
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
-
+use GuzzleHttp\Client;
 class ApplicationsController extends Controller
 {
     public function __construct()
@@ -70,9 +70,8 @@ class ApplicationsController extends Controller
             return redirect()->back()->withInput($request->all());
         }
         $application = new Applications;
-        $grades = array('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E');
+        //dd($grade_points);
         //calculate the clusters
-
         //map schools to programs
         $schools_program = array(
             'sobe'=>array(),
@@ -98,7 +97,14 @@ class ApplicationsController extends Controller
                     'History & Government','Computer Studies',
                     'Home Science','Music','Physics','Agriculture','Art'
                     );
+        $grades = array('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E');
+        $points = array(12,11,10,9,8,7,6,5,4,3,2,1);
+        $grds = collect(['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E']);
+        $grade_points_arr = array_combine($grades, $points);
         $sub_values = array($request->sub_1,$request->sub_2,$request->sub_3,$request->sub_4,$request->sub_5,$request->sub_6,$request->sub_7,$request->sub_8);
+        $grade_values = array($request->grade_1,$request->grade_2,$request->grade_3,$request->grade_4,$request->grade_5,$request->grade_6,$request->grade_7,$request->grade_8);
+        $subject_grades_arr = array_combine($sub_values, $grade_values);
+
         $current_program = $request->current_program;
         $preffered_program = $request->preffered_program;
         $current_school = $request->current_school;
@@ -174,7 +180,8 @@ class ApplicationsController extends Controller
         }
         if($application->save())
         {
-            //send and sms to the student with information of a successfull application
+            //dd($subject_grades_arr);
+            //send an sms to the student with information of a successfull application
             $message = "Hello there ".$request->student_name.' '.'Your application has been a success. You shall be notified soon on the progress';
             $postData = array(
                 'username'=>env('USERNAME'),
@@ -353,20 +360,7 @@ class ApplicationsController extends Controller
         }
     }
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-    /**
-     * @return array
-     */
-    /**
-    *@return array
+    * @return array
     */
     private function update_validation()
     {
@@ -405,6 +399,9 @@ class ApplicationsController extends Controller
             'result_slip'=>'image|nullable|'
         ];
     }
+    /**
+     * @return array
+     */
     private function validate_request()
     {
         return [
@@ -486,7 +483,9 @@ class ApplicationsController extends Controller
             'transfer_reason'=>$request->transfer_reason
         ];
     }
-
+     /**
+     * @return \Illuminate\Http\Response
+     */
     private function validate_phone()
     {
         $pluscode=  substr(request()->student_phone,0,5);
@@ -513,7 +512,7 @@ class ApplicationsController extends Controller
     return $phonenumber;
     }
     /**
-     * @return string|mixed
+     * @return \Illuminate\Http\Response
      */
     private function imageUpload($file_name = null)
     {
@@ -540,4 +539,12 @@ class ApplicationsController extends Controller
         {
             return in_array(strtolower($needle), array_map('strtolower',$haystack));
         }
+    private function weightedClusterCalculation()
+    {
+        //calculate the weighted clusters
+    }
+    private function cutOffPointsCalculation()
+    {
+        //calculate the cluster points
+    }
 }

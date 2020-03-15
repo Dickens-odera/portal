@@ -29,8 +29,9 @@ class CODController extends Controller
     {
         return view('cod.dashboard');
     }
+    /*=======================================  APPLICATIONS ==============================*/
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function getAllApplications()
     {
@@ -52,7 +53,7 @@ class CODController extends Controller
                                     ->whereIn('preffered_program',$p)
                                     ->latest()
                                     ->paginate(2);
-
+        //dd($applications);
         if(!$applications)
         {
             request()->session()->flash('error','No applications found');
@@ -65,7 +66,7 @@ class CODController extends Controller
     }
     /**
      * @param string $application_id
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function getApplication($application_id = null)
     {
@@ -81,6 +82,7 @@ class CODController extends Controller
             if($validator->fails())
             {
                 request()->session()->flash('error',$validator->errors());
+                return redirect()->back();
             }
             else
             {
@@ -99,5 +101,115 @@ class CODController extends Controller
             }
         }
     }
-
+    /**
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllOutgoingApplications()
+    {
+        $user = CODs::where('id','=',Auth::user()->id)->first();
+        $school = $user->school->school_name;
+        $dep = $user->department->program;
+        //dd($dep);
+        $p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
+        $applications = Applications::where('present_school','=',$school)
+                                        ->whereIn('present_program',$p)
+                                        ->latest()
+                                        ->paginate(5);
+        //dd($applications);
+        //dd($p);
+        if(!$applications)
+        {
+            request()->session()->flash('error','No applications at the moment');
+            return redirect()->back();
+        }
+        else
+        {
+            return view('cod.applications.outgoing.all',compact('applications'));
+        }
+    }
+    /**
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllIncomingApplications()
+    {
+        $user = CODs::where('id','=',Auth::user()->id)->first();
+        $school = $user->school->school_name;
+        $dep = $user->department->program;
+        //dd($dep);
+        $p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
+        $applications = Applications::where('preffered_school','=',$school)
+                                        ->whereIn('preffered_program',$p)
+                                        ->latest()
+                                        ->paginate(5);
+        //dd($applications);
+        //dd($p);
+        if(!$applications)
+        {
+            request()->session()->flash('error','No applications at the moment');
+            return redirect()->back();
+        }
+        else
+        {
+            return view('cod.applications.incoming.all',compact('applications'));
+        }
+    }
+    /**
+     * @param int $app_id
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAnIncomingApplication(Request $request,$app_id = null)
+    {
+        $app_id = $request->app_id;
+        if(!$app_id)
+        {
+            $request->session()->flash('error','Invalid Request Format');
+            return redirect()->back();
+        }
+        else
+        {
+            $this->validate($request,array('app_id'=>'required'));
+            $application = Applications::where('app_id','=',$app_id)->first();
+            //dd($application);
+            if(!$application)
+            {
+                $request()->session()->flash('error','Application Not Found');
+                return redirect()->back();
+            }
+            else
+            {
+                return view('cod.applications.incoming.single-view',compact('application'));
+            }
+        }
+    }
+    /**
+     * @param string $app_id
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAnOutgoingApplication(Request $request,$app_id = null)
+    {
+        $app_id = $request->app_id;
+        if(!$app_id)
+        {
+            $request->session()->flash('error','Invalid Request Format');
+            return redirect()->back();
+        }
+        else
+        {
+            $this->validate($request,array('app_id'=>'required'));
+            $application = Applications::where('app_id','=',$app_id)->first();
+            //dd($application);
+            if(!$application)
+            {
+                $request()->session()->flash('error','Application Not Found');
+                return redirect()->back();
+            }
+            else
+            {
+                return view('cod.applications.outgoing.single-view',compact('application'));
+            }
+        }
+    }
+/*================================================ END OF APPLICATIONS =================================== */
 }

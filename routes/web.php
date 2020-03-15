@@ -83,5 +83,9 @@ Route::prefix('cod')->group(function()
     Route::get('/dashboard','COD\CODController@index')->name('cod.dashboard');
     Route::get('/applications','COD\CODController@getAllApplications')->name('cod.applications.view.all');
     Route::get('/application','COD\CODController@getApplication')->name('cod.application.view');
+    Route::get('/applications/outgoing','COD\CODController@getAllOutgoingApplications')->name('cod.applications.outgoing.all');
+    Route::get('/application/outgoing','COD\CODController@getAnOutgoingApplication')->name('cod.applications.outgoing.single.view');
+    Route::get('/applications/incoming','COD\CODController@getAllIncomingApplications')->name('cod.applications.incoming.all');
+    Route::get('/application/incoming','COD\CODController@getAnIncomingApplication')->name('cod.applications.incoming.single.view');
 });
 

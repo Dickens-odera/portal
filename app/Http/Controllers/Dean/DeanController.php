@@ -13,7 +13,7 @@ use App\Imports\ProgramsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Collection;
 class DeanController extends Controller
 {
     public function __construct()
@@ -21,7 +21,7 @@ class DeanController extends Controller
         $this->middleware('auth:dean');
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -29,7 +29,7 @@ class DeanController extends Controller
     }
     /************************* PROGRAMS MODULE ****************/
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function showProgramsForm(Request $request)
     {
@@ -37,7 +37,7 @@ class DeanController extends Controller
     }
     /**
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function addProgram(Request $request)
     {
@@ -92,7 +92,7 @@ class DeanController extends Controller
     }
     /**
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function viewAllPrograms(Request $request)
     {
@@ -103,7 +103,7 @@ class DeanController extends Controller
 
     /******************************** START OF APPLICATIONS MODULE  *************/
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function getAllIncomingApplications()
     {
@@ -127,7 +127,7 @@ class DeanController extends Controller
     }
     /**
      * @param int $app_id
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function getAnIncomingApplication($app_id = null)
     {
@@ -154,14 +154,14 @@ class DeanController extends Controller
         }
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function submitFeedbackOnIncomingApp()
     {
 
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function getAllOutgoingApplications()
     {
@@ -181,7 +181,7 @@ class DeanController extends Controller
     }
     /**
      * @param int $app_id
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function getAnOutGoingApplication($app_id = null)
     {
@@ -207,7 +207,7 @@ class DeanController extends Controller
         }
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function submitFeedbackOnOutgoingApp()
     {
