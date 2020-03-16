@@ -15,6 +15,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use GuzzleHttp\Client;
+//use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Exception\GuzzleException;
+
 class ApplicationsController extends Controller
 {
     public function __construct()
@@ -46,7 +49,20 @@ class ApplicationsController extends Controller
         //show the form to open the applications
         return view('student.applications.create');
     }
-
+    /**
+     * @return \Illuminate\Http\Response
+     */
+    public function getKuccpsPrograms()
+    {
+        /**
+        *$client = new \GuzzleHttp\Client();
+        *$response = $client->request('GET','https://students.kuccps.net/programmes/');
+        *$response->getStatusCode();
+        *$contents = $response->getBody()->getContents();
+        *dd($contents);
+        **/
+        return redirect('https://students.kuccps.net/programmes/');
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -99,7 +115,7 @@ class ApplicationsController extends Controller
                     );
         $grades = array('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E');
         $points = array(12,11,10,9,8,7,6,5,4,3,2,1);
-        $grds = collect(['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E']);
+        //$grds = collect(['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E']);
         $grade_points_arr = array_combine($grades, $points);
         $sub_values = array($request->sub_1,$request->sub_2,$request->sub_3,$request->sub_4,$request->sub_5,$request->sub_6,$request->sub_7,$request->sub_8);
         $grade_values = array($request->grade_1,$request->grade_2,$request->grade_3,$request->grade_4,$request->grade_5,$request->grade_6,$request->grade_7,$request->grade_8);
