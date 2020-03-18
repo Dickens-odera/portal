@@ -43,6 +43,12 @@ Route::prefix('student')->group(function()
     Route::post('/application/update','Student\Applications\ApplicationsController@update')->name('student.application.update');
     Route::post('/application/cancel','Student\Applications\ApplicationsController@cancel')->name('student.application.cancel');
     Route::get('/kuccps','Student\Applications\ApplicationsController@getKuccpsPrograms')->name('student.kuccps.programs');
+
+    //password reset routes
+    Route::post('password/email','Auth\Student\StudentForgotPasswordController@sendResetLinkEmail')->name('student.password.email');
+    Route::post('password/reset','Auth\Student\StudentResetPasswordController@reset')->name('student.password.update');
+    Route::get('password/reset','Auth\Student\StudentForgotPasswordController@showLinkRequestForm')->name('student.password.request');
+    Route::get('password/reset/{token}','Auth\Student\StudentResetPasswordController@showResetForm')->name('student.password.reset');
 });
 //the dean of school
 Route::prefix('dean')->group(function()

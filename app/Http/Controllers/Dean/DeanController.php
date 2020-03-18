@@ -90,7 +90,7 @@ class DeanController extends Controller
         //dd($school);
         return Excel::download(new ProgramsExport, 'school-programs.xlsx');
     }
-    /**
+    /** Enable the dean of school to view all the available programs.
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -110,6 +110,7 @@ class DeanController extends Controller
         $dean = Deans::where('id','=',Auth::user()->id)->first();
         $school = $dean->school->school_name;
         //dd($school);
+        //get the application status
         $applications = Applications::where('preffered_school','=',$school)
                                         ->latest()
                                         ->paginate(3);

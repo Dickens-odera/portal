@@ -140,7 +140,7 @@ return [
         'admins'=>[
             'provider'=>'admins',
             'table'=>'password_resets',
-            'expire'=>60,
+            'expire'=>60, //one hour period
             'throttle'=>60
         ],
         'deans'=>[
