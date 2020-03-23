@@ -46,10 +46,10 @@ class StudentResetPasswordController extends Controller
     }
     public function showResetForm()
     {
-
+        return view('auth.student.reset');
     }
     public function reset()
     {
-
+        
     }
 }

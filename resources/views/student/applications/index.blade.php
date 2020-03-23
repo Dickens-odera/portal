@@ -49,14 +49,16 @@
                                 <td>{{ $value->status}}</td>
                                 <td class="btn-group btn-group-sm">
                                     <a href="{{ route('student.application.show',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>View</a>
+                                    @if($value->status !== 'cancelled')
                                     <form action="{{ route('student.application.cancel',['app_id'=>$value->app_id]) }}" method="post">
                                                {{ csrf_field() }}
                                                 <button class="btn btn-sm btn-danger" type="submit">
                                                         <i class="fa fa-window-close"></i>Cancel
                                                 </button>
                                     </form>
+                                    @endif
                                 </td>
-                            </tr>
+                            </tr>c
                         </tbody>
                     @endforeach
                     {{-- {{$applications->links()}} --}}

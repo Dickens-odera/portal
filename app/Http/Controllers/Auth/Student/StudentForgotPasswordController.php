@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 class StudentForgotPasswordController extends Controller
 {
     use SendsPasswordResetEmails;
@@ -63,7 +64,7 @@ class StudentForgotPasswordController extends Controller
      */
     public function sendResetLinkEmail(Request $request)
     {
-        $this->validateEmail($request);
+        $this->validate($request,array('email'=>'required'));
 
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
@@ -71,10 +72,19 @@ class StudentForgotPasswordController extends Controller
         $response = $this->broker()->sendResetLink(
             $this->credentials($request)
         );
-
-        return $response == Password::RESET_LINK_SENT
-                    ? $this->sendResetLinkResponse($request, $response)
-                    : $this->sendResetLinkFailedResponse($request, $response);
+        if($response)
+        {
+            $request->session()->flash('success','A Password reset Link has been sent to your email address');
+            return redirect()->back();
+        }
+        else
+        {
+            $request->session()->flash('error','Failed to send the link, try again');
+            return redirect()->back()->withInput($request->only('email'));
+        }
+        // return $response == Password::RESET_LINK_SENT
+        //             ? $this->sendResetLinkResponse($request, $response)
+        //             : $this->sendResetLinkFailedResponse($request, $response);
     }
       /**
      * Get the response for a successful password reset link.

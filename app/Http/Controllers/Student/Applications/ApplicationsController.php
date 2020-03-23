@@ -556,11 +556,11 @@ class ApplicationsController extends Controller
             return in_array(strtolower($needle), array_map('strtolower',$haystack));
         }
     private function weightedClusterCalculation()
-    {
-        //calculate the weighted clusters
-    }
+        {
+            //calculate the weighted clusters
+        }
     private function cutOffPointsCalculation()
-    {
-        //calculate the cluster points
-    }
+        {
+            //calculate the cluster points
+        }
 }
