@@ -86,9 +86,9 @@
 						{{-- <span class="txt1">
 							{{ __('Forgot') }}
 						</span> --}}
-						<a class="txt2" href="#">
-                            @if (Route::has('password.request'))
-                            <a class="btn btn-link" href="{{ route('password.request') }}">
+						<a class="txt2" href="">
+                            @if (Route::has('cod.password.request'))
+                            <a class="btn btn-link" href="{{ route('cod.password.request') }}">
                                 {{ __('Forgot Your Password?') }}
                             </a>
                         @endif						</a>

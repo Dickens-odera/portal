@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+
+use App\Notifications\CODResetPasswordNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Schools;
@@ -43,5 +45,15 @@ class CODs extends Authenticatable
     public function school()
     {
        return $this->belongsTo(Schools::class,'school_id','school_id');
+    }
+        /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new CODResetPasswordNotification($token));
     }
 }

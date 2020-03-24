@@ -94,5 +94,11 @@ Route::prefix('cod')->group(function()
     Route::get('/application/outgoing','COD\CODController@getAnOutgoingApplication')->name('cod.applications.outgoing.single.view');
     Route::get('/applications/incoming','COD\CODController@getAllIncomingApplications')->name('cod.applications.incoming.all');
     Route::get('/application/incoming','COD\CODController@getAnIncomingApplication')->name('cod.applications.incoming.single.view');
+
+    //password reset routes
+    Route::post('password/email','Auth\COD\CODForgotPasswordController@sendResetLinkEmail')->name('cod.password.email');
+    Route::post('password/reset','Auth\COD\CODResetPasswordController@reset')->name('cod.password.update');
+    Route::get('password/reset','Auth\COD\CODForgotPasswordController@showLinkRequestForm')->name('cod.password.request');
+    Route::get('password/reset/{token}','Auth\COD\CODResetPasswordController@showResetForm')->name('cod.password.reset');
 });
 

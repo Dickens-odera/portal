@@ -89,7 +89,7 @@ class StudentResetPasswordController extends Controller
                     ? $this->sendResetResponse($request, $response)
                     : $this->sendResetFailedResponse($request, $response);
     }
-        /**
+    /**
      * Get the password reset validation rules.
      *
      * @return array
