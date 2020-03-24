@@ -69,6 +69,11 @@ Route::prefix('dean')->group(function()
     Route::post('/application/icoming/comment','Dean\DeanController@submitFeedbackOnIncomingApp')->name('dean.application.incoming.comment.submit');
     Route::post('/application/outgoing/comment','Dean\DeanController@submitFeedbackOnOutgoingApp')->name('dean.application.outgoing.comment.submit');
 
+        //password reset routes
+    Route::post('password/email','Auth\Dean\DeanForgotPasswordController@sendResetLinkEmail')->name('dean.password.email');
+    Route::post('password/reset','Auth\Dean\CODResetPasswordController@reset')->name('dean.password.update');
+    Route::get('password/reset','Auth\Dean\DeanForgotPasswordController@showLinkRequestForm')->name('dean.password.request');
+    Route::get('password/reset/{token}','Auth\Dean\DeanResetPasswordController@showResetForm')->name('dean.password.reset');
 });
 //the registrar
 Route::prefix('registrar')->group(function()
