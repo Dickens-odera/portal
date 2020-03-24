@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 class StudentResetPasswordController extends Controller
 {
     use ResetsPasswords;
+    public $token;
     //use RedirectsUsers;
     /**
      * The aunthentication guard
@@ -33,6 +34,7 @@ class StudentResetPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest:student');
+        //$this->token = $token;
     }
     /**
      *
@@ -51,6 +53,7 @@ class StudentResetPasswordController extends Controller
     }
     public function showResetForm(Request $request, $token = null)
     {
+        //dd($token);
         return view('auth.student.reset')->with(['token'=>$token, 'email'=>$request->email]);
     }
     public function reset(Request $request)
@@ -59,6 +62,7 @@ class StudentResetPasswordController extends Controller
         if($validator->fails())
         {
             $request->session()->flash('error',$validator->errors());
+            return redirect()->back();
         }
          // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
@@ -68,7 +72,16 @@ class StudentResetPasswordController extends Controller
                 $this->resetPassword($user, $password);
             }
         );
-
+        // $response = Password::reset($this->credentials($request), function ($user, $password) {
+        //     $user->password = Hash::make($password);
+    
+        //     $user->save();
+        // });
+        // if($response)
+        // {
+        //     $request->session()->flash('success','Password changed successfully');
+        //     return redirect()->route('student.dashboard');
+        // }
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
@@ -84,7 +97,7 @@ class StudentResetPasswordController extends Controller
     protected function rules()
     {
         return [
-            'token' => 'required',
+            //'token' => 'required',
             'email' => 'required|email',
             'password' => 'required|confirmed|min:8',
         ];

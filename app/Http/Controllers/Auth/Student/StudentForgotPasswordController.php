@@ -69,7 +69,7 @@ class StudentForgotPasswordController extends Controller
      */
     public function sendResetLinkEmail(Request $request)
     {
-        $this->validate($request,array('email'=>'required'));
+        $this->validate($request,array('email'=>'required|email'));
 
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
@@ -77,19 +77,19 @@ class StudentForgotPasswordController extends Controller
         $response = $this->broker()->sendResetLink(
             $this->credentials($request)
         );
-        // if($response)
-        // {
-        //     $request->session()->flash('success','A Password reset Link has been sent to your email address');
-        //     return redirect()->back();
-        // }
-        // else
-        // {
-        //     $request->session()->flash('error','Failed to send the link, try again');
-        //     return redirect()->back()->withInput($request->only('email'));
-        // }
-        return $response == Password::RESET_LINK_SENT
-                    ? $this->sendResetLinkResponse($request, $response)
-                    : $this->sendResetLinkFailedResponse($request, $response);
+        if($response)
+        {
+            $request->session()->flash('success','A Password reset Link has been sent to your email address, please check your inbox to reset your password');
+            return redirect()->back();
+        }
+        else
+        {
+            $request->session()->flash('error','Failed to send the link, try again');
+            return redirect()->back()->withInput($request->only('email'));
+        }
+        // return $response == Password::RESET_LINK_SENT
+        //             ? $this->sendResetLinkResponse($request, $response)
+        //             : $this->sendResetLinkFailedResponse($request, $response);
     }
       /**
      * Get the response for a successful password reset link.
