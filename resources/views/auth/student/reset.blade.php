@@ -35,7 +35,8 @@
                     {{ csrf_field() }}
 					<span class="login100-form-title">
 						{{ __('STUDENT PASSWORD RESET') }}
-					</span>
+                    </span>
+                    <input type="hidden" name="token" value="{{ $token }}">
 					<div class="wrap-input100 validate-input $errors->has('email')? 'has-error':''">
                         <input class="input100 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus type="email" placeholder="Email">
                                 @error('email')

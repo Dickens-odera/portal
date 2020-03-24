@@ -26,7 +26,7 @@ class StudentResetPasswordController extends Controller
      * Where to redirect the user upon  successfull password change
      * @var string $redirectTo
      */
-    protected $redirectTo = '/student';
+    protected $redirectTo = '/student/dashboard';
     /**
      * Instantiate a new StudentPasswordController instance
      * @return void
@@ -74,7 +74,7 @@ class StudentResetPasswordController extends Controller
         );
         // $response = Password::reset($this->credentials($request), function ($user, $password) {
         //     $user->password = Hash::make($password);
-    
+
         //     $user->save();
         // });
         // if($response)
@@ -97,12 +97,12 @@ class StudentResetPasswordController extends Controller
     protected function rules()
     {
         return [
-            //'token' => 'required',
+            'token' => 'required',
             'email' => 'required|email',
             'password' => 'required|confirmed|min:8',
         ];
     }
-    
+
     /**
      * Get the password reset credentials from the request.
      *
@@ -115,7 +115,7 @@ class StudentResetPasswordController extends Controller
             'email', 'password', 'password_confirmation', 'token'
         );
     }
-    
+
     /**
      * Reset the given user's password.
      *
@@ -135,7 +135,7 @@ class StudentResetPasswordController extends Controller
 
         $this->guard()->login($user);
     }
-    
+
     /**
      * Set the user's password.
      *
