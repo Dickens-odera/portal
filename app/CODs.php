@@ -46,7 +46,7 @@ class CODs extends Authenticatable
     {
        return $this->belongsTo(Schools::class,'school_id','school_id');
     }
-        /**
+    /**
      * Send the password reset notification.
      *
      * @param  string  $token

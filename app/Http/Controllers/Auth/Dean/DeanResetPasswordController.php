@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+
 class DeanResetPasswordController extends Controller
 {
     use ResetsPasswords;
@@ -86,7 +87,7 @@ class DeanResetPasswordController extends Controller
                     ? $this->sendResetResponse($request, $response)
                     : $this->sendResetFailedResponse($request, $response);
     }
-/**
+    /**
      * Get the password reset validation rules.
      *
      * @return array
@@ -153,7 +154,7 @@ class DeanResetPasswordController extends Controller
         return redirect($this->redirectPath())
                             ->with('status', trans($response));
     }
-        /**
+    /**
      * Get the response for a failed password reset.
      *
      * @param  \Illuminate\Http\Request  $request

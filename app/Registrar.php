@@ -3,7 +3,7 @@
 namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use App\Notifications\RegistrarResetPasswordNotification;
 class Registrar extends Authenticatable
 {
     use Notifiable;
@@ -30,4 +30,14 @@ class Registrar extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /**
+     * Send password reset notification to the registrar
+     *
+     * @param string $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new RegistrarResetPasswordNotification($token));
+    }
 }

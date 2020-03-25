@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CODResetPasswordNotification extends Notification
+class RegistrarResetPasswordNotification extends Notification
 {
     use Queueable;
     /**
@@ -45,8 +45,8 @@ class CODResetPasswordNotification extends Notification
     {
         return (new MailMessage)
                     ->line('You are receiving this email because we received a password reset request for your account.')
-                    ->action('Reset Password', route('cod.password.reset',$this->token))
-                    ->line('If you did not make this request, please ignore this email!');
+                    ->action('Reset Password', route('registrar.password.reset',$this->token))
+                    ->line('If you did not make this request, kindly ignore this email.');
     }
 
     /**

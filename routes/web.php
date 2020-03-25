@@ -24,11 +24,23 @@ Route::delete('/deleteSchool/{school_id}','Staff\Schools\SchoolsController@destr
 //the student urls
 Route::prefix('admin')->group(function()
 {
-    Route::get('/admin-user','Auth\Admins\AdminLoginController@showLoginForm')->name('admin.login');
+    Route::get('/admin-superuser/v1/login','Auth\Admins\AdminLoginController@showLoginForm')->name('admin.login');
     Route::post('/login','Auth\Admins\AdminLoginController@login')->name('admin.login.submit');
     Route::get('/dashboard','Admin\AdminController@index')->name('admin.dashboard');
     Route::get('/logout','Auth\Admins\AdminLoginController@logout')->name('admin.logout');
 
+    /************************************  SETTINGS URLS ***********************************/
+    //Deans urls
+    Route::get('/deans/all','Admin\AdminController@getAllDeans')->name('admin.deans.view.all');
+    Route::get('/dean/add','Admin\AdminController@ShowNewDeanOfSchoolForm')->name('admin.dean.add.form');
+    Route::post('/dean/add','Admin\AdminController@addNewDeanOfSchool')->name('admin.dean.add.submit');
+    //CODs urls
+    Route::get('/cods/all','Admin\AdminController@getAllCODs')->name('admin.cods.view.all');
+    //Schools urls
+    Route::get('/schools/add','Admin\AdminController@ShowNewAdditionSchoolForm')->name('admin.schools.add.form');
+    Route::post('/school','Admin\AdminController@addNewSchool')->name('admin.schools.add.submit');
+    Route::get('/schools/all','Admin\AdminController@getAllSchools')->name('admin.schools.view.all');
+    /********************************************* END OF SETTINGS URLS*****************************/
 });
 Route::prefix('student')->group(function()
 {
@@ -69,7 +81,7 @@ Route::prefix('dean')->group(function()
     Route::post('/application/icoming/comment','Dean\DeanController@submitFeedbackOnIncomingApp')->name('dean.application.incoming.comment.submit');
     Route::post('/application/outgoing/comment','Dean\DeanController@submitFeedbackOnOutgoingApp')->name('dean.application.outgoing.comment.submit');
 
-        //password reset routes
+    //password reset routes
     Route::post('password/email','Auth\Dean\DeanForgotPasswordController@sendResetLinkEmail')->name('dean.password.email');
     Route::post('password/reset','Auth\Dean\CODResetPasswordController@reset')->name('dean.password.update');
     Route::get('password/reset','Auth\Dean\DeanForgotPasswordController@showLinkRequestForm')->name('dean.password.request');
@@ -85,6 +97,12 @@ Route::prefix('registrar')->group(function()
     Route::get('/applications','Registrar\RegistrarController@getApplication')->name('registrar.applications.view');
     Route::post('/student-add',['as'=>'registrar.student.add','uses'=>'Registrar\RegistrarController@addStudent']);
     Route::get('/logout','Auth\Registrar\RegistrarLoginController@logout')->name('registrar.logout');
+
+    //password reset routes
+    Route::post('password/email','Auth\Registrar\RegistrarForgotPasswordController@sendResetLinkEmail')->name('registrar.password.email');
+    Route::post('password/reset','Auth\Registrar\RegistrarResetPasswordController@reset')->name('registrar.password.update');
+    Route::get('password/reset','Auth\Registrar\RegistrarForgotPasswordController@showLinkRequestForm')->name('registrar.password.request');
+    Route::get('password/reset/{token}','Auth\Registrar\RegistrarResetPasswordController@showResetForm')->name('registrar.password.reset');
 });
 //the chairperson of department
 Route::prefix('cod')->group(function()

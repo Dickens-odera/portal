@@ -1,5 +1,5 @@
 @if(session('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-success text-center">
             {{session('success')}}
             <button class="close" type="button" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -8,7 +8,7 @@
 @endif
 
 @if(session('error'))
-        <div class="alert alert-danger">
+        <div class="alert alert-danger text-center">
             {{session('error')}}
             <button class="close" type="button" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>

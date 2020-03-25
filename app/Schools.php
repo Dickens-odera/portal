@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Programs;
 class Schools extends Model
 {
     /**
@@ -13,11 +12,11 @@ class Schools extends Model
     /**
      * @var array $fillable
      */
-    protected $fillable = ['school_name'];
+    protected $fillable = ['school_name','school_id'];
     /**
      * @var array $guarded
      */
-    protected $guarded = ['school_id'];
+    //protected $guarded = ['school_id'];
     /**
      * @return \Illuminate\Support\Facades\Response
      */

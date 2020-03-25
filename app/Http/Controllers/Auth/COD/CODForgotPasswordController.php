@@ -32,7 +32,7 @@ class CODForgotPasswordController extends Controller
     {
         return view('auth.passwords.cod.email');
     }
-      /**
+    /**
      * Validate the email for the given request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -42,7 +42,7 @@ class CODForgotPasswordController extends Controller
     {
         $request->validate(['email' => 'required|email']);
     }
-     /**
+    /**
      * Get the needed authentication credentials from the request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -82,7 +82,7 @@ class CODForgotPasswordController extends Controller
         //             ? $this->sendResetLinkResponse($request, $response)
         //             : $this->sendResetLinkFailedResponse($request, $response);
     }
-          /**
+    /**
      * Get the response for a successful password reset link.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -94,7 +94,7 @@ class CODForgotPasswordController extends Controller
         return back()->with('status', trans($response));
     }
 
-     /**
+    /**
      * Get the response for a failed password reset link.
      *
      * @param  \Illuminate\Http\Request  $request

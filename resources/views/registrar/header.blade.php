@@ -33,7 +33,7 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="" alt="Dr'Photo" style="" class="user-image">
+                <img src="/storage/uploads/logo/admin.jpg" alt="Dr'Photo" style="" class="user-image">
               {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="user-image" alt="User Image"> --}}
               <span class="hidden-xs">{{ Auth::user()->name}}</span>
             </a>
@@ -41,10 +41,10 @@
               <!-- User image -->
               <li class="user-header">
                 {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="img-circle" alt="User Image"> --}}
-                <img src="" alt="Dean's Photo" style="">
+                <img src="/storage/uploads/logo/admin.jpg" alt="Dean's Photo" style="">
                 <p>
                   {{-- {{ Auth::user()->surname }} --}}
-                  <small>Registrar ASA</small>
+                  <small>Registrar AA</small>
                 </p>
               </li>
               <!-- Menu Footer-->

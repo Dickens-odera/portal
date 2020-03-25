@@ -49,7 +49,6 @@
 							<i class="fa fa-envelope" aria-hidden="true"></i>
 						</span>
 					</div>
-
 					<div class="wrap-input100 validate-input">
                         <input class="input100 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" type="password" placeholder="Password" >
                             @error('password')
@@ -86,19 +85,12 @@
 							{{ __('Forgot') }}
 						</span> --}}
 						<a class="txt2" href="#">
-                            @if (Route::has('password.request'))
-                            <a class="btn btn-link" href="{{ route('password.request') }}">
+                            @if (Route::has('registrar.password.request'))
+                            <a class="btn btn-link" href="{{ route('registrar.password.request') }}">
                                 {{ __('Forgot Your Password?') }}
                             </a>
                         @endif						</a>
 					</div>
-
-					<!-- <div class="text-center p-t-136">
-						<a class="txt2" href="#">
-							Create your Account
-							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a>
-					</div> -->
 				</form>
 			</div>
 		</div>

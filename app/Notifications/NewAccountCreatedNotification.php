@@ -7,21 +7,26 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CODResetPasswordNotification extends Notification
+class NewAccountCreatedNotification extends Notification
 {
     use Queueable;
     /**
-     * @var $token
+     * @var $email
      */
-    public $token;
+    public $email;
+    /**
+     * @var
+     */
+    public $password;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct($email, $password)
     {
-        $this->token = $token;
+        $this->email = $email;
+        $this->password = $password;
     }
 
     /**
@@ -44,9 +49,11 @@ class CODResetPasswordNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('You are receiving this email because we received a password reset request for your account.')
-                    ->action('Reset Password', route('cod.password.reset',$this->token))
-                    ->line('If you did not make this request, please ignore this email!');
+                    ->line('Kindly Use these Credentials to log into your new account')
+                    ->line('You can change your password after loging in')
+                    ->line("Email:"." ".$this->email, " "."Password:"." ".$this->password)
+                    ->action('Go To Account', route('dean.login'));
+                    // ->line('Thank you for using our application!');
     }
 
     /**
