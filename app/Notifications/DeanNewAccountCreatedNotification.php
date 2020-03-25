@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewAccountCreatedNotification extends Notification
+class DeanNewAccountCreatedNotification extends Notification
 {
     use Queueable;
     /**
@@ -49,13 +49,15 @@ class NewAccountCreatedNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+                    ->greeting('Hello There!')
+                    ->subject('Your Login Credentials')
                     ->line('Kindly Use these Credentials to log into your new account')
                     ->line('You can change your password after loging in')
-                    ->line("Email:"." ".$this->email, " "."Password:"." ".$this->password)
-                    ->action('Go To Account', route('dean.login'));
-                    // ->line('Thank you for using our application!');
+                    ->line("Email:"." ".$this->email)
+                    ->line('Password: '.' '.$this->password)
+                    ->action('Go To Account', route('dean.login'))
+                    ->line('Thank you for using our application!');
     }
-
     /**
      * Get the array representation of the notification.
      *

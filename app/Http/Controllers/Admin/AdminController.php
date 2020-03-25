@@ -11,12 +11,11 @@ use App\Registrar;
 use App\Schools;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Notifications\NewAccountCreatedNotification;
-use Illuminate\Notifications\Notifiable;
+use App\Notifications\DeanNewAccountCreatedNotification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
 {
-    use Notifiable;
     public function __construct()
     {
         $this->middleware('auth:admin');
@@ -188,6 +187,6 @@ class AdminController extends Controller
      */
     protected function sendAccountCreatedNotification($email, $password)
     {
-        return $this->notify(new NewAccountCreatedNotification($email, $password));
+        Notification::route('mail',request()->email)->notify(new DeanNewAccountCreatedNotification($email, $password));
     }
 }
