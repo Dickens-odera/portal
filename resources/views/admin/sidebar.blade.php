@@ -38,7 +38,7 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href=""><i class="fa fa-circle-o"></i> New</a></li>
+              <li><a href="{{ route('admin.cod.add.form') }}"><i class="fa fa-circle-o"></i> New</a></li>
               <li><a href="{{ route('admin.cods.view.all') }}"><i class="fa fa-circle-o"></i> All</a></li>
             </ul>
           </li>
@@ -77,7 +77,7 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href=""><i class="fa fa-circle-o"></i> New</a></li>
+              <li><a href="{{ route('admin.department.add.form') }}"><i class="fa fa-circle-o"></i> New</a></li>
               <li><a href=""><i class="fa fa-circle-o"></i> All</a></li>
             </ul>
           </li>

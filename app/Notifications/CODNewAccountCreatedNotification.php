@@ -7,26 +7,26 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DeanNewAccountCreatedNotification extends Notification
+class CODNewAccountCreatedNotification extends Notification
 {
     use Queueable;
     /**
-     * @var $email
+     * @var string $token
+     */
+    public $token;
+    /**
+     * @var string $email
      */
     public $email;
-    /**
-     * @var $password
-     */
-    public $password;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($email, $password)
+    public function __construct($email, $token)
     {
         $this->email = $email;
-        $this->password = $password;
+        $this->token = $token;
     }
 
     /**
@@ -51,15 +51,15 @@ class DeanNewAccountCreatedNotification extends Notification
         return (new MailMessage)
                     ->greeting('Hello There!')
                     ->subject('Your Account Login Credentials')
-                    ->line('You have been added by our system administrator as a dean to a school')
-                    ->line('Kindly Use these Credentials to log into your new account')
-                    ->line('You can change your password after loging in')
-                    ->line("Email:"." ".$this->email)
+                    ->line('You have been added by our system administrator as a chairperson to a department')
+                    ->line('Kindly use these credentials to log into your new account.')
+                    ->line('Email: '.' '.$this->email)
                     ->line('Password: '.' '.$this->password)
-                    ->action('Go To Account', route('dean.login'))
+                    ->action('Go To Account', route('cod.login'))
                     ->line('For security purposes, we recommend that you change your password after loggin in.')
                     ->line('Cheers!');
     }
+
     /**
      * Get the array representation of the notification.
      *

@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Deans;
 use App\CODs;
+use App\Departments;
 use App\Registrar;
 use App\Schools;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\DeanNewAccountCreatedNotification;
+use App\Notifications\CODNewAccountCreatedNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
@@ -25,10 +27,6 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $deans = DB::select('select * from deans LIMIT 10');
-        // $cods = CODs::latest()->get();
-        // $registrars= Registrar::latest()->get();
-        // $schools = Schools::latest()->get();
         return view('admin.dashboard');
     }
     //SETTINGS
@@ -125,6 +123,55 @@ class AdminController extends Controller
         $cods = CODs::latest()->paginate(10);
         return view('admin.settings.cods.all', compact('cods'));
     }
+    /**
+     * Show the form to add a new Chairperson to the departent
+     * @return \Illuminate\Http\Response
+     */
+    public function ShowNewCODForm()
+    {
+        $departments = Departments::all();
+        //dd($departments);
+        $schools = Schools::all();
+        return view('admin.settings.cods.new', compact('departments','schools'));
+    }
+    /**
+     * Add new COD
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Response
+     */
+    public function addNewSchoolDepartmentChair(Request $request)
+    {
+        $validator = Validator::make($request->all(),array('name'=>'required',
+                                'email'=>'required|email|unique:cods',
+                                'password'=>'required|min:8',
+                                'confirm_password'=>'required'));
+        if($validator->fails())
+        {
+            $request->session()->flash('error',$validator->errors());
+            return redirect()->back()->withInput($request->only('name','email'));
+        }
+        //$this->validate($request);
+        $pwd = $request->input('password');
+        $confirm_pwd = $request->input('confirm_password');
+        if($pwd !== $confirm_pwd)
+        {
+            $request->session()->flash('error','Password Mismatch');
+            return redirect()->back();
+        }
+        if(CODs::create($this->codData($request)))
+        {
+            //send mail notification with login credentials
+            $this->sendNotificationToNewCod($request->email, $request->password);
+            $request->session()->flash('success','COD'.' '.$request->name.' '.'added successfully');
+            return redirect()->back();
+        }
+        else
+        {
+            $request->session()->flash('error','Failed to add the requested COD, try again');
+            return redirect()->back()->witnInput($request->only('name','email'));
+        }
+
+    }
     /***************************** End of CODs Module */
     /***************************** SCHOOLS MODULE *************************** */
     /**
@@ -163,6 +210,58 @@ class AdminController extends Controller
         }
     }
     /**************************** END SCHOOLS MODULE ************************** */
+    /***************************** DEPARTMENTS MODULE *************************/
+    /**
+     * Show the form to add a new department
+     * @return \Illuminate\Http\Response
+     */
+    public function showNewDepartmentForm()
+    {
+        $schools = Schools::all();
+        return view('admin.settings.departments.new', compact('schools'));
+    }
+    /**
+     * add a new department
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function addNewDepartment(Request $request)
+    {
+        $validator = Validator::make($request->all(), array(
+            'name'=>'required',
+            'school'=>'required',
+            'chair'=>'nullable'
+        ));
+        if($validator->fails())
+        {
+            $request->session()->flash('error',$validator->errors());
+            return redirect()->back()->withInput($request->only('name','school','chair'));
+        }
+        else
+        {
+            $department = Departments::where('name','=',$request->input('name'))->first();
+            if($department)
+            {
+                $request->session()->flash('error','The department already exists');
+                return redirect()->back();
+            }
+            if(Departments::create(array(
+                'name'=>$request->input('name'),
+                'school_id'=>$request->input('school'),
+                'chair'=>$request->input('chair')
+            )))
+            {
+                $request->session()->flash('success','Department added successfully');
+                return redirect()->back();
+            }
+            else
+            {
+                $request->session()->flash('error','Something went wrong, try again');
+                return redirect()->back()->withInput($request->only('name','school','chair'));
+            }
+        }
+    }
+    /****************************** END IOF DEPARTMENTS MODULE *********************/
     //helper functions
     /**
      * the user data
@@ -181,12 +280,43 @@ class AdminController extends Controller
         return $this->validate($request,array('name'=>'required','email'=>'required|email|min:4','password'=>'required','confirm_password'=>'required'));
     }
     /**
-     * send email notification with credentials
+     * send email notification with credentials to the new dean
      * @param  string $email
      * @param string $password
+     * @return \Illuminate\Support\Facades\Notification
      */
     protected function sendAccountCreatedNotification($email, $password)
     {
         Notification::route('mail',request()->email)->notify(new DeanNewAccountCreatedNotification($email, $password));
+    }
+    /**
+     *send a mail notofication to the new chirperson of the department
+     * @param string $email
+     * @param string password
+     * @return \Illuminate\Support\Facades\Notification
+     */
+    public function sendNotificationToNewCod($email, $password)
+    {
+        Notification::route('mail',request()->email)->notify(new CODNewAccountCreatedNotification($email, $password));
+    }
+    protected function school_dep()
+    {
+        $schools = Schools::all();
+        dd($schools->department->name);
+        $departments = Departments::all();
+    }
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
+    protected function codData(Request $request)
+    {
+        return array(
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'dep_id'=>$request->department,
+            'school_id'=>$request->department->school->school_id,
+            'password'=>Hash::make($request->password)
+        );
     }
 }

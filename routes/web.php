@@ -36,6 +36,11 @@ Route::prefix('admin')->group(function()
     Route::post('/dean/add','Admin\AdminController@addNewDeanOfSchool')->name('admin.dean.add.submit');
     //CODs urls
     Route::get('/cods/all','Admin\AdminController@getAllCODs')->name('admin.cods.view.all');
+    Route::get('/cod/add','Admin\AdminController@ShowNewCODForm')->name('admin.cod.add.form');
+    Route::post('/cod/add','Admin\AdminController@addNewSchoolDepartmentChair')->name('admin.cod.add.submit');
+    //DEPARTMENT URLS
+    Route::get('/departments/add','Admin\AdminController@showNewDepartmentForm')->name('admin.department.add.form');
+    Route::post('/departments/add','Admin\AdminController@addNewDepartment')->name('admin.department.add.submit');
     //Schools urls
     Route::get('/schools/add','Admin\AdminController@ShowNewAdditionSchoolForm')->name('admin.schools.add.form');
     Route::post('/school','Admin\AdminController@addNewSchool')->name('admin.schools.add.submit');

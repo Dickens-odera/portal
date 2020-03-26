@@ -32,7 +32,7 @@
           <div class="icon">
             <i class="ion ion-person"></i>
           </div>
-          <a href="{{ route('admin.deans.view.all') }}" class="small-box-footer">View All <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('admin.deans.view.all') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
@@ -47,7 +47,7 @@
           <div class="icon">
             <i class="ion ion-person"></i>
           </div>
-          <a href="{{ route('admin.cods.view.all') }}" class="small-box-footer">View All <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('admin.cods.view.all') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
@@ -62,7 +62,7 @@
           <div class="icon">
             <i class="ion ion-person"></i>
           </div>
-          <a href="" class="small-box-footer">View All <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
@@ -77,7 +77,7 @@
           <div class="icon">
             <i class="ion ion-home"></i>
           </div>
-          <a href="" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('admin.schools.view.all') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
