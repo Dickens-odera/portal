@@ -2,7 +2,10 @@
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">{{ __('schools') }}</div>
+        <div class="box-header bg-warning text-center text-uppercase">
+            {{ __('schools') }}
+            <a href="{{ route('admin.dashboard')}}" class="btn btn-sm btn-info pull-right">Dashboard</a>
+        </div>
         <div class="box-body table-responsive">
             <table class="table table-bordered">
                 @if(count($schools) > 0)
@@ -11,6 +14,7 @@
                             <th>#</th>
                             <th>Name</th>
                             {{-- <th>Dean</th> --}}
+                            {{-- <th>Departments</th> --}}
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -19,6 +23,7 @@
                             <tr>
                                 <td>{{ $value->school_id }}</td>
                                 <td>{{ $value->school_name }}</td>
+                                {{-- <td>{{ implode(',',$value->department->chair)}}</td> --}}
                                 {{-- <td>{{ $value->dean->name }}</td> --}}
                                 <td class="btn-group btn-group-sm">
                                     <a href="" class="btn btn-sm btn-success"><i class="fa fa-pencil"></i></a>
@@ -31,9 +36,10 @@
                             <td class="bg-warning">No schools Information Found</td>
                         </div>
                 @endif
-
             </table>
         </div>
-        <div class="box-footer"></div>
+        <div class="box-footer">
+            {{ $schools->links() }}
+        </div>
     </div>
 @endsection

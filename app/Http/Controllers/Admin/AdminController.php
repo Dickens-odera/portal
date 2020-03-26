@@ -103,7 +103,7 @@ class AdminController extends Controller
      */
     public function getAllSchools(Request $request)
     {
-        $schools = Schools::latest()->paginate(2);
+        $schools = Schools::latest()->paginate(5);
         if(!$schools)
         {
             $request->session()->flash('error','No Schools Found');

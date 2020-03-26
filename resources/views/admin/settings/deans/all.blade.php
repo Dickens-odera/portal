@@ -2,7 +2,10 @@
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">{{ __('Deans of schools') }}</div>
+        <div class="box-header bg-warning text-center text-uppercase">
+            {{ __('Deans of schools') }}
+            <a href="{{ route('admin.dashboard')}}" class="btn btn-sm btn-info pull-right">Dashboard</a>
+        </div>
         <div class="box-body table-responsive">
             <table class="table table-bordered">
                 @if(count($deans) > 0)
@@ -30,7 +33,7 @@
                         </div>
                 @endif
 
-            </table>    
+            </table>
         </div>
         <div class="box-footer"></div>
     </div>

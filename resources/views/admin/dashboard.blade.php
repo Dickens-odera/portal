@@ -6,7 +6,7 @@
       <small>Control panel</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="{{ route('admin.dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>
@@ -20,10 +20,10 @@
         <div class="small-box bg-aqua">
           <div class="inner">
             <div class="hidden">
-              {{ $deans = App\Deans::latest()->get() }}
+              {{ $deans = App\Deans::latest()->get()}}
               {{ $cods = App\CODs::latest()->get() }}
               {{ $registrars= App\Registrar::latest()->get() }}
-              {{ $schools = App\Schools::latest()->get() }}
+              {{ $schools = App\Schools::latest()->paginate(5) }}
             </div>
             <h3>{{ count($deans)}}</h3>
 
@@ -118,7 +118,9 @@
                   @endif
                 </table>
               </div>
-              <div class="box-footer"></div>
+              <div class="box-footer">
+                {{-- {{ $deans->links() }} --}}
+              </div>
             </div>
       </div>
       <div class="col-md-6">
@@ -182,7 +184,12 @@
                     @endif
                   </table>
                 </div>
-                <div class="box-footer"></div>
+                <div class="box-footer">
+                    {{ $schools->links() }}
+                    @if(count($schools) > 3)
+                        <a href="{{ route('admin.schools.view.all') }}" class="btn btn-success btn-sm"><i class="fa fa-arrow-right"></i> View All</a>
+                    @endif
+                </div>
               </div>
         </div>
       <div class="col-md-6">

@@ -2,7 +2,10 @@
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">{{ __('cods of departments') }}</div>
+        <div class="box-header bg-warning text-center text-uppercase">
+            {{ __('cods of departments') }}
+            <a href="{{ route('admin.dashboard')}}" class="btn btn-sm btn-info pull-right">Dashboard</a>
+        </div>
         <div class="box-body table-responsive">
             <table class="table table-bordered">
                 @if(count($cods) > 0)
@@ -28,15 +31,15 @@
                             </tr>
                         </tbody>
                     @endforeach
-                   
+
                     @else
                         <div class="table-responsive">
                             <td class="bg-warning">No cods Information Found</td>
                         </div>
                 @endif
 
-            </table> 
-            {{ $cods->links() }}   
+            </table>
+            {{ $cods->links() }}
         </div>
         <div class="box-footer"></div>
     </div>
