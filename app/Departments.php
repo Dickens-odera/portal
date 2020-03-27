@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Departments extends Model
 {
     /**
-     * @var string
+     * @var string $table
      */
     protected $table = 'departments';
     /**
-     * @var array
+     * @var array $fillable
      */
     protected $fillable = ['school_id','programs','chair','name','dep_id'];
     /**
@@ -26,7 +26,7 @@ class Departments extends Model
      */
     public function school()
     {
-        return $this->belongsTo(Schools::class,'dep_id','dep_id');
+        return $this->belongsTo(Schools::class,'dep_id','school_id');
     }
     /**
      * @return \Illuminate\Support\Facades\Response

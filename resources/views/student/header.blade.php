@@ -9,7 +9,8 @@
         <span class="logo-mini"><b>MM</b>UST</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><b>PORTAL</span>
-      </a>
+
+        </a>
       <!-- Header Navbar: style can be found in header.less -->
       <nav class="navbar navbar-static-top">
         <!-- Sidebar toggle button-->
@@ -221,7 +222,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src="/storage/uploads/logo/student.jpg" alt="Dr'Photo" style="" class="user-image">
                 {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="user-image" alt="User Image"> --}}
-                <span class="hidden-xs">{{ Auth::user()->surname.' '.Auth::user()->middleName.' '.Auth::user()->lastName }}</span>
+                <span class="hidden-xs">{{ Auth::user()->surname }}</span>
               </a>
               <ul class="dropdown-menu">
                 <!-- User image -->

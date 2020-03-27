@@ -44,9 +44,12 @@ class RegistrarResetPasswordNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+                    ->greeting('Hello!')
+                    ->subject('Password Reset')
                     ->line('You are receiving this email because we received a password reset request for your account.')
                     ->action('Reset Password', route('registrar.password.reset',$this->token))
-                    ->line('If you did not make this request, kindly ignore this email.');
+                    ->line('If you did not make this request, kindly ignore this email.')
+                    ->line('Cheers!');
     }
 
     /**

@@ -44,9 +44,12 @@ class DeanResetPasswordNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+                ->greeting('Hello!')
+                ->subject('Password Reset')
                 ->line('You have received this email because we received a password reset request for your account.')
                 ->action('Reset Password', route('dean.password.reset',$this->token))
-                ->line('If you did not make this request, please ignore this email!');
+                ->line('If you did not make this request, please ignore this email!')
+                ->line('Cheers!');
     }
 
     /**

@@ -6,7 +6,7 @@
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>MMUST</b>Portal</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>MIISTP</span>
+        <span class="logo-lg"><b>Portal</span>
       </a>
       <!-- Header Navbar: style can be found in header.less -->
       <nav class="navbar navbar-static-top">
@@ -53,7 +53,7 @@
                     <a href="" class="btn btn-default btn-flat">Profile</a>
                   </div>
                   <div class="pull-right">
-                        <a class="btn btn-default btn-flat" href="{{ route('student.logout') }}">
+                        <a class="btn btn-default btn-flat" href="{{ route('dean.logout') }}">
                      {{ __('Sign Out') }}
                  </a>
                   </div>

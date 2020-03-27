@@ -24,13 +24,16 @@
                     <div class="form-group row">
                         <label for="school" class="form-label col-md-4 text-md-right">{{ __('School') }}</label>
                         <div class="col-md-8">
+
                             <select name="school" id="school" class="form-control">
                                 <option value="">Select ...</option>
-                                @if(count($schools) > 0)
-                                    @foreach($schools as $key=>$value)
-                                        <option value="{{ $value->school_id }}">{{ $value->school_name }}</option>
-                                    @endforeach
-                                @endif
+                                {{-- @if(!$schools->dean->first()->name) --}}
+                                    @if(count($schools) > 0)
+                                        @foreach($schools as $key=>$value)
+                                            <option value="{{ $value->school_id }}">{{ $value->school_name }}</option>
+                                        @endforeach
+                                    @endif
+                                {{-- @endif --}}
                             </select>
                             <button class="btn btn-sm btn-info hidden">+</button>
                         </div>

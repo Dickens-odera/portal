@@ -88,7 +88,7 @@ Route::prefix('dean')->group(function()
 
     //password reset routes
     Route::post('password/email','Auth\Dean\DeanForgotPasswordController@sendResetLinkEmail')->name('dean.password.email');
-    Route::post('password/reset','Auth\Dean\CODResetPasswordController@reset')->name('dean.password.update');
+    Route::post('password/reset','Auth\Dean\DeanResetPasswordController@reset')->name('dean.password.update');
     Route::get('password/reset','Auth\Dean\DeanForgotPasswordController@showLinkRequestForm')->name('dean.password.request');
     Route::get('password/reset/{token}','Auth\Dean\DeanResetPasswordController@showResetForm')->name('dean.password.reset');
 });

@@ -6,10 +6,10 @@
       <div class="user-panel">
         <div class="pull-left image">
           {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="img-circle" alt="User Image"> --}}
-          <img src="/storage/uploads/images/students/{{ Auth::user()->avartar}}" alt="Dr'Photo" style="" class="img-circle">
+          <img src="/storage/uploads/logo/student.jpg" alt="Dr'Photo" style="" class="img-circle">
         </div>
         <div class="pull-left info">
-          <p>{{ Auth::user()->email}}</p>
+          <p>{{ Auth::user()->surname }}</p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>

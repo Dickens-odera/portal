@@ -82,6 +82,7 @@ class AdminController extends Controller
             return redirect()->back()->withInput($request->only('name','email'));
         }
         $dean->school_id = $request->school;
+
         //$dean->create($this->data($request));
         if($dean->save())
         {
