@@ -20,12 +20,12 @@
         <div class="small-box bg-aqua">
           <div class="inner">
             <div class="hidden">
-              {{ $deans = App\Deans::latest()->get()}}
-              {{ $cods = App\CODs::latest()->get() }}
-              {{ $registrars= App\Registrar::latest()->get() }}
-              {{ $schools = App\Schools::latest()->paginate(5) }}
+              {{ $deans = App\Deans::all()->take(3)}}
+              {{ $cods = App\CODs::all()->take(3) }}
+              {{ $registrars= App\Registrar::all()->take(3) }}
+              {{ $schools = App\Schools::all()->take(5)}}
             </div>
-            <h3>{{ count($deans)}}</h3>
+            <h3>{{ count(App\Deans::all())}}</h3>
 
             <p class="text-uppercase">Deans</p>
           </div>
@@ -40,7 +40,7 @@
         <!-- small box -->
         <div class="small-box bg-green">
           <div class="inner">
-            <h3>{{ count($cods) }}</h3>
+            <h3>{{ count(App\CODs::all()) }}</h3>
 
             <p class="text-uppercase">CODs</p>
           </div>
@@ -55,7 +55,7 @@
         <!-- small box -->
         <div class="small-box bg-yellow">
           <div class="inner">
-            <h3>{{ count($registrars) }}</h3>
+            <h3>{{ count(App\Registrar::all()) }}</h3>
 
             <p class="text-uppercase">Registrars(AA)</p>
           </div>
@@ -70,7 +70,7 @@
         <!-- small box -->
         <div class="small-box bg-red">
           <div class="inner">
-            <h3>{{ count($schools) }}</h3>
+            <h3>{{ count(App\Schools::all()) }}</h3>
 
             <p class="text-uppercase">Schools</p>
           </div>
@@ -119,7 +119,7 @@
                 </table>
               </div>
               <div class="box-footer">
-                {{-- {{ $deans->links() }} --}}
+                <a href="{{ route('admin.deans.view.all') }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View All</a>
               </div>
             </div>
       </div>
@@ -144,11 +144,11 @@
                     <tbody>
                       <tr>
                         <td>{{ $value->id }}</td>
-                        {{-- <td><img src="/storage/uploads/images/nurses/{{ $value->avartar }}" alt="Admin Image" class="img-circle" style="width:50px; height:50px"></td> --}}
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
                         <td>{{ $value->school->school_name }}</td>
-                        <td>{{ $value->department->name}}</td>
+                        {{-- <td>{{ $value->department->name}}</td> --}}
+                        <td></td>
                         <td>{{ $value->phone }}</td>
                       </tr>
                     </tbody>
@@ -157,7 +157,7 @@
               </table>
           </div>
           <div class="box-footer">
-            <!--  Some footer content go here-->
+                <a href="{{ route('admin.cods.view.all') }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> View All</a>
           </div>
         </div>
       </div>
@@ -185,10 +185,7 @@
                   </table>
                 </div>
                 <div class="box-footer">
-                    {{ $schools->links() }}
-                    @if(count($schools) > 3)
-                        <a href="{{ route('admin.schools.view.all') }}" class="btn btn-success btn-sm"><i class="fa fa-arrow-right"></i> View All</a>
-                    @endif
+                        <a href="{{ route('admin.schools.view.all') }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View All</a>
                 </div>
               </div>
         </div>
@@ -218,7 +215,9 @@
                   @endif
                 </table>
               </div>
-              <div class="box-footer"></div>
+              <div class="box-footer">
+                    <a href="" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> View All</a>
+              </div>
             </div>
       </div>
     </div>

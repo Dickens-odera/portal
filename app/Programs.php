@@ -15,14 +15,14 @@ class Programs extends Model
      */
     protected $fillable = ['name','description','school_id','dep_id'];
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function school()
     {
        return $this->belongsTo(Schools::class,'school_id','school_id');
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function department()
     {

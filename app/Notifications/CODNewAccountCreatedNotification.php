@@ -11,9 +11,9 @@ class CODNewAccountCreatedNotification extends Notification
 {
     use Queueable;
     /**
-     * @var string $token
+     * @var string $password
      */
-    public $token;
+    public $password;
     /**
      * @var string $email
      */
@@ -23,10 +23,10 @@ class CODNewAccountCreatedNotification extends Notification
      *
      * @return void
      */
-    public function __construct($email, $token)
+    public function __construct($email, $password)
     {
         $this->email = $email;
-        $this->token = $token;
+        $this->password = $password;
     }
 
     /**

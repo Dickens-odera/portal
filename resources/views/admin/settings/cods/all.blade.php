@@ -1,4 +1,10 @@
 @extends('admin.main')
+{{-- <div class="hidden">
+    {{ $cods = App\CODS::all()}}
+    @foreach($cods as $k=>$v)
+    {{ dd($v->department->first()->pluck('name'))}}
+    @endforeach
+</div> --}}
 
 @section('content')
     <div class="box">
@@ -27,11 +33,11 @@
                                 <td>{{ $value->email }}</td>
                                 <td>{{ $value->school->school_name }}</td>
                                 <td>{{ $value->department->name }}</td>
+                                <td></td>
                                 <td>{{ $value->phone }}</td>
                             </tr>
                         </tbody>
                     @endforeach
-
                     @else
                         <div class="table-responsive">
                             <td class="bg-warning">No cods Information Found</td>
@@ -39,7 +45,7 @@
                 @endif
 
             </table>
-            {{ $cods->links() }}
+            {{-- {{ $cods->links() }} --}}
         </div>
         <div class="box-footer"></div>
     </div>

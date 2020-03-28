@@ -16,6 +16,7 @@ use App\Notifications\DeanNewAccountCreatedNotification;
 use App\Notifications\CODNewAccountCreatedNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
 class AdminController extends Controller
 {
     public function __construct()
@@ -23,7 +24,7 @@ class AdminController extends Controller
         $this->middleware('auth:admin');
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -104,7 +105,16 @@ class AdminController extends Controller
      */
     public function getAllSchools(Request $request)
     {
+        //$schools = Schools::all();
         $schools = Schools::latest()->paginate(5);
+        //dd($schools->first()->school_name);
+        /**
+        *foreach($schools as $key=>$value)
+        *{
+        *    dd($value->school_name);
+        *}
+        */
+        //dd($schools->departments->first()->name);
         if(!$schools)
         {
             $request->session()->flash('error','No Schools Found');
@@ -121,19 +131,25 @@ class AdminController extends Controller
      */
     public function getAllCODs()
     {
-        $cods = CODs::latest()->paginate(10);
+        $cods = CODs::all();
+        $department = CODs::where('dep_id','=','')->first();
         return view('admin.settings.cods.all', compact('cods'));
     }
     /**
      * Show the form to add a new Chairperson to the departent
+     * @param \Illuminate\\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function ShowNewCODForm()
+    public function ShowNewCODForm(Request $request)
     {
         $departments = Departments::all();
-        //dd($departments);
+        //dd($departments->school->first()->school_name);
+        // foreach($departments as $key=>$value)
+        // {
+        //     dd($value->school->school_name);
+        // }
         $schools = Schools::all();
-        return view('admin.settings.cods.new', compact('departments','schools'));
+        return view('admin.settings.cods.new',compact(['departments','schools']));
     }
     /**
      * Add new COD
@@ -142,36 +158,48 @@ class AdminController extends Controller
      */
     public function addNewSchoolDepartmentChair(Request $request)
     {
-        $validator = Validator::make($request->all(),array('name'=>'required',
-                                'email'=>'required|email|unique:cods',
-                                'password'=>'required|min:8',
-                                'confirm_password'=>'required'));
-        if($validator->fails())
+        $this->validateData($request);
+        $cod = new CODs;
+        $cod->name = $request->name;
+        $cod->email = $request->email;
+        $dep = $request->department;
+        //$_school = DB::select('SELECT school_id FROM departments WHERE dep_id = :dep',['dep'=>$dep]);
+        //$_school = DB::table('departments')->select('school_id')->where('dep_id',$dep)->first();
+        $_dep = Departments::where('dep_id','=',$dep)->first();
+        $existing_cod = CODs::where('dep_id','=',$dep)->first();
+        if($existing_cod)
         {
-            $request->session()->flash('error',$validator->errors());
+            $request->session()->flash('error','The selected department already has a cod');
             return redirect()->back()->withInput($request->only('name','email'));
         }
-        //$this->validate($request);
-        $pwd = $request->input('password');
-        $confirm_pwd = $request->input('confirm_password');
+        //dd($_dep->school_id);
+        //$cod->school_id = $_dep->school->school_id;
+        dd($dep->school->school_name);
+        $sch = Schools::where('dep_id','=','');
+        dd($dep->school->school_id);
+        $cod->dep_id = $dep;
+        $pwd = $request->password;
+        $confirm_pwd = $request->confirm_password;
         if($pwd !== $confirm_pwd)
         {
             $request->session()->flash('error','Password Mismatch');
-            return redirect()->back();
-        }
-        if(CODs::create($this->codData($request)))
-        {
-            //send mail notification with login credentials
-            $this->sendNotificationToNewCod($request->email, $request->password);
-            $request->session()->flash('success','COD'.' '.$request->name.' '.'added successfully');
-            return redirect()->back();
+            return redirect()->back()->withInput($request->only('name','email','department'));
         }
         else
         {
-            $request->session()->flash('error','Failed to add the requested COD, try again');
-            return redirect()->back()->witnInput($request->only('name','email'));
+            $cod->password = Hash::make($pwd);
         }
-
+        if($cod->save())
+        {
+            Departments::where('dep_id','=',$dep)->update(array('chair'=>$request->name));
+            $this->sendNotificationToNewCod($request->email, $request->password);
+            $request->session()->flash('success','COD'.' '.$request->name.' '.'added successfully');
+        }
+        else
+        {
+            $request->session()->flash('error','Something went wrong, try again');
+            return redirect()->back()->withInput($request->only('name','email','department'));
+        }
     }
     /***************************** End of CODs Module */
     /***************************** SCHOOLS MODULE *************************** */
@@ -252,6 +280,8 @@ class AdminController extends Controller
                 'chair'=>$request->input('chair')
             )))
             {
+                //update the school's dep_id
+                //Schools::where('school_id','=',$request->input('school'))->first()->update(array('dep_id'=>$request->department->dep_id));
                 $request->session()->flash('success','Department added successfully');
                 return redirect()->back();
             }
@@ -312,11 +342,15 @@ class AdminController extends Controller
      */
     protected function codData(Request $request)
     {
+        //$department = $request->department;
+        $_school = DB::select('SELECT school_id FROM departments WHERE dep_id = :dep LIMIT 1',['dep'=>$request->department]);
+        //dd($_school);
+        //$school = $request->input('department')->school->first()->school_id;
         return array(
             'name'=>$request->name,
             'email'=>$request->email,
             'dep_id'=>$request->department,
-            'school_id'=>$request->department->school->school_id,
+            'school_id'=>$_school,
             'password'=>Hash::make($request->password)
         );
     }

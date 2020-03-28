@@ -13,23 +13,23 @@ class Departments extends Model
     /**
      * @var array $fillable
      */
-    protected $fillable = ['school_id','programs','chair','name','dep_id'];
+    protected $fillable = ['school_id','programs','chair','name','dep_id','cod_id'];
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function cod()
     {
        return $this->hasOne(CODs::class,'dep_id','dep_id');
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function school()
     {
         return $this->belongsTo(Schools::class,'dep_id','school_id');
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function program()
     {

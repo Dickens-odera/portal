@@ -27,8 +27,9 @@ class Student extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    //student-applications relationship
+    /**
+     * @return \Illuminate\Http\Response
+     */
     public function applications()
     {
         return $this->hasMany(Applications::class,'student_id');

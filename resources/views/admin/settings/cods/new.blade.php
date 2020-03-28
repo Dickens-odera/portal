@@ -40,11 +40,11 @@
                         <div class="col-md-8">
                             <select name="department" id="department" class="form-control">
                                 <option value="">Select ...</option>
-                                @if(count($departments) > 0)
-                                    @foreach($departments as $key=>$value)
-                                        <option value="{{ $value->dep_id }}">{{ $value->name }}</option>
-                                    @endforeach
-                                @endif
+                                    @if(count($departments) > 0)
+                                        @foreach($departments as $key=>$value)
+                                            <option value="{{ $value->dep_id }}">{{ $value->name }}</option>
+                                        @endforeach
+                                    @endif
                             </select>
                             <button class="btn btn-sm btn-info hidden">+</button>
                         </div>

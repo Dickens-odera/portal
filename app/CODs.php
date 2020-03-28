@@ -33,14 +33,14 @@ class CODs extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function department()
     {
-       return $this->belongsTo(Departments::class,'dep_id','dep_id');
+       return $this->belongsTo(Departments::class,'school_id','dep_id');
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function school()
     {

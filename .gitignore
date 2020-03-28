@@ -12,3 +12,4 @@ npm-debug.log
 yarn-error.log
 /.history/
 /public/admin/bower_components
+portal.sql

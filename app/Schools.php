@@ -18,28 +18,28 @@ class Schools extends Model
      */
     //protected $guarded = ['school_id'];
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function program()
     {
        return $this->hasMany(Programs::class,'school_id','program_id');
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function dean()
     {
        return $this->hasOne(Deans::class,'school_id','id');
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function cod()
     {
        return $this->hasMany(CODs::class,'school_id','id');
     }
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function department()
     {

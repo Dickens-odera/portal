@@ -29,7 +29,7 @@ class Deans extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     /**
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\Response
      */
     public function school()
     {

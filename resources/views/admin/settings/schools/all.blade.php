@@ -13,8 +13,6 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            {{-- <th>Dean</th> --}}
-                            {{-- <th>Departments</th> --}}
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -23,7 +21,7 @@
                             <tr>
                                 <td>{{ $value->school_id }}</td>
                                 <td>{{ $value->school_name }}</td>
-                                {{-- <td>{{ implode(',',$value->department->chair)}}</td> --}}
+                                {{-- <td>{{ $value->first()->department->name}}</td> --}}
                                 {{-- <td>{{ $value->dean->name }}</td> --}}
                                 <td class="btn-group btn-group-sm">
                                     <a href="" class="btn btn-sm btn-success"><i class="fa fa-pencil"></i></a>

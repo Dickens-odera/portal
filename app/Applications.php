@@ -12,7 +12,10 @@ class Applications extends Model
         'weighted_clusters','subject_1','subject_2','subject_3','subject_4','subject_5','subject_6','subject_7','subject_8','grade_1','grade_2',
         'grade_3','grade_4','grade_5','grade_6','grade_7','grade_8','result_slip','transfer_reason','student_id','status'
     ];
-
+    /**
+     * Student-applications relationship
+     * @return \Illuminate\Http\Response
+     */
     public function students()
     {
       return $this->belongsTo(Student::class,'student_id','id');
