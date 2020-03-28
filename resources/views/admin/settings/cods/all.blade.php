@@ -31,8 +31,15 @@
                                 <td>{{ $value->id }}</td>
                                 <td>{{ $value->name }}</td>
                                 <td>{{ $value->email }}</td>
+                                @if(isset($value->school))
                                 <td>{{ $value->school->school_name }}</td>
+                                @else "Null";
+                                @endif
+                                @if(isset($value->department))
                                 <td>{{ $value->department->name }}</td>
+                                @else "Null";
+                                @endif
+
                                 <td></td>
                                 <td>{{ $value->phone }}</td>
                             </tr>

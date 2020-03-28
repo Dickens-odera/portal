@@ -26,7 +26,7 @@ class Departments extends Model
      */
     public function school()
     {
-        return $this->belongsTo(Schools::class,'dep_id','school_id');
+        return $this->belongsTo(Schools::class,'school_id','school_id');
     }
     /**
      * @return \Illuminate\Http\Response

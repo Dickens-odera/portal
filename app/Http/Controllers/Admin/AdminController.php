@@ -173,10 +173,10 @@ class AdminController extends Controller
             return redirect()->back()->withInput($request->only('name','email'));
         }
         //dd($_dep->school_id);
-        //$cod->school_id = $_dep->school->school_id;
-        dd($dep->school->school_name);
+        $cod->school_id = $_dep->school->school_id;
+       // dd($dep->school->school_name);
         $sch = Schools::where('dep_id','=','');
-        dd($dep->school->school_id);
+        //dd($dep->school->school_id);
         $cod->dep_id = $dep;
         $pwd = $request->password;
         $confirm_pwd = $request->confirm_password;
@@ -194,6 +194,7 @@ class AdminController extends Controller
             Departments::where('dep_id','=',$dep)->update(array('chair'=>$request->name));
             $this->sendNotificationToNewCod($request->email, $request->password);
             $request->session()->flash('success','COD'.' '.$request->name.' '.'added successfully');
+            return redirect()->back();
         }
         else
         {
