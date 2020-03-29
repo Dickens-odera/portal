@@ -14,7 +14,7 @@ class StudentRegisterController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest:student');
     }
     /**
      * @return void
@@ -54,7 +54,7 @@ class StudentRegisterController extends Controller
             if($student->save())
             {
                 //send mail to comfirm email address in the near future
-                $this->sendMailToNewStudentAccount();
+                //$this->sendMailToNewStudentAccount();
                 request()->session()->flash('success','Account created successfully, please check your email and verify your count before login');
                 return redirect()->back();
             }

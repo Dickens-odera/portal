@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\DeanNewAccountCreatedNotification;
 use App\Notifications\CODNewAccountCreatedNotification;
+use App\Student;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
@@ -34,7 +35,12 @@ class AdminController extends Controller
                     ->select('cods.*','departments.name as department','schools.school_name as school')
                     ->take(3)
                     ->get();
-        return view('admin.dashboard', compact('cods_queries'));
+        $cod_count = count(CODs::all());
+        $dean_count = count(Deans::all());
+        $registrar_count = count(Registrar::all());
+        $school_count = count(Schools::all());
+        $student_count = count(Student::all());
+        return view('admin.dashboard', compact(['cods_queries','cod_count','dean_count','registrar_count','school_count','student_count']));
     }
     //SETTINGS
     /**************************** Deans Module   ****************************** */
@@ -200,8 +206,8 @@ class AdminController extends Controller
         }
         if($cod->save())
         {
-            Departments::where('dep_id','=',$dep)->update(array('chair'=>$request->name));
-            $this->sendNotificationToNewCod($request->email, $request->password, $_dep->name);
+            Departments::where('dep_id','=',$dep)->update(array('chair'=>$request->name,'cod_id'=>$cod->id));
+            $this->sendNotificationToNewCod($request->email, $request->password, $_dep->name,$request->name);
             $request->session()->flash('success','COD'.' '.$request->name.' '.'added successfully');
             return redirect()->back();
         }
@@ -336,9 +342,9 @@ class AdminController extends Controller
      * @param string password
      * @return \Illuminate\Support\Facades\Notification
      */
-    public function sendNotificationToNewCod($email, $password, $department)
+    public function sendNotificationToNewCod($email, $password, $department,$name)
     {
-        Notification::route('mail',request()->email)->notify(new CODNewAccountCreatedNotification($email, $password, $department));
+        Notification::route('mail',request()->email)->notify(new CODNewAccountCreatedNotification($email, $password, $department,$name));
     }
     protected function school_dep()
     {

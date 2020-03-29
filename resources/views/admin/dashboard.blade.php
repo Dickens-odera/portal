@@ -25,8 +25,7 @@
               {{ $registrars= App\Registrar::all()->take(3) }}
               {{ $schools = App\Schools::all()->take(5)}}
             </div>
-            <h3>{{ count(App\Deans::all())}}</h3>
-
+            <h3>{{ $dean_count }}</h3>
             <p class="text-uppercase">Deans</p>
           </div>
           <div class="icon">
@@ -40,7 +39,7 @@
         <!-- small box -->
         <div class="small-box bg-green">
           <div class="inner">
-            <h3>{{ count(App\CODs::all()) }}</h3>
+            <h3>{{ $cod_count}}</h3>
 
             <p class="text-uppercase">CODs</p>
           </div>
@@ -55,7 +54,7 @@
         <!-- small box -->
         <div class="small-box bg-yellow">
           <div class="inner">
-            <h3>{{ count(App\Registrar::all()) }}</h3>
+            <h3>{{ $registrar_count }}</h3>
 
             <p class="text-uppercase">Registrars(AA)</p>
           </div>
@@ -70,7 +69,7 @@
         <!-- small box -->
         <div class="small-box bg-red">
           <div class="inner">
-            <h3>{{ count(App\Schools::all()) }}</h3>
+            <h3>{{ $school_count }}</h3>
 
             <p class="text-uppercase">Schools</p>
           </div>

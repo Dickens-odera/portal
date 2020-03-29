@@ -23,15 +23,20 @@ class CODNewAccountCreatedNotification extends Notification
      */
     public $department;
     /**
+     * @var string $name
+     */
+    public $name;
+    /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($email, $password, $department)
+    public function __construct($email, $password, $department,$name)
     {
         $this->email = $email;
         $this->password = $password;
         $this->department = $department;
+        $this->name = $name;
     }
 
     /**
@@ -54,7 +59,7 @@ class CODNewAccountCreatedNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hello There!')
+                    ->greeting('Hello There!'.' '.$this->name)
                     ->subject('Your Account Login Credentials')
                     ->line('You have been added by our system administrator as a chairperson to the'.' '.$this->department.' '.'department')
                     ->line('Kindly use these credentials to log into your new account.')
