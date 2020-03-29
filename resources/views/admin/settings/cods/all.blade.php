@@ -14,7 +14,7 @@
         </div>
         <div class="box-body table-responsive">
             <table class="table table-bordered">
-                @if(count($cods) > 0)
+                @if(count($query) > 0)
                     <thead class="" style="background:#000; color:#fff">
                         <tr>
                             <th>#</th>
@@ -25,25 +25,29 @@
                             <th>Phone</th>
                         </tr>
                     </thead>
-                    @foreach($cods as $key=>$value)
+                    @foreach($query as $key=>$value)
                         <tbody>
                             <tr>
                                 <td>{{ $value->id }}</td>
                                 <td>{{ $value->name }}</td>
                                 <td>{{ $value->email }}</td>
                                 @if(isset($value->school))
-                                <td>{{ $value->school->school_name }}</td>
+                                <td>{{ $value->school }}</td>
                                 @else
                                 <td></td>
                                 @endif
                                 @if(isset($value->department))
-                                <td>{{ $value->department->name }}</td>
+                                <td>{{ $value->department }}</td>
                                 @else
                                 <td></td>
                                 @endif
 
                                 <td></td>
-                                <td>{{ $value->phone }}</td>
+                                @if(isset($value->phone))
+                                    <td>{{ $value->phone }}</td>
+                                @else
+                                    <td></td>
+                                @endif
                             </tr>
                         </tbody>
                     @endforeach
@@ -54,7 +58,7 @@
                 @endif
 
             </table>
-            {{-- {{ $cods->links() }} --}}
+                {{ $query->links() }}
         </div>
         <div class="box-footer"></div>
     </div>

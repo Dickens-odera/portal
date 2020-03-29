@@ -28,7 +28,13 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard');
+        $cods_queries = DB::table('cods')
+                    ->join('departments','cods.dep_id','=','departments.dep_id')
+                    ->join('schools','cods.school_id','=','schools.school_id')
+                    ->select('cods.*','departments.name as department','schools.school_name as school')
+                    ->take(3)
+                    ->get();
+        return view('admin.dashboard', compact('cods_queries'));
     }
     //SETTINGS
     /**************************** Deans Module   ****************************** */
@@ -106,15 +112,12 @@ class AdminController extends Controller
      */
     public function getAllSchools(Request $request)
     {
-        //$schools = Schools::all();
         $schools = Schools::latest()->paginate(5);
-        //dd($schools->first()->school_name);
-        /**
-        *foreach($schools as $key=>$value)
-        *{
-        *    dd($value->school_name);
-        *}
-        */
+        $_schools = DB::table('schools')
+                            ->join('departments','schools.')
+                            ->select('schools.*')
+                            ->latest()
+                            ->paginate(5);
         //dd($schools->departments->first()->name);
         if(!$schools)
         {
@@ -132,9 +135,14 @@ class AdminController extends Controller
      */
     public function getAllCODs()
     {
-        $cods = CODs::all();
-        $department = CODs::where('dep_id','=','')->first();
-        return view('admin.settings.cods.all', compact('cods'));
+        // $cods = CODs::all();
+        $query = DB::table('cods')
+                     ->join('departments','cods.dep_id','=','departments.dep_id')
+                     ->join('schools','cods.school_id','=','schools.school_id')
+                     ->select('cods.*','departments.name as department','schools.school_name as school')
+                    //  ->latest()
+                     ->paginate(5);
+        return view('admin.settings.cods.all', compact('cods','query'));
     }
     /**
      * Show the form to add a new Chairperson to the departent

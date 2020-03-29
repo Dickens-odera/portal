@@ -21,7 +21,7 @@
           <div class="inner">
             <div class="hidden">
               {{ $deans = App\Deans::all()->take(3)}}
-              {{ $cods = App\CODs::all()->take(3) }}
+              {{-- {{ $cods = App\CODs::all()->take(3) }} --}}
               {{ $registrars= App\Registrar::all()->take(3) }}
               {{ $schools = App\Schools::all()->take(5)}}
             </div>
@@ -139,24 +139,30 @@
                     <th>phone</th>
                   </tr>
                 </thead>
-                @if(count($cods) > 0)
-                  @foreach($cods as $key=>$value)
+                @if(count($cods_queries) > 0)
+                  @foreach($cods_queries as $key=>$value)
                     <tbody>
                       <tr>
                         <td>{{ $value->id }}</td>
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
                         @if(isset($value->school))
-                        <td>{{ $value->school->school_name }}</td>
+                        {{-- <td>{{ $value->school->school_name }}</td> --}}
+                        <td>{{ $value->school }}</td>
                         @else
                         <td></td>
                         @endif
                         @if(isset($value->department))
-                        <td>{{ $value->department->name}}</td>
+                        {{-- <td>{{ $value->department->name}}</td> --}}
+                            <td>{{ $value->department}}</td>
                         @else
                         <td></td>
                         @endif
-                        <td>{{ $value->phone }}</td>
+                        @if(isset($value->phone))
+                            <td>{{ $value->phone }}</td>
+                        @else
+                        <td></td>
+                        @endif
                       </tr>
                     </tbody>
                   @endforeach
