@@ -146,9 +146,16 @@
                         <td>{{ $value->id }}</td>
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
+                        @if(isset($value->school))
                         <td>{{ $value->school->school_name }}</td>
-                        {{-- <td>{{ $value->department->name}}</td> --}}
+                        @else
                         <td></td>
+                        @endif
+                        @if(isset($value->department))
+                        <td>{{ $value->department->name}}</td>
+                        @else
+                        <td></td>
+                        @endif
                         <td>{{ $value->phone }}</td>
                       </tr>
                     </tbody>
@@ -172,6 +179,7 @@
                       <tr>
                         <th>#</th>
                         <th>Name</th>
+                        <th>Departments</th>
                       </tr>
                     </thead>
                     @if(count($schools) > 0)
@@ -179,6 +187,12 @@
                         <tr>
                           <td>{{ $value->school_id }}</td>
                           <td>{{ $value->school_name }}</td>
+                          <td></td>
+                          {{-- @if(isset((array)$value->department->name))
+                            <td>{{ implode(',',(array)$value->department->name)}}</td>
+                          @else
+                          <td></td>
+                          @endif --}}
                         </tr>
                       @endforeach
                     @endif

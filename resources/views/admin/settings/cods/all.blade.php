@@ -33,11 +33,13 @@
                                 <td>{{ $value->email }}</td>
                                 @if(isset($value->school))
                                 <td>{{ $value->school->school_name }}</td>
-                                @else "Null";
+                                @else
+                                <td></td>
                                 @endif
                                 @if(isset($value->department))
                                 <td>{{ $value->department->name }}</td>
-                                @else "Null";
+                                @else
+                                <td></td>
                                 @endif
 
                                 <td></td>

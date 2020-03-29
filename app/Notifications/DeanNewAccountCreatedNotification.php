@@ -19,14 +19,24 @@ class DeanNewAccountCreatedNotification extends Notification
      */
     public $password;
     /**
+     * @var string $school
+     */
+    public $school;
+    /**
+     * @var string $name
+     */
+    public $name;
+    /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($email, $password)
+    public function __construct($email, $password, $school,$name)
     {
         $this->email = $email;
         $this->password = $password;
+        $this->school = $school;
+        $this->name = $name;
     }
 
     /**
@@ -49,9 +59,9 @@ class DeanNewAccountCreatedNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hello There!')
+                    ->greeting('Hello '.' '.$this->name.'!')
                     ->subject('Your Account Login Credentials')
-                    ->line('You have been added by our system administrator as a dean to a school')
+                    ->line('You have been added by our system administrator as a dean to the'.' '.$this->school)
                     ->line('Kindly Use these Credentials to log into your new account')
                     ->line('You can change your password after loging in')
                     ->line("Email:"." ".$this->email)
