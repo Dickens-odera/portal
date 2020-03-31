@@ -264,7 +264,7 @@ class CODController extends Controller
             $program->school_id = Auth::user()->school->school_id;
             $department = Departments::where('dep_id','=',Auth::user()->dep_id)->first();
             $program->dep_id = $department->dep_id;
-            $existing_program = Programs::where('name','=',$request->name)->first();
+            $existing_program = Programs::where('name','=',$request->name)->where('dep_id','=',Auth::user()->dep_id)->first();
             if($existing_program)
             {
                 $request->session()->flash('error','The program already exists');
@@ -305,8 +305,6 @@ class CODController extends Controller
      */
     public function exportPrograms()
     {
-        $school = Schools::where('school_id','=',Auth::user()->school_id)->first();
-        //dd($school);
         return Excel::download(new ProgramsExport, 'school-programs.xlsx');
     }
     /** Enable the cod of the department to view all the available programs
