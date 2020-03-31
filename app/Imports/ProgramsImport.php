@@ -21,7 +21,7 @@ class ProgramsImport implements ToModel, WithStartRow, WithValidation
         return new Programs([
             'name'=>$row[0],
             'description'=>$row[1],
-            'school_id'=>$row[2]
+            // 'school_id'=>$row[2]
         ]);
     }
     public function startRow(): int

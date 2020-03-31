@@ -52,7 +52,7 @@ class CODController extends Controller
         $department = Departments::where('dep_id','=',Auth::user()->dep_id)->first();
         $program = Programs::where('dep_id','=',$department->dep_id)->first();
         $programs = DB::table('programs')
-                            ->join('departments','programs.dep_id','=','programs.dep_id')
+                            ->join('departments','programs.dep_id','=','departments.dep_id')
                             ->select('programs.name as program','departments.dep_id as dep_id','departments.name as department')
                             ->first();
         $applications = Applications::whereIn('present_program',(array)$program)
@@ -72,7 +72,7 @@ class CODController extends Controller
     }
     /**
      * Show a single application
-     * 
+     *
      * @param string $application_id
      * @return \Illuminate\Http\Response
      */
@@ -111,7 +111,7 @@ class CODController extends Controller
     }
     /**
      * List all the applications from students chosing to opt of the programs in the cod's department
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function getAllOutgoingApplications()
@@ -141,7 +141,7 @@ class CODController extends Controller
     }
     /**
      * List all the applications form students whom would wish to transfer to programs available in the cod's particular department
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function getAllIncomingApplications()
@@ -171,7 +171,7 @@ class CODController extends Controller
     }
     /**
      * Show asingle incoming application
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @param int $app_id
      * @return \Illuminate\Http\Response
@@ -202,7 +202,7 @@ class CODController extends Controller
     }
     /**
      * List a single outgoing application
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @param string $app_id
      * @return \Illuminate\Http\Response
@@ -235,7 +235,7 @@ class CODController extends Controller
 /************************* PROGRAMS MODULE ****************/
     /**
      * Show the form to add a new program
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function showProgramsForm()
@@ -244,7 +244,7 @@ class CODController extends Controller
     }
     /**
      * Add a new program
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -291,7 +291,7 @@ class CODController extends Controller
         if(Excel::import(new ProgramsImport, request()->file('excel_program_file')))
         {
             request()->session()->flash('success','Programs uploaded successfully via the excel file');
-            return back();
+            return redirect()->back();
         }
         else
         {
@@ -325,7 +325,7 @@ class CODController extends Controller
     //Helper functions
     /**
      * An array of all the programs data validations
-     * 
+     *
      * @return array
      */
     private function validate_data()
