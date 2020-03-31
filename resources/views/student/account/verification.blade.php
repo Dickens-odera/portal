@@ -12,21 +12,8 @@
     <div class="col-md-12 row">
         <div class="col-md-2"></div>
         <div class="col-md-8 text-center">
-            <h6>Account Registration Success</h6>
-            @if(isset($message))
-            <p class="text-success">
-                {{ $message }}
-            </p>
-            @endif
-            @if($isset($error))
-            <p class="text-error">
-                {{ $error }}
-            </p>
-            @else
-                <p class="warning">
-                    Something went wrong
-                </p>
-            @endif
+            <h6>Account Verification</h6>
+                    @include('includes.errors.custom')
         </div>
         <div class="col-md-2"></div>
     </div>

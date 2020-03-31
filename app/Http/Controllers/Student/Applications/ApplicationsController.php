@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use GuzzleHttp\Client;
+use App\Programs;
 //use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -45,7 +46,8 @@ class ApplicationsController extends Controller
     public function create()
     {
         //show the form to open the applications
-        return view('student.applications.create');
+        $programs = $this->programs();
+        return view('student.applications.create',compact('programs'));
     }
     /**
      * @return \Illuminate\Http\Response
@@ -85,26 +87,8 @@ class ApplicationsController extends Controller
         }
         $application = new Applications;
         //dd($grade_points);
-        //calculate the clusters
-        //map schools to programs
-        $schools_program = array(
-            'sobe'=>array(),
-            'sci'=>array(
-                'IT'=>'Bsc Informatuon Technology',
-                'COM'=>'Bsc Computer Science',
-                'SIK'=>'Bsc Information Systems and Knowledge Management',
-                'ETS'=>'Bsc Education Technology Computer Studies'
-            ),
-            'sebe'=>array(),
-            'sedu'=>array(),
-            'som'=>array(),
-            'sidmha'=>array(),
-            'savet'=>array(),
-            'sass'=>array(),
-            'sonmaps'=>array(),
-            'sonas'=>array(),
-            'spbh'=>array()
-        );
+        $programs = $this->programs();
+        dd($programs->school);
         $subjects =  array('English','Kiswahili','Mathematics',
                     'Geography','Chemistry','Biology',
                     'Business Studies','Christian Religious Education',
@@ -553,6 +537,20 @@ class ApplicationsController extends Controller
         {
             return in_array(strtolower($needle), array_map('strtolower',$haystack));
         }
+    /**
+     * get all the programs by their schools and departments
+     *
+     * @return \Illuminate\Http\Response
+     */
+    protected function programs()
+    {
+        $programs = DB::table('programs')
+                            ->join('schools','programs.school_id','=','schools.school_id')
+                            ->join('departments','programs.dep_id','=','departments.dep_id')
+                            ->select('programs.program_id as id','programs.name as program','schools.school_name as school','departments.name as department')
+                            ->get();
+        return $programs;
+    }
     private function weightedClusterCalculation()
         {
             //calculate the weighted clusters

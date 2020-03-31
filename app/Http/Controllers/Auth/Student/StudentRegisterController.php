@@ -55,16 +55,19 @@ class StudentRegisterController extends Controller
             if($student->save())
             {
                 //send mail to confirm email address in the near future
-                if($this->sendNotificationToNewStudent($request,$request->reg_Number, $request->email, $request->password))
-                {
-                request()->session()->flash('success','Account created successfully, please check your email and verify your count before login');
-                return redirect(route('student.account.verification.message'))->with(['message'=>'Kindly check your email address for a verification link']);
-                }
-                else
-                {
-                    $request->session()->flash('error','Something went wrong, please contact your system administrator');
-                    return view('student.account.verification.message')->with(['error'=>'Something went wrong, we could not send you the verification link, kindly use a valid email address']);
-                }
+                $this->sendNotificationToNewStudent($request,$request->reg_Number, $request->email, $request->password);
+                // {
+                //     $request->session()->flash('success','Account created successfully, please check your email and verify your count before login');
+                //     return redirect(route('student.account.verification.message'))->with(['message'=>'Kindly check your email address for a verification link']);
+                // }
+                // else
+                // {
+                //     $request->session()->flash('error','Something went wrong, please contact your system administrator');
+                //     return redirect(route('student.account.verification.message'))->with(['error'=>'Something went wrong, we could not send you the verification link, kindly use a valid email address']);
+                // }
+                $request->session()->flash('success','Please check your email for the account verification link');
+                return redirect()->route('student.account.verification.message');
+
             }
             else
             {
