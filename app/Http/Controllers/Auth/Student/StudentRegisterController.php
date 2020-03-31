@@ -54,10 +54,10 @@ class StudentRegisterController extends Controller
             }
             if($student->save())
             {
-                //send mail to comfirm email address in the near future
-                $this->sendNotificationToNewStudent($request,$request->name, $request->email, $request->password);
+                //send mail to confirm email address in the near future
+                $this->sendNotificationToNewStudent($request,$request->reg_Number, $request->email, $request->password);
                 request()->session()->flash('success','Account created successfully, please check your email and verify your count before login');
-                return redirect()->back();
+                return redirect(route('student.account.verification.message'));
             }
             else
             {
@@ -65,6 +65,14 @@ class StudentRegisterController extends Controller
                 return redirect()->back()->withInput($request->only('email','reg_number'));
             }
         }
+    }
+    /**
+     * show the page with message of successful message
+     *
+     */
+    public function showVerificationPage()
+    {
+        return view('student.account.verification');
     }
     /**
      *@return array

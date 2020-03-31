@@ -87,6 +87,7 @@ Route::prefix('student')->group(function()
         {
             Route::post('/register','Auth\Student\StudentRegisterController@register')->name('student.register');
             Route::get('/register','Auth\Student\StudentRegisterController@create')->name('student.account.creation');
+            Route::get('/verification','Auth\Student\StudentRegisterController@showVerificationPage')->name('student.account.verification.message');
             Route::get('/login','Auth\Student\StudentLoginController@showLoginForm')->name('student.login');
             Route::post('/login','Auth\Student\StudentLoginController@login')->name('student.login.submit');
         });
