@@ -26,7 +26,7 @@ class StudentResetPasswordController extends Controller
      * Where to redirect the user upon  successfull password change
      * @var string $redirectTo
      */
-    protected $redirectTo = '/student/dashboard';
+    protected $redirectTo = '/student/account/dashboard';
     /**
      * Instantiate a new StudentPasswordController instance
      * @return void

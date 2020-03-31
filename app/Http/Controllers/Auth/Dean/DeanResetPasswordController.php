@@ -24,7 +24,7 @@ class DeanResetPasswordController extends Controller
      * Where to redirect the user upon  successfull password change
      * @var string $redirectTo
      */
-    protected $redirectTo = '/dean/dashboard';
+    protected $redirectTo = '/dean/account/dashboard';
     /**
      * Instantiate a new StudentPasswordController instance
      * @return void

@@ -61,7 +61,7 @@
           <div class="icon">
             <i class="ion ion-person"></i>
           </div>
-          <a href="" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('admin.registrars.view.all') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
@@ -96,7 +96,7 @@
                       <th>Name</th>
                       <th>Email</th>
                       <th>School</th>
-                      <th>Phone</th>
+                      {{-- <th>Phone</th> --}}
                       {{-- <th>Type</th> --}}
                     </tr>
                   </thead>
@@ -109,7 +109,7 @@
                           <td>{{ $value->name }}</td>
                           <td>{{ $value->email }}</td>
                           <td>{{ $value->school->school_name}}</td>
-                          <td>{{ $value->phone }}</td>
+                          {{-- <td>{{ $value->phone }}</td> --}}
                           {{--<td>{{ $value->type}}</td> --}}
                         </tr>
                       </tbody>
@@ -135,7 +135,7 @@
                     <th>Email</th>
                     <th>School</th>
                     <th>Department</th>
-                    <th>phone</th>
+                    {{-- <th>phone</th> --}}
                   </tr>
                 </thead>
                 @if(count($cods_queries) > 0)
@@ -157,11 +157,11 @@
                         @else
                         <td></td>
                         @endif
-                        @if(isset($value->phone))
+                        {{-- @if(isset($value->phone))
                             <td>{{ $value->phone }}</td>
                         @else
                         <td></td>
-                        @endif
+                        @endif --}}
                       </tr>
                     </tbody>
                   @endforeach
@@ -184,7 +184,6 @@
                       <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Departments</th>
                       </tr>
                     </thead>
                     @if(count($schools) > 0)
@@ -192,7 +191,6 @@
                         <tr>
                           <td>{{ $value->school_id }}</td>
                           <td>{{ $value->school_name }}</td>
-                          <td></td>
                           {{-- @if(isset((array)$value->department->name))
                             <td>{{ implode(',',(array)$value->department->name)}}</td>
                           @else
@@ -219,7 +217,7 @@
                       {{-- <th>Avartar</th> --}}
                       <th>Name</th>
                       <th>Email</th>
-                      <th>Phone</th>
+                      {{-- <th>Phone</th> --}}
                     </tr>
                   </thead>
                   @if(count($registrars) > 0)
@@ -228,14 +226,14 @@
                         <td>{{ $value->id }}</td>
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
-                        <td>{{ $value->phone }}</td>
+                        {{-- <td>{{ $value->phone }}</td> --}}
                       </tbody>
                       @endforeach
                   @endif
                 </table>
               </div>
               <div class="box-footer">
-                    <a href="" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> View All</a>
+                    <a href="{{ route('admin.registrars.view.all') }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> View All</a>
               </div>
             </div>
       </div>

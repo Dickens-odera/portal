@@ -23,7 +23,7 @@ class RegistrarResetPasswordController extends Controller
      * Where to redirect the rgistrar once the password has been reset successfully
      * @var string $redirectTo
      */
-    protected $redirectTo = '/registrar/dashboard';
+    protected $redirectTo = '/registrar/account/dashboard';
     /**
      * create a new instance of the registrarresetpassword controller
      */

@@ -6,10 +6,11 @@ use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-//use PHPMailer\PHPMailer\PHPMailer as PHPMailerPHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
+use App\Notifications\StudentAccountCreatedNotification;
+use Illuminate\Support\Facades\Notification;
 class StudentRegisterController extends Controller
 {
     public function __construct()
@@ -54,7 +55,7 @@ class StudentRegisterController extends Controller
             if($student->save())
             {
                 //send mail to comfirm email address in the near future
-                //$this->sendMailToNewStudentAccount();
+                $this->sendNotificationToNewStudent($request,$request->name, $request->email, $request->password);
                 request()->session()->flash('success','Account created successfully, please check your email and verify your count before login');
                 return redirect()->back();
             }
@@ -75,6 +76,18 @@ class StudentRegisterController extends Controller
             'email'=>'required|email|domain_email',
             'password'=>'required'
         ];
+    }
+    /**
+     *Send a mail notification to a the new student account with login credentials and login url
+     * @param $name
+     * @param $emai
+     * @param $password
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Support\Facades\Notification
+     */
+    protected function sendNotificationToNewStudent(Request $request,$name, $email, $password)
+    {
+        Notification::route('mail',$request->email)->notify(new StudentAccountCreatedNotification($name, $email, $password));
     }
     /**
      * @param $email

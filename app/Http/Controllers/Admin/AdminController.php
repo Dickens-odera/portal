@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\DeanNewAccountCreatedNotification;
 use App\Notifications\CODNewAccountCreatedNotification;
+use App\Notifications\newRegistrarAccountCreated;
 use App\Student;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
@@ -25,6 +26,7 @@ class AdminController extends Controller
         $this->middleware('auth:admin');
     }
     /**
+     * show the admin dasboard
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -50,12 +52,9 @@ class AdminController extends Controller
      */
     public function getAllDeans()
     {
-        $deans = Deans::latest()->get();
+        $deans = Deans::paginate(5);
         return view('admin.settings.deans.all',compact('deans'));
     }
-    /***************************** End of Deans Module **************************/
-
-    /**************************** CODs Module ********************/
     /**
      * Show the form to add a dean of school
      * @return \Illuminate\Http\Response
@@ -67,7 +66,7 @@ class AdminController extends Controller
     }
     /**
      * Add a new dean od school
-     * @param \Illuminate\Http\Request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function addNewDeanOfSchool(Request $request)
@@ -111,30 +110,8 @@ class AdminController extends Controller
             return redirect()->back()->withInput(array_merge($this->data($request),array('password'=>'','confirm_password'=>'')));
         }
     }
-    /**
-     * list all the schools
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllSchools(Request $request)
-    {
-        $schools = Schools::latest()->paginate(5);
-        $_schools = DB::table('schools')
-                            ->join('departments','schools.')
-                            ->select('schools.*')
-                            ->latest()
-                            ->paginate(5);
-        //dd($schools->departments->first()->name);
-        if(!$schools)
-        {
-            $request->session()->flash('error','No Schools Found');
-            return redirect()->back();
-        }
-        else
-        {
-            return view('admin.settings.schools.all', compact('schools'));
-        }
-    }
+    /********************************** End of Deans Module ***********************/
+    /*****************************  Start of CODs Module **************************/
     /**
      * list all the departments heads
      * @return \Illuminate\Http\Response
@@ -168,6 +145,7 @@ class AdminController extends Controller
     }
     /**
      * Add new COD
+     * 
      * @param \Illuminate\Http\Request $request
      * @param \Illuminate\Http\Response
      */
@@ -219,9 +197,23 @@ class AdminController extends Controller
     }
     /***************************** End of CODs Module */
     /***************************** SCHOOLS MODULE *************************** */
+        /**
+     * list all the schools
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllSchools(Request $request)
+    {
+        $_schools = DB::table('schools')
+                            ->join('deans','schools.school_id','=','deans.school_id')
+                            ->select('schools.*','deans.name as dean')
+                            // ->latest()
+                            ->paginate(5);
+        return view('admin.settings.schools.all', compact('_schools'));
+    }
     /**
      * Show the page to add new school
-     * @return \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
      */
     public function ShowNewAdditionSchoolForm()
     {
@@ -308,10 +300,90 @@ class AdminController extends Controller
             }
         }
     }
-    /****************************** END IOF DEPARTMENTS MODULE *********************/
-    //helper functions
+    /**
+     * list all the departments
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllDepartments(Request $request)
+    {
+        //$departments = Departments::paginate(5);
+        $departments = DB::table('departments')
+                        ->join('cods','departments.dep_id','=','cods.dep_id')
+                        ->select('departments.*','cods.name as cod')
+                        ->paginate(10);
+        return view('admin.settings.departments.all', compact('departments'));
+    }
+    /****************************** END OF DEPARTMENTS MODULE *********************/
+    /****************************** Start of Registrar Module *********************/
+    /**
+     * Show The Form To Add new Registrar (Academic Affairs)
+     * @return \Illuminate\Http\Response
+     */
+    public function ShowRegistrarAAForm()
+    {
+        return view('admin.settings.registrars.new');
+    }
+    /**
+     * List all the registrars
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllRegistrarsAA()
+    {
+        $registrars = Registrar::all();
+        return view('admin.settings.registrars.all', compact('registrars'));
+    }
+    /**
+     * Add a new Registrar Academic Affairs
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function addNewRegistrarAA(Request $request)
+    {
+        $count = count(Registrar::all());
+        if($count > 0)
+        {
+            //there should be only one registrar academic affairs an any particular instance
+            $request->session()->flash('error','Action not allowed as there is already an account, please contact the concerned authority');
+            return redirect(route('admin.registrars.view.all'));
+        }
+        else
+        {
+            $this->validateData($request);
+            $registrar = new Registrar;
+            $registrar->name = $request->name;
+            $registrar->email = $request->email;
+            $pwd = $request->password;
+            $pwd_confirmation = $request->confirm_pasword;
+            if($pwd !== $pwd_confirmation)
+            {
+                $request->session()->flash('error','Password Mismatch');
+                return redirect()->back()->withInput($request->only('name','email'));
+            }
+            else
+            {
+                $registrar->password = Hash::make($pwd);
+            }
+            if($registrar->save())
+            {
+                //send email to the registrar with login url and credentials
+                $this->sendEmailNotificationToNewRegistrarAccount($request,$request->name, $request->email, $request->password);
+                $request->session()->flash('success','Registrar'.' '.$request->name.' '.'added successfully');
+                return redirect(route('admin.registrars.view.all'));
+            }
+            else
+            {
+                $request->session()->flash('error','something went wrong, try again');
+                return redirect()->back()->withInput($request->only('name','email'));
+            }
+        }
+    }
+    /****************************** End of Regustrar Module ************************/
+    /********************************* HELPER FUNCTIONS ****************************/
     /**
      * the user data
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     protected function data(Request $request)
@@ -320,6 +392,7 @@ class AdminController extends Controller
     }
     /**
      * data validation
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     protected function validateData(Request $request)
@@ -330,6 +403,8 @@ class AdminController extends Controller
      * send email notification with credentials to the new dean
      * @param  string $email
      * @param string $password
+     * @param string $school
+     * @param string $name
      * @return \Illuminate\Support\Facades\Notification
      */
     protected function sendAccountCreatedNotification($email, $password, $school,$name)
@@ -337,22 +412,32 @@ class AdminController extends Controller
         Notification::route('mail',request()->email)->notify(new DeanNewAccountCreatedNotification($email, $password,$school,$name));
     }
     /**
-     *send a mail notofication to the new chirperson of the department
+     *send a mail notification to the new chairperson of the department
      * @param string $email
-     * @param string password
+     * @param string $password
+     * @param string $department
+     * @param string $name
      * @return \Illuminate\Support\Facades\Notification
      */
     public function sendNotificationToNewCod($email, $password, $department,$name)
     {
         Notification::route('mail',request()->email)->notify(new CODNewAccountCreatedNotification($email, $password, $department,$name));
     }
-    protected function school_dep()
+    /**
+     * Send email notifiction with login url and credentials
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $name
+     * @param string $email
+     * @param string $password
+     * @return \Illuminate\Support\Facades\Notification
+     */
+    protected function sendEmailNotificationToNewRegistrarAccount(Request $request,$name, $email, $password)
     {
-        $schools = Schools::all();
-        dd($schools->department->name);
-        $departments = Departments::all();
+        Notification::route('mail',$request->email)->notify(new newRegistrarAccountCreated($name, $email, $password));
     }
     /**
+     * the cod array
      * @param \Illuminate\Http\Request $request
      * @return array
      */

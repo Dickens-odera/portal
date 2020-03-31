@@ -22,7 +22,7 @@
                             <th>Email</th>
                             <th>School</th>
                             <th>Department</th>
-                            <th>Phone</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     @foreach($query as $key=>$value)
@@ -41,13 +41,11 @@
                                 @else
                                 <td></td>
                                 @endif
-
-                                <td></td>
-                                @if(isset($value->phone))
-                                    <td>{{ $value->phone }}</td>
-                                @else
-                                    <td></td>
-                                @endif
+                                <td class="btn-group btn-group-sm text-center" style="width:100%">
+                                    <a href="" class="btn btn-sm btn-success"><i class="fa fa-eye"></i></a>
+                                    <a href="" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></a>
+                                    <a href="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                </td>
                             </tr>
                         </tbody>
                     @endforeach
