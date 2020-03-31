@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
-
+use App\Exports\ProgramsExport;
+use App\Imports\ProgramsImport;
+use App\Schools;
+use Maatwebsite\Excel\Facades\Excel;
 class CODController extends Controller
 {
     public function __construct()
@@ -31,6 +34,7 @@ class CODController extends Controller
     }
     /*=======================================  APPLICATIONS ==============================*/
     /**
+     * List all the applications specific to the cod's school and department
      * @return \Illuminate\Http\Response
      */
     public function getAllApplications()
@@ -67,6 +71,8 @@ class CODController extends Controller
         }
     }
     /**
+     * Show a single application
+     * 
      * @param string $application_id
      * @return \Illuminate\Http\Response
      */
@@ -104,6 +110,8 @@ class CODController extends Controller
         }
     }
     /**
+     * List all the applications from students chosing to opt of the programs in the cod's department
+     * 
      * @return \Illuminate\Http\Response
      */
     public function getAllOutgoingApplications()
@@ -132,6 +140,8 @@ class CODController extends Controller
         }
     }
     /**
+     * List all the applications form students whom would wish to transfer to programs available in the cod's particular department
+     * 
      * @return \Illuminate\Http\Response
      */
     public function getAllIncomingApplications()
@@ -160,8 +170,10 @@ class CODController extends Controller
         }
     }
     /**
-     * @param int $app_id
+     * Show asingle incoming application
+     * 
      * @param \Illuminate\Http\Request $request
+     * @param int $app_id
      * @return \Illuminate\Http\Response
      */
     public function getAnIncomingApplication(Request $request,$app_id = null)
@@ -189,8 +201,10 @@ class CODController extends Controller
         }
     }
     /**
-     * @param string $app_id
+     * List a single outgoing application
+     * 
      * @param \Illuminate\Http\Request $request
+     * @param string $app_id
      * @return \Illuminate\Http\Response
      */
     public function getAnOutgoingApplication(Request $request,$app_id = null)
@@ -218,4 +232,104 @@ class CODController extends Controller
         }
     }
 /*================================================ END OF APPLICATIONS =================================== */
+/************************* PROGRAMS MODULE ****************/
+    /**
+     * Show the form to add a new program
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function showProgramsForm()
+    {
+        return view('cod.programs.create');
+    }
+    /**
+     * Add a new program
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function addProgram(Request $request)
+    {
+        $validator = Validator::make($request->all(),$this->validate_data());
+        if($validator->fails())
+        {
+            $request->session()->flash('error',$validator->errors());
+            return redirect()->back()->withInput($request->all());
+        }
+        else
+        {
+            $program = new Programs;
+            $program->name = $request->name;
+            $program->description = $request->description;
+            $program->school_id = Auth::user()->school->school_id;
+            $department = Departments::where('dep_id','=',Auth::user()->dep_id)->first();
+            $program->dep_id = $department->dep_id;
+            $existing_program = Programs::where('name','=',$request->name)->first();
+            if($existing_program)
+            {
+                $request->session()->flash('error','The program already exists');
+                return redirect()->back()->withInput($request->only('name','description'));
+            }
+            if($program->save())
+            {
+                $request->session()->flash('success','Program added successfully');
+                return redirect(route('cod.programs'));
+            }
+            else
+            {
+                $request->session()->flash('error','Unable to add the specified program, try again later');
+                return redirect()->back()->withInput($request->all());
+            }
+        }
+    }
+    /**
+     * Enable the cod to upload an excel sheet of programs
+     *@return \Illuminate\Support\Collection
+     */
+    public function importPrograms()
+    {
+        if(Excel::import(new ProgramsImport, request()->file('excel_program_file')))
+        {
+            request()->session()->flash('success','Programs uploaded successfully via the excel file');
+            return back();
+        }
+        else
+        {
+            request()->session()->flash('error','Failed to upload excel file, kindly check on the format');
+            return redirect()->back();
+        }
+    }
+    /**
+     * Enable the COD to download an excel sheet of all the programs
+     * @return \Illuminate\Support\Collection
+     */
+    public function exportPrograms()
+    {
+        $school = Schools::where('school_id','=',Auth::user()->school_id)->first();
+        //dd($school);
+        return Excel::download(new ProgramsExport, 'school-programs.xlsx');
+    }
+    /** Enable the cod of the department to view all the available programs
+     * .
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function viewAllPrograms(Request $request)
+    {
+        $programs = Programs::where('school_id','=',Auth::user()->school->school_id)
+                                ->where('dep_id','=',Auth::user()->dep_id)
+                                ->get();
+        return view('cod.programs.index', compact('programs'));
+    }
+    /****************************** END OF PROGRAMS MODULE *****************/
+    //Helper functions
+    /**
+     * An array of all the programs data validations
+     * 
+     * @return array
+     */
+    private function validate_data()
+    {
+        return array('name'=>'required','description'=>'nullable');
+    }
 }

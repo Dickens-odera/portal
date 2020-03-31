@@ -124,15 +124,6 @@ Route::prefix('dean')->group(function()
         Route::get('/dashboard','Dean\DeanController@index')->name('dean.dashboard');
         Route::get('/logout','Auth\Dean\DeanLoginController@logout')->name('dean.logout');
     });
-    //Programs routes
-    Route::prefix('programs')->group(function()
-    {
-        Route::get('/add','Dean\DeanController@showProgramsForm')->name('dean.programs');
-        Route::post('/add','Dean\DeanController@addProgram')->name('dean.program.add');
-        Route::post('/import','Dean\DeanController@importPrograms')->name('dean.programs.import');
-        Route::get('/export','Dean\DeanController@exportPrograms')->name('dean.programs.export');
-        Route::get('/all','Dean\DeanController@viewAllPrograms')->name('dean.programs.view.all');
-    });
     //Applications routes
     Route::prefix('applications')->group(function()
     {
@@ -209,5 +200,14 @@ Route::prefix('cod')->group(function()
         Route::get('/reset','Auth\COD\CODForgotPasswordController@showLinkRequestForm')->name('cod.password.request');
         Route::get('/reset/{token}','Auth\COD\CODResetPasswordController@showResetForm')->name('cod.password.reset');
     });
+        //Programs routes
+        Route::prefix('programs')->group(function()
+        {
+            Route::get('/add','COD\CODController@showProgramsForm')->name('cod.programs');
+            Route::post('/add','COD\CODController@addProgram')->name('cod.program.add');
+            Route::post('/import','COD\CODController@importPrograms')->name('cod.programs.import');
+            Route::get('/export','COD\CODController@exportPrograms')->name('cod.programs.export');
+            Route::get('/all','COD\CODController@viewAllPrograms')->name('cod.programs.view.all');
+        });
 });
 

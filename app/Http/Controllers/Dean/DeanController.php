@@ -7,10 +7,6 @@ use App\Deans;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Schools;
-use App\Programs;
-use App\Exports\ProgramsExport;
-use App\Imports\ProgramsImport;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
@@ -27,79 +23,6 @@ class DeanController extends Controller
     {
         return view('dean.dashboard');
     }
-    /************************* PROGRAMS MODULE ****************/
-    /**
-     * @return \Illuminate\Http\Response
-     */
-    public function showProgramsForm(Request $request)
-    {
-        return view('dean.programs.create');
-    }
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function addProgram(Request $request)
-    {
-        $validator = Validator::make($request->all(),$this->validate_data());
-        if($validator->fails())
-        {
-            $request->session()->flash('error',$validator->errors());
-            return redirect()->back()->withInput($request->all());
-        }
-        else
-        {
-            $program = new Programs;
-            $program->name = $request->name;
-            $program->description = $request->description;
-            $program->school_id = Auth::user()->school_id;
-            if($program->save())
-            {
-                $request->session()->flash('success','Program added successfully');
-                return redirect(route('dean.programs'));
-            }
-            else
-            {
-                $request->session()->flash('error','Unable to add the specified program, try again later');
-                return redirect()->back()->withInput($request->all());
-            }
-        }
-    }
-    /**
-     *@return \Illuminate\Support\Collection
-     */
-    public function importPrograms()
-    {
-        if(Excel::import(new ProgramsImport, request()->file('excel_program_file')))
-        {
-            request()->session()->flash('success','Programs uploaded successfully via the excel file');
-            return back();
-        }
-        else
-        {
-            request()->session()->flash('error','Failed to upload excel file, kindly check on the format');
-            return redirect()->back();
-        }
-    }
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function exportPrograms()
-    {
-        $school = Schools::where('school_id','=',Auth::user()->school_id)->first();
-        //dd($school);
-        return Excel::download(new ProgramsExport, 'school-programs.xlsx');
-    }
-    /** Enable the dean of school to view all the available programs.
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function viewAllPrograms(Request $request)
-    {
-        $programs = Programs::where('school_id','=',Auth::user()->school_id)->get();
-        return view('dean.programs.index', compact('programs'));
-    }
-    /****************************** END OF PROGRAMS MODULE *****************/
 
     /******************************** START OF APPLICATIONS MODULE  *************/
     /**
@@ -221,13 +144,6 @@ class DeanController extends Controller
     private function data()
     {
         return array('name'=>request()->name,'description'=>request()->description);
-    }
-    /**
-     * @return array
-     */
-    private function validate_data()
-    {
-        return array('name'=>'required','description'=>'nullable');
     }
     /**
      * @return array

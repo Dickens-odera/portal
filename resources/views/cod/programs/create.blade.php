@@ -1,4 +1,4 @@
-@extends('dean.main')
+@extends('cod.main')
 
 @section('content')
     <div class="box">
@@ -7,7 +7,7 @@
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 @include('includes.errors.custom')
-                {!! Form::open(['action'=>'Dean\DeanController@addProgram']) !!}
+                {!! Form::open(['action'=>'COD\CODController@addProgram']) !!}
                     <div class="form-group row">
                         {!! Form::label('name','Program Name', ['class'=>'form-label col-md-4 text-md-right']) !!}
                         <div class="col-md-8">
@@ -30,7 +30,7 @@
                         </div>
                     </div>
                 {!! Form::close() !!}
-                {!! Form::open(['action'=>'Dean\DeanController@importPrograms','method'=>'post','enctype'=>'multipart/form-data']) !!}
+                {!! Form::open(['action'=>'COD\CODController@importPrograms','method'=>'post','enctype'=>'multipart/form-data']) !!}
                     <div class="form-group col-md-8 col-md-offset-4">
                         {!! Form::file('excel_program_file') !!} <br>
                         <button class="btn btn-sm btn-primary">{{ __('Import Excel File') }}</button>
