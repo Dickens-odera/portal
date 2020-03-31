@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">{{ __('applications for transfer') }} {{ __('receiving department')}} ({{ Auth::user()->department->name}})</div>
+        <div class="box-header bg-warning text-center text-uppercase">{{ __('all applications for transfer') }} {{ $department->name }} {{ __('department') }}</div>
         <div class="box-body">
             <div class="col-md-12 table-responsive">
                 <div class="col-md-12 row">
@@ -12,7 +12,7 @@
             </div>
             @if(count($applications) > 0)
                     <table class="table table-bordered table-dark">
-                        <thead style="background:#000; color:#fff">
+                        <thead style="background:#000; color:#fff" style="width:100%">
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
@@ -52,7 +52,7 @@
                                 <td>{{ $value->cut_off_points }}</td>
                                 <td>{{ $value->weighted_clusters}}</td>
                                 <td>{{ $value->status}}</td>
-                                <td class="btn-group btn-group-sm">
+                                <td class="btn-group btn-group-sm" style="width:100%">
                                     <a href="{{ route('cod.application.view',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View</a>
                                     <form action="{{ route('student.application.cancel',['app_id'=>$value->app_id]) }}" method="post">
                                                {{ csrf_field() }}

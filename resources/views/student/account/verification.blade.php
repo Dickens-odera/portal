@@ -9,14 +9,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-
     <div class="col-md-12 row">
         <div class="col-md-2"></div>
         <div class="col-md-8 text-center">
             <h6>Account Registration Success</h6>
+            @if(isset($message))
             <p class="text-success">
-                Hello, a verification link has been sent to your email address, please check your email for to proceed
+                {{ $message }}
             </p>
+            @endif
+            @if($isset($error))
+            <p class="text-error">
+                {{ $error }}
+            </p>
+            @else
+                <p class="warning">
+                    Something went wrong
+                </p>
+            @endif
         </div>
         <div class="col-md-2"></div>
     </div>

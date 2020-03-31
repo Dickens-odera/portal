@@ -37,22 +37,24 @@ class CODController extends Controller
     {
         $cod = CODs::where('id','=',Auth::user()->id)->first();
         $school = $cod->school;
-        //$school_name = $school->school_name;
+        //dd($school->school_name);
         //dd($school_name);
         $department = $cod->department;
-        $school_name = $department->school->school_name;
-        $department_name = $department->name;
-        //dd($department->program);
-        $dep = Departments::where('dep_id','=',Auth::user()->department->dep_id)->first();
-        $test_programs = DB::select('select name from programs where programs.dep_id = :id',['id'=>Auth::user()->department->dep_id]);
-        $p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
-        //dd($p);
-        //dd($test_programs);
-        //dd($dep->program);
-        $applications = Applications::where('preffered_school','=',$school_name)
-                                    ->whereIn('preffered_program',$p)
+        //dd($department->name);
+        $cods = DB::table('cods')
+                    ->join('departments','cods.dep_id','=','departments.dep_id')
+                    ->select('cods.*','departments.name as department')
+                    ->get();
+        $department = Departments::where('dep_id','=',Auth::user()->dep_id)->first();
+        $program = Programs::where('dep_id','=',$department->dep_id)->first();
+        $programs = DB::table('programs')
+                            ->join('departments','programs.dep_id','=','programs.dep_id')
+                            ->select('programs.name as program','departments.dep_id as dep_id','departments.name as department')
+                            ->first();
+        $applications = Applications::whereIn('present_program',(array)$program)
+                                    ->orwhereIn('preffered_program',(array)$program)
                                     ->latest()
-                                    ->paginate(2);
+                                    ->paginate(10);
         //dd($applications);
         if(!$applications)
         {
@@ -61,7 +63,7 @@ class CODController extends Controller
         }
         else
         {
-            return view('cod.applications.index', compact('applications'));
+            return view('cod.applications.index', compact('applications','programs','department'));
         }
     }
     /**
@@ -108,11 +110,13 @@ class CODController extends Controller
     {
         $user = CODs::where('id','=',Auth::user()->id)->first();
         $school = $user->school->school_name;
-        $dep = $user->department->program;
+        //$dep = $user->department->name;
         //dd($dep);
+        $department = Departments::where('dep_id','=',Auth::user()->dep_id)->first();
+        $program = Programs::where('dep_id','=',$department->dep_id)->pluck('name');
         $p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
         $applications = Applications::where('present_school','=',$school)
-                                        ->whereIn('present_program',$p)
+                                        ->whereIn('present_program',(array)$program)
                                         ->latest()
                                         ->paginate(5);
         //dd($applications);
@@ -124,7 +128,7 @@ class CODController extends Controller
         }
         else
         {
-            return view('cod.applications.outgoing.all',compact('applications'));
+            return view('cod.applications.outgoing.all',compact('applications','department'));
         }
     }
     /**
@@ -134,11 +138,13 @@ class CODController extends Controller
     {
         $user = CODs::where('id','=',Auth::user()->id)->first();
         $school = $user->school->school_name;
-        $dep = $user->department->program;
-        //dd($dep);
-        $p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
+        //$p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
+        $department = Departments::where('dep_id','=',Auth::user()->dep_id)->first();
+        $program = Programs::where('dep_id','=',$department->dep_id)
+                                //->first()
+                                ->pluck('name');
         $applications = Applications::where('preffered_school','=',$school)
-                                        ->whereIn('preffered_program',$p)
+                                        ->whereIn('preffered_program',(array)$program)
                                         ->latest()
                                         ->paginate(5);
         //dd($applications);
@@ -150,7 +156,7 @@ class CODController extends Controller
         }
         else
         {
-            return view('cod.applications.incoming.all',compact('applications'));
+            return view('cod.applications.incoming.all',compact('applications','department'));
         }
     }
     /**
