@@ -58,7 +58,7 @@
                                     <div class="form-group row">
                                         {!! Form::label('current_program','Present Program', ['class'=>'form-label text-md-right col-md-4']) !!}
                                     <div class="col-md-8">
-                                       {!! Form::select('current_program',
+                                       {{-- {!! Form::select('current_program',
                                     [''=>'Select...',
                                        'Bsc Computer Science'=>'Bsc Computer Science',
                                        'Bsc Information Technology'=>'Bsc Information Technology',
@@ -66,10 +66,18 @@
                                        'Bsc Information Systems and Knowledge Management'=>'Bsc Information Systems and Knowledge Management'
                                     ],
                                         old('current_program'),
-                                        ['class'=>'form-control']) !!}
+                                        ['class'=>'form-control']) !!} --}}
+                                        <select name="current_program" id="current_program" class="form-control">
+                                            <option value="">Select Program...</option>
+                                            @if(count($programs) > 0)
+                                                @foreach ($programs as $key=>$value)
+                                                    <option value="{{ $value->program }}">{{ $value->program }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
                                     </div>
                                     </div>
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
                                         <label for="current_school" class="form-label text-md-right col-md-4">{{ __('Present School') }}</label>
                                         <div class="col-md-8">
                                             {!! Form::select('current_school',
@@ -87,11 +95,11 @@
                                              old('current_school'),
                                              ['class'=>'form-control']) !!}
                                          </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group row">
-                                        {!! Form::label('prefferd_program','Preffered Program', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        {!! Form::label('preffered_program','Preffered Program', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::select('preffered_program',
+                                            {{-- {!! Form::select('preffered_program',
                                             [''=>'Select...',
                                                 'Bsc Computer Science'=>'Bsc Computer Science',
                                                 'Bsc Information Technology'=>'Bsc Information Technology',
@@ -100,7 +108,15 @@
                                             ],
                                              old('preffered_program'),
                                              ['class'=>'form-control'])
-                                             !!}
+                                             !!} --}}
+                                             <select name="preffered_program" id="preffered_program" class="form-control">
+                                                <option value="">Select Program...</option>
+                                                @if(count($programs) > 0)
+                                                    @foreach ($programs as $key=>$value)
+                                                        <option value="{{ $value->program }}">{{ $value->program }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
                                          </div>
                                     </div>
                                     <div class="form-group row">
@@ -109,7 +125,7 @@
                                             {!! Form::number('cluster_no',old('cluster_no'), ['class'=>'form-control']) !!}
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
                                         {!! Form::label('preffered_school','Preffered School', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
                                             {!! Form::select('preffered_school',
@@ -128,7 +144,7 @@
                                              ['class'=>'form-control'])
                                              !!}
                                          </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="card-footer"></div>
                             </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student\Applications;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Applications;
+use App\Departments;
 use App\Student;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use GuzzleHttp\Client;
 use App\Programs;
+use App\Schools;
 //use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -86,9 +88,6 @@ class ApplicationsController extends Controller
             return redirect()->back()->withInput($request->all());
         }
         $application = new Applications;
-        //dd($grade_points);
-        $programs = $this->programs();
-        dd($programs->school);
         $subjects =  array('English','Kiswahili','Mathematics',
                     'Geography','Chemistry','Biology',
                     'Business Studies','Christian Religious Education',
@@ -104,9 +103,21 @@ class ApplicationsController extends Controller
         $subject_grades_arr = array_combine($sub_values, $grade_values);
 
         $current_program = $request->current_program;
+        //dd($current_program);
+        $prg = Programs::where('name','=',$current_program)->first();
+        $sch = Schools::where('school_id','=',$prg->school_id)->first();
+        //dd($sch->school_name);
+        $dep = Departments::where('school_id','=',$sch->school_id)->first();
+        //dd($dep->name);
         $preffered_program = $request->preffered_program;
-        $current_school = $request->current_school;
-        $preffered_school = $request->preffered_school;
+        $prg2 = Programs::where('name','=',$preffered_program)->first();
+        //dd($prg2->name);
+        $sch2 = Schools::where('school_id','=',$prg2->school_id)->first();
+        //dd($sch2->school_name);
+        $dep2 = Departments::where('school_id','=',$sch2->school_id)->first();
+        //dd($dep2->name);
+        $current_school = $sch->school_name;
+        $preffered_school = $sch2->school_name;
         if($current_program === $preffered_program)
         {
             request()->session()->flash('error','You cannot transfer to the same program, kindly select another program');
@@ -144,8 +155,8 @@ class ApplicationsController extends Controller
         $application->kuccps_password = (int)$request->kuccps_password;
         $application->mean_grade = $request->mean_grade;
         $application->aggregate_points = (float)$request->aggregate;
-        $application->cut_off_points = (float)$request->cut_off_points;
-        $application->weighted_clusters = (float)$request->weighted_clusters;
+        $application->cut_off_points = (float)$request->cut_off_points; //$this->cutOffPointsCalculation();
+        $application->weighted_clusters = (float)$request->weighted_clusters; //$this->weightedClusterCalculation();
         $application->subject_1 = $request->sub_1;
         $application->subject_2 = $request->sub_2;
         $application->subject_3 = $request->sub_3;
@@ -407,10 +418,10 @@ class ApplicationsController extends Controller
             'reg_number'=>'required|unique:applications',
             'student_phone'=>'required|unique:applications',
             'student_id'=>'required|unique:applications',
-            'current_program'=>'required',
-            'current_school'=>'required',
-            'preffered_program'=>'required',
-            'preffered_school'=>'required',
+            'current_program'=>'nullable',
+            'current_school'=>'nullable',
+            'preffered_program'=>'nullable',
+            'preffered_school'=>'nullable',
             'kcse_index'=>'required|unique:applications',
             'kcse_year'=>'required',
             'kuccps_password'=>'required|unique:applications',
@@ -547,13 +558,15 @@ class ApplicationsController extends Controller
         $programs = DB::table('programs')
                             ->join('schools','programs.school_id','=','schools.school_id')
                             ->join('departments','programs.dep_id','=','departments.dep_id')
-                            ->select('programs.program_id as id','programs.name as program','schools.school_name as school','departments.name as department')
+                            ->select('programs.program_id as program_id','programs.name as program','schools.school_id as school_id','schools.school_name as school','departments.name as department')
                             ->get();
         return $programs;
     }
     private function weightedClusterCalculation()
         {
             //calculate the weighted clusters
+            return 2;
+
         }
     private function cutOffPointsCalculation()
         {
