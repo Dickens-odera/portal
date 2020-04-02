@@ -83,6 +83,14 @@ Route::prefix('admin')->group(function()
             Route::post('/grade/edit','Admin\AdminController@updateGrade')->name('admin.grading.update');
             Route::get('/grades','Admin\AdminController@getAllGrades')->name('admin.grading.grades.all');
         });
+        //SUBJECTS
+        Route::prefix('subjects')->group(function()
+        {
+            Route::get('/add','Admin\AdminController@ShowSubjectForm')->name('admin.subjects.add.form');
+            Route::post('/add','Admin\AdminController@addNewSubject')->name('admin.subjects.add.submit');
+            Route::get('/all','Admin\AdminController@getAllSubjects')->name('admin.subjects.view.all');
+            Route::get('/single-view','Admin\AdminController@viewASingeSubject')->name('admin.subjects.single.view');
+        });
     });
             /********************************************* END OF ADMIN SETTINGS URLS*****************************/
 

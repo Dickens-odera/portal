@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use App\Grades;
+use App\Subjects;
 class AdminController extends Controller
 {
     public function __construct()
@@ -507,6 +508,81 @@ class AdminController extends Controller
 
     }
     /******************************* End of Gradings Modeule ***********************/
+    /****************************** Subjects Module ********************************/
+    /**
+     * Show the form to add a new subject 
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function ShowSubjectForm()
+    {
+        return view('admin.settings.subjects.new');
+    }
+    /**
+     * Add a new subject
+     * 
+     * @param \Illuminate\Http\Request $request
+     */
+    public function addNewSubject(Request $request)
+    {
+        $subjects =  array('English','Kiswahili','Mathematics',
+        'Geography','Chemistry','Biology',
+        'Business Studies','Christian Religious Education',
+        'History & Government','Computer Studies',
+        'Home Science','Music','Physics','Agriculture','Art', 'French'
+        );
+        $validator = Validator::make($request->all(), array('name'=>'required'));
+        if($validator->fails())
+        {
+            $request->session()->flash('error',$validator->errors());
+            return redirect()->back()->withInput($request->only('name'));
+        }
+        if(!($this->case_insensitive_in_array($request->name,$subjects)))
+        {
+            $request->session()->flash('error','The subject'.' '.$request->name .' '.'is not within the curriculum');
+            return redirect()->back();
+        }
+        $existing_subject = Subjects::where('name','=',$request->name)->first();
+        if($existing_subject)
+        {
+            $request->session()->flash('error','Subject not created as there is a similar name');
+            return redirect()->back()->withInput($request->name);
+        }
+        else
+        {
+            if(Subjects::create(array('name'=>$request->name)))
+            {
+                $request->session()->flash('success','Subject'.' '.$request->name.' '.'added successfully');
+                return redirect()->back();
+            }
+            else
+            {
+                $request->session()->flash('error','Something went wrong, try again');
+                return redirect()->back()->withInput($request->name);
+            }
+        }
+    }
+    /**
+     * List all the subjects
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllSubjects()
+    {
+
+    }
+    /**
+     * Show a single subject
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param int $subject_id
+     */
+    public function viewASingeSubject(Request $request, $subject_id = NULL)
+    {
+
+    }
+
+    /************************* End of Subjets Module *********************/
     /********************************* HELPER FUNCTIONS ****************************/
     /**
      * the user data
@@ -593,5 +669,9 @@ class AdminController extends Controller
         $grade_points['grade']['point'] = array_combine($grades,$points);
         return $grade_points;
     }
+    private function case_insensitive_in_array($needle, $haystack)
+        {
+            return in_array(strtolower($needle), array_map('strtolower',$haystack));
+        }
 
 }

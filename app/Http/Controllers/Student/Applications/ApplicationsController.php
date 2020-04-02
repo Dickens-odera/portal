@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Applications;
 use App\Departments;
+use App\Grades;
 use App\Student;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -49,7 +50,8 @@ class ApplicationsController extends Controller
     {
         //show the form to open the applications
         $programs = $this->programs();
-        return view('student.applications.create',compact('programs'));
+        $grades = Grades::all();
+        return view('student.applications.create',compact('programs','grades'));
     }
     /**
      * @return \Illuminate\Http\Response

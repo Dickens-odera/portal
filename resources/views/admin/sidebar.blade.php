@@ -94,6 +94,19 @@
                 <li><a href="{{ route('admin.grading.grades.all') }}"><i class="fa fa-circle-o"></i> All Grades</a></li>
             </ul>
           </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-bars"></i>
+              <span>Subjects</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{{ route('admin.subjects.add.form') }}"><i class="fa fa-circle-o"></i> New</a></li>
+              <li><a href="{{ route('admin.subjects.view.all') }}"><i class="fa fa-circle-o"></i> All</a></li>
+            </ul>
+          </li>
           </ul>
         </li>
       </ul>
