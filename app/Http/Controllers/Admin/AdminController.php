@@ -510,8 +510,8 @@ class AdminController extends Controller
     /******************************* End of Gradings Modeule ***********************/
     /****************************** Subjects Module ********************************/
     /**
-     * Show the form to add a new subject 
-     * 
+     * Show the form to add a new subject
+     *
      * @return \Illuminate\Http\Response
      */
     public function ShowSubjectForm()
@@ -520,7 +520,7 @@ class AdminController extends Controller
     }
     /**
      * Add a new subject
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      */
     public function addNewSubject(Request $request)
@@ -564,7 +564,7 @@ class AdminController extends Controller
     }
     /**
      * List all the subjects
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function getAllSubjects()
@@ -573,7 +573,7 @@ class AdminController extends Controller
     }
     /**
      * Show a single subject
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @param int $subject_id
      */
