@@ -93,7 +93,6 @@ Route::prefix('admin')->group(function()
         });
     });
             /********************************************* END OF ADMIN SETTINGS URLS*****************************/
-
 });
 Route::prefix('student')->group(function()
 {

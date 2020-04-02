@@ -74,6 +74,7 @@
                                                     <option value="{{ $value->program }}">{{ $value->program }}</option>
                                                 @endforeach
                                             @endif
+                                            {{ old('current_program')}}
                                         </select>
                                     </div>
                                     </div>
@@ -116,6 +117,7 @@
                                                         <option value="{{ $value->program }}">{{ $value->program }}</option>
                                                     @endforeach
                                                 @endif
+                                                {{ old('preffered_program')}}
                                             </select>
                                          </div>
                                     </div>
@@ -208,55 +210,134 @@
                                     <div class="form-group row">
                                         {!! Form::label('sub_1','Subject One', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('sub_1',old('sub_1'),['class'=>'form-control','required'=>true]) !!}
+                                            <select name="sub_1" id="sub_1" class="form-control">
+                                                <option value="">Select Subject</option>
+                                                @if(count($subjects) > 0)
+                                                    @foreach($subjects as $k=>$v)
+                                                        <option value="{{ $v->name }}">{{ $v->name }}</option>
+                                                    @endforeach
+                                            {{-- {!! Form::text('sub_1',old('sub_1'),['class'=>'form-control','required'=>true]) !!} --}}
+                                                @endif
+                                                {{ old('sub_1') }}
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         {!! Form::label('sub_2','Subject Two', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('sub_2',old('sub_2'), ['class'=>'form-control','required'=>true]) !!}
+                                            <select name="sub_2" id="sub_2" class="form-control" value="{{ old('sub_2') }}">
+                                                <option value="">Select Subject</option>
+                                                @if(count($subjects) > 0)
+                                                    @foreach($subjects as $k=>$v)
+                                                        <option value="{{ $v->name }}">{{ $v->name }}</option>
+                                                    @endforeach
+                                            {{-- {!! Form::text('sub_1',old('sub_1'),['class'=>'form-control','required'=>true]) !!} --}}
+                                                @endif
+                                                {{ old('sub_2') }}
+                                            </select>
+                                            {{-- {!! Form::text('sub_2',old('sub_2'), ['class'=>'form-control','required'=>true]) !!} --}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         {!! Form::label('sub_3','Subject Three', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('sub_3',old('sub_3'), ['class'=>'form-control','required'=>true]) !!}
+                                            <select name="sub_3" id="sub_3" class="form-control">
+                                                <option value="">Select Subject</option>
+                                                @if(count($subjects) > 0)
+                                                    @foreach($subjects as $k=>$v)
+                                                        <option value="{{ $v->name }}">{{ $v->name }}</option>
+                                                    @endforeach
+                                            {{-- {!! Form::text('sub_1',old('sub_1'),['class'=>'form-control','required'=>true]) !!} --}}
+                                                @endif
+                                                {{ old('sub_3') }}
+                                            </select>
+                                            {{-- {!! Form::text('sub_3',old('sub_3'), ['class'=>'form-control','required'=>true]) !!} --}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         {!! Form::label('sub_4','Subject Four', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('sub_4', old('sub_4'), ['class'=>'form-control','required'=>true]) !!}
+                                            <select name="sub_4" id="sub_4" class="form-control">
+                                                <option value="">Select Subject</option>
+                                                @if(count($subjects) > 0)
+                                                    @foreach($subjects as $k=>$v)
+                                                        <option value="{{ $v->name }}">{{ $v->name }}</option>
+                                                    @endforeach
+                                            {{-- {!! Form::text('sub_1',old('sub_1'),['class'=>'form-control','required'=>true]) !!} --}}
+                                                @endif
+                                                {{ old('sub_4') }}
+                                            </select>
+                                            {{-- {!! Form::text('sub_4', old('sub_4'), ['class'=>'form-control','required'=>true]) !!} --}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         {!! Form::label('sub_5','Subject Five', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('sub_5',old('sub_5'), ['class'=>'form-control','required'=>true]) !!}
+                                            <select name="sub_5" id="sub_5" class="form-control">
+                                                <option value="">Select Subject</option>
+                                                @if(count($subjects) > 0)
+                                                    @foreach($subjects as $k=>$v)
+                                                        <option value="{{ $v->name }}">{{ $v->name }}</option>
+                                                    @endforeach
+                                            {{-- {!! Form::text('sub_1',old('sub_1'),['class'=>'form-control','required'=>true]) !!} --}}
+                                                @endif
+                                                {{ old('sub_5') }}
+                                            </select>
+                                            {{-- {!! Form::text('sub_5',old('sub_5'), ['class'=>'form-control','required'=>true]) !!} --}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         {!! Form::label('sub_6','Subject Six', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('sub_6', old('sub_6'), ['class'=>'form-control','required'=>true]) !!}
+                                            <select name="sub_6" id="sub_6" class="form-control">
+                                                <option value="">Select Subject</option>
+                                                @if(count($subjects) > 0)
+                                                    @foreach($subjects as $k=>$v)
+                                                        <option value="{{ $v->name }}">{{ $v->name }}</option>
+                                                    @endforeach
+                                            {{-- {!! Form::text('sub_1',old('sub_1'),['class'=>'form-control','required'=>true]) !!} --}}
+                                                @endif
+                                                {{ old('sub_6') }}
+                                            </select>
+                                            {{-- {!! Form::text('sub_6', old('sub_6'), ['class'=>'form-control','required'=>true]) !!} --}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         {!! Form::label('sub_7','Subject Seven', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('sub_7',old('sub_7'), ['class'=>'form-control','required'=>true]) !!}
+                                            <select name="sub_7" id="sub_7" class="form-control">
+                                                <option value="">Select Subject</option>
+                                                @if(count($subjects) > 0)
+                                                    @foreach($subjects as $k=>$v)
+                                                        <option value="{{ $v->name }}">{{ $v->name }}</option>
+                                                    @endforeach
+                                            {{-- {!! Form::text('sub_1',old('sub_1'),['class'=>'form-control','required'=>true]) !!} --}}
+                                                @endif
+                                                {{ old('sub_7') }}
+                                            </select>
+                                            {{-- {!! Form::text('sub_7',old('sub_7'), ['class'=>'form-control','required'=>true]) !!} --}}
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         {!! Form::label('sub_8','Subject Eight', ['class'=>'form-label text-md-right col-md-4']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::text('sub_8', old('sub_8'), ['class'=>'form-control','required'=>true]) !!}
+                                            <select name="sub_8" id="sub_8" class="form-control">
+                                                <option value="">Select Subject</option>
+                                                @if(count($subjects) > 0)
+                                                    @foreach($subjects as $k=>$v)
+                                                        <option value="{{ $v->name }}">{{ $v->name }}</option>
+                                                    @endforeach
+                                            {{-- {!! Form::text('sub_1',old('sub_1'),['class'=>'form-control','required'=>true]) !!} --}}
+                                                @endif
+                                                {{ old('sub_8') }}
+                                            </select>
+                                            {{-- {!! Form::text('sub_8', old('sub_8'), ['class'=>'form-control','required'=>true]) !!} --}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group row">
-                                        {!! Form::label('grade_1','Grade', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        {!! Form::label('grade_1','Grade 1', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {{-- {!! Form::select('grade_1',
                                             ['A'=>'A','A-'=>'A-','B+'=>'B+','B'=>'B','B-'=>'B-','C+'=>'C+','C'=>'C','C-'=>'C-','D+'=>'D+','D'=>'D','D-'=>'D-','E'=>'E'],
@@ -268,11 +349,12 @@
                                                         <option value="{{ $v->name }}">{{ $v->name }}</option>
                                                     @endforeach
                                                 @endif
+                                                {{ old('grade_1') }}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {!! Form::label('grade_2','Grade', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        {!! Form::label('grade_2','Grade 1', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {{-- {!! Form::select('grade_2',
                                             ['A'=>'A','A-'=>'A-','B+'=>'B+','B'=>'B','B-'=>'B-','C+'=>'C+','C'=>'C','C-'=>'C-','D+'=>'D+','D'=>'D','D-'=>'D-','E'=>'E'],
@@ -284,11 +366,12 @@
                                                         <option value="{{ $v->name }}">{{ $v->name }}</option>
                                                     @endforeach
                                                 @endif
+                                                {{ old('grade_2') }}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {!! Form::label('grade_3','Grade', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        {!! Form::label('grade_3','Grade 3', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {{-- {!! Form::select('grade_3',
                                             ['A'=>'A','A-'=>'A-','B+'=>'B+','B'=>'B','B-'=>'B-','C+'=>'C+','C'=>'C','C-'=>'C-','D+'=>'D+','D'=>'D','D-'=>'D-','E'=>'E'],
@@ -300,11 +383,12 @@
                                                         <option value="{{ $v->name }}">{{ $v->name }}</option>
                                                     @endforeach
                                                 @endif
+                                                {{ old('grade_3') }}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {!! Form::label('grade_4','Grade', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        {!! Form::label('grade_4','Grade 4', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {{-- {!! Form::select('grade_4',
                                             ['A'=>'A','A-'=>'A-','B+'=>'B+','B'=>'B','B-'=>'B-','C+'=>'C+','C'=>'C','C-'=>'C-','D+'=>'D+','D'=>'D','D-'=>'D-','E'=>'E'],
@@ -316,11 +400,12 @@
                                                         <option value="{{ $v->name }}">{{ $v->name }}</option>
                                                     @endforeach
                                                 @endif
+                                                {{ old('grade_4') }}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {!! Form::label('grade_5','Grade', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        {!! Form::label('grade_5','Grade 5', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {{-- {!! Form::select('grade_5',
                                             ['A'=>'A','A-'=>'A-','B+'=>'B+','B'=>'B','B-'=>'B-','C+'=>'C+','C'=>'C','C-'=>'C-','D+'=>'D+','D'=>'D','D-'=>'D-','E'=>'E'],
@@ -332,11 +417,12 @@
                                                         <option value="{{ $v->name }}">{{ $v->name }}</option>
                                                     @endforeach
                                                 @endif
+                                                {{ old('grade_5') }}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {!! Form::label('grade_6','Grade', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        {!! Form::label('grade_6','Grade 6', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {{-- {!! Form::select('grade_6',
                                             ['A'=>'A','A-'=>'A-','B+'=>'B+','B'=>'B','B-'=>'B-','C+'=>'C+','C'=>'C','C-'=>'C-','D+'=>'D+','D'=>'D','D-'=>'D-','E'=>'E'],
@@ -348,11 +434,12 @@
                                                         <option value="{{ $v->name }}">{{ $v->name }}</option>
                                                     @endforeach
                                                 @endif
+                                                {{ old('grade_6') }}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {!! Form::label('grade_7','Grade', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        {!! Form::label('grade_7','Grade 7', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {{-- {!! Form::select('grade_7',
                                             ['A'=>'A','A-'=>'A-','B+'=>'B+','B'=>'B','B-'=>'B-','C+'=>'C+','C'=>'C','C-'=>'C-','D+'=>'D+','D'=>'D','D-'=>'D-','E'=>'E'],
@@ -364,11 +451,12 @@
                                                         <option value="{{ $v->name }}">{{ $v->name }}</option>
                                                     @endforeach
                                                 @endif
+                                                {{ old('grade_7') }}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        {!! Form::label('grade_8','Grade', ['class'=>'form-label col-md-4 text-md-right']) !!}
+                                        {!! Form::label('grade_8','Grade 8', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
                                             {{-- {!! Form::select('grade_8',
                                             ['A'=>'A','A-'=>'A-','B+'=>'B+','B'=>'B','B-'=>'B-','C+'=>'C+','C'=>'C','C-'=>'C-','D+'=>'D+','D'=>'D','D-'=>'D-','E'=>'E'],
@@ -380,6 +468,7 @@
                                                         <option value="{{ $v->name }}">{{ $v->name }}</option>
                                                     @endforeach
                                                 @endif
+                                                {{ old('grade_8') }}
                                             </select>
                                         </div>
                                     </div>

@@ -19,6 +19,7 @@ use Intervention\Image\Facades\Image;
 use GuzzleHttp\Client;
 use App\Programs;
 use App\Schools;
+use App\Subjects;
 //use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -50,8 +51,9 @@ class ApplicationsController extends Controller
     {
         //show the form to open the applications
         $programs = $this->programs();
-        $grades = Grades::all();
-        return view('student.applications.create',compact('programs','grades'));
+        $grades = Grades::OrderBy('name','asc')->get();
+        $subjects = Subjects::OrderBy('name','asc')->get();
+        return view('student.applications.create',compact('programs','grades','subjects'));
     }
     /**
      * @return \Illuminate\Http\Response
@@ -90,12 +92,95 @@ class ApplicationsController extends Controller
             return redirect()->back()->withInput($request->all());
         }
         $application = new Applications;
-        $subjects =  array('English','Kiswahili','Mathematics',
-                    'Geography','Chemistry','Biology',
-                    'Business Studies','Christian Religious Education',
-                    'History & Government','Computer Studies',
-                    'Home Science','Music','Physics','Agriculture','Art'
-                    );
+        if($request->sub_1 === $request->sub_2 ||
+            $request->sub_1 === $request->sub_3 ||
+            $request->sub_1 === $request->sub_4 ||
+            $request->sub_1 === $request->sub_5 ||
+            $request->sub_1 === $request->sub_6 ||
+            $request->sub_1 === $request->sub_7
+        || $request->sub_1 === $request->sub_8)
+        {
+            $request->session()->flash('error','Duplicate subject selected');
+            return redirect()->back()->withInput($request->all());
+        }
+        else if($request->sub_2 === $request->sub_1 ||
+            $request->sub_2 === $request->sub_3 ||
+            $request->sub_2 === $request->sub_4 ||
+            $request->sub_2 ===  $request->sub_5 ||
+            $request->sub_2 === $request->sub_6 ||
+            $request->sub_2 === $request->sub_7 ||
+            $request->sub_2 === $request->sub_8)
+        {
+            $request->session()->flash('error','Duplicate subject selected');
+            return redirect()->back()->withInput($request->all());
+        }
+        else if($request->sub_3 === $request->sub_1 ||
+            $request->sub_3 === $request->sub_2 ||
+            $request->sub_3 === $request->sub_4 ||
+            $request->sub_3 === $request->sub_5 ||
+            $request->sub_3 === $request->sub_6 ||
+            $request->sub_3 === $request->sub_7
+        || $request->sub_3 === $request->sub_8)
+        {
+            $request->session()->flash('error','Duplicate subject selected');
+            return redirect()->back()->withInput($request->all());
+        }
+        else if($request->sub_4 === $request->sub_1 ||
+            $request->sub_4 === $request->sub_2 ||
+            $request->sub_4 === $request->sub_3 ||
+            $request->sub_4 === $request->sub_5 ||
+            $request->sub_4 ===  $request->sub_6 ||
+            $request->sub_4 === $request->sub_7 ||
+            $request->sub_4 === $request->sub_8)
+        {
+            $request->session()->flash('error','Duplicate subject selected');
+            return redirect()->back()->withInput($request->all());
+        }
+        else if($request->sub_5 === $request->sub_1 ||
+            $request->sub_5 === $request->sub_2 ||
+            $request->sub_5 === $request->sub_3 ||
+            $request->sub_5 === $request->sub_4 ||
+            $request->sub_5 === $request->sub_6 ||
+            $request->sub_5 === $request->sub_7
+            ||$request->sub_5 === $request->sub_8)
+        {
+            $request->session()->flash('error','Duplicate subject selected');
+            return redirect()->back()->withInput($request->all());
+        }
+        else if($request->sub_6 === $request->sub_1 ||
+            $request->sub_6 === $request->sub_2 ||
+            $request->sub_6 === $request->sub_3 ||
+            $request->sub_6 === $request->sub_4 ||
+            $request->sub_6 === $request->sub_5 ||
+            $request->sub_6 === $request->sub_7
+            || $request->sub_6 === $request->sub_8)
+        {
+            $request->session()->flash('error','Duplicate subject selected');
+            return redirect()->back()->withInput($request->all());
+        }
+        else if($request->sub_7 === $request->sub_1 ||
+            $request->sub_7 === $request->sub_2 ||
+            $request->sub_7 === $request->sub_3 ||
+            $request->sub_7 === $request->sub_4 ||
+            $request->sub_7 === $request->sub_5 ||
+            $request->sub_7 ===  $request->sub_6
+            || $request->sub_7 === $request->sub_8)
+        {
+            $request->session()->flash('error','Duplicate subject selected');
+            return redirect()->back()->withInput($request->all());
+        }
+        else if($request->sub_8 === $request->sub_1 ||
+            $request->sub_8 === $request->sub_2 ||
+            $request->sub_8 === $request->sub_4 ||
+            $request->sub_8 ===  $request->sub_5 ||
+            $request->sub_8 === $request->sub_6 ||
+            $request->sub_8 ===  $request->sub_7
+            || $request->sub_8 === $request->sub_3)
+        {
+            $request->session()->flash('error','Duplicate subject selected');
+            return redirect()->back()->withInput($request->all());
+        }
+
         $grades = array('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E');
         $points = array(12,11,10,9,8,7,6,5,4,3,2,1);
         //$grds = collect(['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E']);
@@ -125,17 +210,6 @@ class ApplicationsController extends Controller
             request()->session()->flash('error','You cannot transfer to the same program, kindly select another program');
             return redirect()->back()->withInput($request->all());
         }
-
-        //determine whether the subjects keyed in by the student are among the array declared above
-        for($i = 0; $i < count($sub_values); $i++)
-        {
-            if(!($this->case_insensitive_in_array($sub_values[$i], $subjects)))
-                {
-                    request()->session()->flash('error','The subject'.' '.$sub_values[$i].' '.'not within the carriculum');
-                    return redirect()->back()->withInput(request()->all());
-                }
-        }
-
         //check that the entered mean grade value is valid
         if(!(in_array($request->mean_grade,$grades)))
         {
@@ -258,7 +332,10 @@ class ApplicationsController extends Controller
                 }
                 else
                 {
-                    return view('student.applications.show', compact('application'));
+                    $programs = Programs::OrderBy('name','asc')->get();
+                    $subjects = Subjects::OrderBy('name','asc')->get();
+                    $grades = Grades::OrderBy('name','asc')->get();
+                    return view('student.applications.show', compact('application','programs','subjects','grades'));
                 }
             }
         }
