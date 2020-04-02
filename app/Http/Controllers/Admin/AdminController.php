@@ -569,7 +569,8 @@ class AdminController extends Controller
      */
     public function getAllSubjects()
     {
-
+        $subjects = Subjects::paginate(5);
+        return view('admin.settings.subjects.all', compact('subjects'));
     }
     /**
      * Show a single subject
