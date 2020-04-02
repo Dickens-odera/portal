@@ -4,7 +4,7 @@
   </div>
     <header class="main-header">
       <!-- Logo -->
-      <a href="index2.html" class="logo">
+      <a href="{{ route('admin.dashboard') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>MM</b>UST</span>
         <!-- logo for regular state and mobile devices -->
@@ -221,7 +221,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src="/storage/uploads/logo/admin.jpg" alt="Dr'Photo" style="" class="user-image">
                 {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="user-image" alt="User Image"> --}}
-                <span class="hidden-xs">{{ Auth::user()->name}}</span>
+                <span class="hidden-xs">{{ Auth::user()->name }}</span>
               </a>
               <ul class="dropdown-menu">
                 <!-- User image -->
@@ -229,7 +229,7 @@
                   {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="img-circle" alt="User Image"> --}}
                   <img src="/storage/uploads/logo/admin.jpg" alt="Dr'Photo" style="">
                   <p>
-                    {{-- {{ Auth::user()->surname }} --}}
+                    {{ Auth::user()->name }}
                     <small>System Administrator</small>
                   </p>
                 </li>

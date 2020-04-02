@@ -19,6 +19,7 @@ use App\Student;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
+use App\Grades;
 class AdminController extends Controller
 {
     public function __construct()
@@ -145,7 +146,7 @@ class AdminController extends Controller
     }
     /**
      * Add new COD
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @param \Illuminate\Http\Response
      */
@@ -335,7 +336,7 @@ class AdminController extends Controller
     }
     /**
      * Add a new Registrar Academic Affairs
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -379,7 +380,133 @@ class AdminController extends Controller
             }
         }
     }
-    /****************************** End of Regustrar Module ************************/
+    /****************************** End of Registrar Module ************************/
+    /****************************** Gradings Module   ******************************/
+    /**
+     * list all the grades
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllGrades(Request $request)
+    {
+        $grades = Grades::all();
+        return view('admin.settings.gradings.all', compact('grades'));
+    }
+    /**
+     * Show the form to add a new grade
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showGradeNewForm()
+    {
+        return view('admin.settings.gradings.new');
+    }
+    /**
+     * Add a new grade
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function addNewGrade(Request $request)
+    {
+        $validator = Validator::make($request->all(),array('name'=>'required'));
+        if($validator->fails())
+        {
+            $request->session()->flash('error',$validator->errors());
+            return redirect()->back()->withInput($request->name);
+        }
+        // $grade_points = $this->grade_programs();
+        //dd($grade_points);
+        $grades = array('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E');
+        $grade = $request->name;
+        $existing_grade = Grades::where('name','=',$grade)->first();
+        if($existing_grade)
+        {
+            $request->session()->flash('error','A similar grade exists');
+            return redirect()->back()->withInput($request->only('name'));
+        }
+        if(!(in_array($grade,$grades)))
+        {
+            $request->session()->flash('error','The Entered grade is not within the curriculum');
+            return redirect()->back()->withInput($request->only('name'));
+        }
+        switch($grade)
+        {
+            case 'A':
+                $point = 12;
+            break;
+            case 'A-':
+                $point = 11;
+            break;
+            case 'B+':
+                $point = 10;
+            break;
+            case 'B':
+                $point = 9;
+            break;
+            case 'B-':
+                $point = 8;
+            break;
+            case 'C+':
+                $point = 7;
+            break;
+            case 'C':
+                $point = 6;
+            break;
+            case 'C-':
+                $point = 5;
+            break;
+            case 'D+':
+                $point = 4;
+            break;
+            case 'D':
+                $point = 3;
+            break;
+            case 'D-':
+                $point = 2;
+            break;
+            case 'E':
+                $point = 1;
+            break;
+            default:
+                $point = 0;
+            break;
+        }
+        if(Grades::create(array('name'=>$grade, 'points'=>$point)))
+        {
+            $request->session()->flash('success','Grade'.' '.$grade.' '.'with'.' '.$point.' '.'points addedd successfully');
+            return redirect()->back();
+        }
+        else
+        {
+            $request->session()->flash('error','Something went wrong, try again');
+            return redirect()->back()->withInput($request->only('name'));
+        }
+    }
+    /**
+     * Show the form to edit a grade instance
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $grade_id
+     * @return \Illuminate\Http\Response
+     */
+    public function showGradeEditForm(Request $request, $grade_id = null)
+    {
+
+    }
+    /**
+     * Update a grade instance
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $grade_id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateGrade(Request $request, $grade_id = null)
+    {
+
+    }
+    /******************************* End of Gradings Modeule ***********************/
     /********************************* HELPER FUNCTIONS ****************************/
     /**
      * the user data
@@ -455,4 +582,16 @@ class AdminController extends Controller
             'password'=>Hash::make($request->password)
         );
     }
+    /**
+     * An array of grades
+     * @return array
+     */
+    protected function grade_programs()
+    {
+        $grades = array('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','E');
+        $points = array(12,11,10,9,8,7,6,5,4,3,2,1);
+        $grade_points['grade']['point'] = array_combine($grades,$points);
+        return $grade_points;
+    }
+
 }

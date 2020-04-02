@@ -81,18 +81,19 @@
               <li><a href="{{ route('admin.departments.view.all') }}"><i class="fa fa-circle-o"></i> All</a></li>
             </ul>
           </li>
-          {{-- <li class="treeview">
+          <li class="treeview">
             <a href="#">
               <i class="fa fa-bars"></i>
-              <span>Applications</span>
+              <span>Grading</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href=""><i class="fa fa-circle-o"></i> All</a></li>
+                <li><a href="{{ route('admin.grading.add.form') }}"><i class="fa fa-circle-o"></i> New Grade</a></li>
+                <li><a href="{{ route('admin.grading.grades.all') }}"><i class="fa fa-circle-o"></i> All Grades</a></li>
             </ul>
-          </li> --}}
+          </li>
           </ul>
         </li>
       </ul>

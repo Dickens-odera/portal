@@ -74,6 +74,15 @@ Route::prefix('admin')->group(function()
             Route::post('/add','Admin\AdminController@addNewRegistrarAA')->name('admin.registrar.add.submit');
             Route::get('/all','Admin\AdminController@getAllRegistrarsAA')->name('admin.registrars.view.all');
         });
+        //GRADING SYSTEM
+        Route::prefix('grading')->group(function()
+        {
+            Route::get('/grade/add','Admin\AdminController@showGradeNewForm')->name('admin.grading.add.form');
+            Route::post('/grade','Admin\AdminController@addNewGrade')->name('admin.grading.add.submit');
+            Route::get('/grade/edit','Admin\AdminController@showGradeEditForm')->name('admin.grading.edit.form');
+            Route::post('/grade/edit','Admin\AdminController@updateGrade')->name('admin.grading.update');
+            Route::get('/grades','Admin\AdminController@getAllGrades')->name('admin.grading.grades.all');
+        });
     });
             /********************************************* END OF ADMIN SETTINGS URLS*****************************/
 
