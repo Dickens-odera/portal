@@ -13,5 +13,5 @@ class Comments extends Model
     /**
      * @var array $fillable
      */
-    protected $fillable = [];
+    protected $fillable = ['comment','user_id','user_type','app_id','app_type'];
 }

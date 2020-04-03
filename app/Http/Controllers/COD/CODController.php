@@ -4,6 +4,7 @@ namespace App\Http\Controllers\COD;
 
 use App\Applications;
 use App\CODs;
+use App\Comments;
 use App\Departments;
 use App\Http\Controllers\Controller;
 use App\Programs;
@@ -16,7 +17,10 @@ use Illuminate\Support\Facades\Validator;
 use App\Exports\ProgramsExport;
 use App\Imports\ProgramsImport;
 use App\Schools;
+use App\Deans;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Notifications\CodToDeanNotificationOnOutgoingApplication as CoDDeanResponse;
+use Illuminate\Support\Facades\Notification;
 class CODController extends Controller
 {
     public function __construct()
@@ -122,7 +126,7 @@ class CODController extends Controller
         //dd($dep);
         $department = Departments::where('dep_id','=',Auth::user()->dep_id)->first();
         $program = Programs::where('dep_id','=',$department->dep_id)->pluck('name');
-        $p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
+        //$p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
         $applications = Applications::where('present_school','=',$school)
                                         ->whereIn('present_program',(array)$program)
                                         ->latest()
@@ -219,6 +223,8 @@ class CODController extends Controller
         {
             $this->validate($request,array('app_id'=>'required'));
             $application = Applications::where('app_id','=',$app_id)->first();
+            $user = Auth::user();
+            //dd($user->department->name);
             //dd($application);
             if(!$application)
             {
@@ -320,6 +326,115 @@ class CODController extends Controller
         return view('cod.programs.index', compact('programs'));
     }
     /****************************** END OF PROGRAMS MODULE *****************/
+
+    //*************************************** APPLICATIONS APPROVAL *********************************/
+    /**
+     * Approve and Outgoing application
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $app_id
+     * @return \Illuminate\Http\Response
+     */
+    public function approveAnOutgoingApplication(Request $request, $app_id = NULL)
+    {
+        $app_id = $request->app_id;
+        if(!$app_id)
+        {
+            $request->session()->flash('error','Invalid Request Format');
+            return redirect()->back()->withInput($request->only('comment'));
+        }
+        else
+        {
+            $validator = Validator::make($request->all(),array('comment'=>'required','message_channel'=>'required'));
+            if($validator->fails())
+            {
+                $request->session()->flash('error',$validator->errors());
+                return redirect()->back()->withInput($request->only('comment','message_channel'));
+            }
+            else
+            {
+                $application = Applications::where('app_id','=',$app_id)->first();
+                $channel = $request->message_channel;
+                $programs = Programs::where('name','=',$application->present_program)->first();
+                $school = Schools::where('school_id','=',$programs->school_id)->first();
+                //dd($school->school_name);
+                $dean = Deans::where('school_id','=',$school->school_id)->first();
+                //dd($dean->email);
+                $phone = $dean->phone;
+                //dd($phone);
+                $name = $dean->name;
+                $email = $dean->email;
+                //dd($email);
+                $user = CODS::where('id','=',Auth::user()->id)->first();
+                //dd($user->name);
+                $department = Departments::where('dep_id','=',$user->dep_id)->first();
+                $dep_name = $department->name;
+                //dd($dep_name);
+                $comment = new Comments;
+                $comment->comment = $request->comment;
+                $comment->user_id = $user->id;
+                $comment->user_type = 'cod';
+                $comment->app_id = $application->app_id;
+                $comment->app_type = 'outgoing';
+                $message = "Dear"." ".$name." "."you have received a notification from the cod"." ".$dep_name." "."to act on application serial no: ".
+                " ".$app_id." "."kindly";
+                //dd($message);
+                if($comment->save())
+                {
+                  switch($channel)
+                  {
+                      case 'sms':
+                        $this->sendSmsMessageToDean($message, $phone);
+                        // if($this->sendSmsMessageToDean($message, $phone))
+                        // {
+                        //     $request->session()->flash('success','Message sent successfully to'.' '.$name);
+                        //     return redirect()->back();
+                        // }
+                        // else
+                        // {
+                        //     $request->session()->flash('error','Failed to send sms, please contact your service provider');
+                        //     return redirect()->back()->withInput($request->only('comment','message_channel'));
+                        // }
+                      break;
+                      
+                      case 'email':
+                        if($this->sendEmailToDean($email, $name, $department,$app_id))
+                        {
+                            $request->session()->flash('success','Email sent successfully');
+                            return redirect()->back();
+                        }
+                        else
+                        {
+                            $request->session()->flash('error','Failed to send email notification to'.' '.$name.' '.'please try again later');
+                            return redirect()->back()->withInput($request->only('comment','message_channel'));
+                        }
+                      break;
+                      case 'both':
+                        if($this->sendSmsMessageToDean($message, $phone) && $this->sendEmailToDean($email, $name, $department,$application))
+                            {
+                               $request->session()->flash('success',$name.' '.'notified'); 
+                               return redirect()->back();
+                            }
+                            else
+                            {
+                                $request->session()->flash('error','Failed to send notification to'.' '.$name);
+                                return redirect()->back()->withInput($request->only('comment','message_channel'));
+                            }
+                      break;
+                      default:
+                        return 0;
+                      break;  
+
+                  }
+                }
+                else
+                {
+
+                }
+            }
+        }
+    }
+    //*************************************** END OF APPLICATIONS APPROVAL **************************/
     //Helper functions
     /**
      * An array of all the programs data validations
@@ -329,5 +444,43 @@ class CODController extends Controller
     private function validate_data()
     {
         return array('name'=>'required','description'=>'nullable');
+    }
+    /**
+     * Send sms messae notification to dean to act on the application
+     *
+     * @param string $phone
+     * @return \Illuminate\Http\Response
+     */
+    private function sendSmsMessageToDean($message, $phone)
+    {
+        // $message = "Hello there ".$name.' '.'Your application has been a success. You shall be notified soon on the progress';
+        $postData = array(
+            'username'=>env('USERNAME'),
+            'api_key'=>env('APIKEY'),
+            'sender'=>env('SENDERID'),
+            'to'=>"254".(int)$phone,
+            'message'=>$message,
+            'msgtype'=>env('MSGTYPE'),
+            'dlr'=>env('DLR')
+        );
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => env('URL'),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $postData
+        ));
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+        $output = curl_exec($ch);
+        if(curl_errno($ch))
+        {
+            $output = curl_error($ch);
+        }
+        curl_close($ch);
+    }
+    protected function sendEmailToDean($name, $email, $department, $application)
+    {
+        Notification::route('mail',request()->$email)->notify(new CoDDeanResponse($name, $email, $department, $application));
     }
 }

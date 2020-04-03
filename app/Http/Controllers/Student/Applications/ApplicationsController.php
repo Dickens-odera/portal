@@ -457,7 +457,7 @@ class ApplicationsController extends Controller
             'reg_number'=>'required',
             'student_phone'=>'required',
             'current_program'=>'required',
-            'current_school'=>'required',
+            'current_school'=>'nullable',
             'preffered_program'=>'required',
             'preffered_school'=>'required',
             'kcse_index'=>'required',

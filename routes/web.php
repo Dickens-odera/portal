@@ -207,6 +207,12 @@ Route::prefix('cod')->group(function()
         Route::get('/single-view/outgoing','COD\CODController@getAnOutgoingApplication')->name('cod.applications.outgoing.single.view');
         Route::get('/all/incoming','COD\CODController@getAllIncomingApplications')->name('cod.applications.incoming.all');
         Route::get('/single-view/incoming','COD\CODController@getAnIncomingApplication')->name('cod.applications.incoming.single.view');
+
+        //Application approval
+        Route::prefix('approval')->group(function()
+        {
+            Route::post('/approve','COD\CODController@approveAnOutgoingApplication')->name('cod.applications.approval.approve');
+        });
     });
     //password reset routes
     Route::prefix('password')->group(function()
