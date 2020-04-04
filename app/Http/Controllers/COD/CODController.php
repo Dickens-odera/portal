@@ -375,6 +375,16 @@ class CODController extends Controller
                 $dep_name = $department->name;
                 //dd($dep_name);
                 $comment = new Comments;
+                $existing_comment = Comments::where('app_id','=',$application->app_id)
+                                                ->where('app_type','=','outgoing')
+                                                ->where('user_id','=',$user->id)
+                                                ->where('user_type','=','cod')
+                                                ->get();
+                if($existing_comment)
+                {
+                    $request->session()->flash('error','You had previously forwadred this application to '.' '.$name);
+                    return redirect()->back()->withInput($request->only('comment','message_channel'));
+                }
                 $comment->comment = $request->comment;
                 $comment->user_id = $user->id;
                 $comment->user_type = 'cod';
@@ -404,7 +414,8 @@ class CODController extends Controller
                 }
                 else
                 {
-
+                    $request->session()->flash('error','Something went wrong, please try again');
+                    return redirect()->back()->withInput($request->only('comment','message_channel'));
                 }
             }
         }
@@ -454,6 +465,12 @@ class CODController extends Controller
         }
         curl_close($ch);
     }
+    /**
+     * Retrieve the dean email address based on the programs school
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Htt\Response
+     */
     protected function email(Request $request)
     {
         $app_id = $request->app_id;
@@ -466,10 +483,18 @@ class CODController extends Controller
         $email = $dean->email;
         return $email;
     }
+    /**
+     * Send email notification to the dean of school with application details
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $name
+     * @param string $department
+     * @param int $application
+     * @return \Illuminate\Support\Facades\Notification
+     */
     protected function sendEmailToDean(Request $request, $name, $department, $application)
     {
-        Notification::route('mail',
-                $this->email($request))
+        Notification::route('mail',$this->email($request))
                         ->notify(new CoDDeanResponse($name, $department, $application));
     }
 }
