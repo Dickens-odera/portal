@@ -10,7 +10,7 @@
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">Outgoing application sr no: {{ $application->app_id }} - {{ Auth::user()->school->school_name}}</div>
+        <div class="box-header bg-warning text-center text-uppercase">Outgoing application sr no: {{ $application->app_id }} - {{ $school->school_name}}</div>
         <div class="box-body">
             <div class="col-md-12 row">
                 <div class="col-md-4">

@@ -224,7 +224,11 @@ class CODController extends Controller
             $this->validate($request,array('app_id'=>'required'));
             $application = Applications::where('app_id','=',$app_id)->first();
             $user = Auth::user();
-            //dd($user->department->name);
+            $programs = Programs::where('name','=',$application->present_program)->first();
+            $dep = Departments::where('dep_id','=',$programs->dep_id)->first();
+            //dd($dep->name);
+            $user_dep_id = Auth::user()->dep_id;
+            //dd($user_dep_id);
             //dd($application);
             if(!$application)
             {
@@ -233,7 +237,7 @@ class CODController extends Controller
             }
             else
             {
-                return view('cod.applications.outgoing.single-view',compact('application'));
+                return view('cod.applications.outgoing.single-view',compact('application','dep'));
             }
         }
     }
@@ -385,46 +389,17 @@ class CODController extends Controller
                   {
                       case 'sms':
                         $this->sendSmsMessageToDean($message, $phone);
-                        // if($this->sendSmsMessageToDean($message, $phone))
-                        // {
-                        //     $request->session()->flash('success','Message sent successfully to'.' '.$name);
-                        //     return redirect()->back();
-                        // }
-                        // else
-                        // {
-                        //     $request->session()->flash('error','Failed to send sms, please contact your service provider');
-                        //     return redirect()->back()->withInput($request->only('comment','message_channel'));
-                        // }
                       break;
-                      
                       case 'email':
-                        if($this->sendEmailToDean($email, $name, $department,$app_id))
-                        {
-                            $request->session()->flash('success','Email sent successfully');
-                            return redirect()->back();
-                        }
-                        else
-                        {
-                            $request->session()->flash('error','Failed to send email notification to'.' '.$name.' '.'please try again later');
-                            return redirect()->back()->withInput($request->only('comment','message_channel'));
-                        }
+                        $this->sendEmailToDean($request, $name, $department,$app_id);
                       break;
                       case 'both':
-                        if($this->sendSmsMessageToDean($message, $phone) && $this->sendEmailToDean($email, $name, $department,$application))
-                            {
-                               $request->session()->flash('success',$name.' '.'notified'); 
-                               return redirect()->back();
-                            }
-                            else
-                            {
-                                $request->session()->flash('error','Failed to send notification to'.' '.$name);
-                                return redirect()->back()->withInput($request->only('comment','message_channel'));
-                            }
-                      break;
+                            $this->sendSmsMessageToDean($message, $phone);
+                            $this->sendEmailToDean($request, $name, $department,$app_id);
+                        break;
                       default:
                         return 0;
-                      break;  
-
+                      break;
                   }
                 }
                 else
@@ -479,8 +454,22 @@ class CODController extends Controller
         }
         curl_close($ch);
     }
-    protected function sendEmailToDean($name, $email, $department, $application)
+    protected function email(Request $request)
     {
-        Notification::route('mail',request()->$email)->notify(new CoDDeanResponse($name, $email, $department, $application));
+        $app_id = $request->app_id;
+        $app = Applications::where('app_id','=',$app_id)->first();
+        $present_program = $app->present_program;
+        $programs = Programs::where('name','=',$present_program)->first();
+        // $department = Departments::where('dep_id','=',$programs->dep_id)->first();
+        $school = Schools::where('school_id','=',$programs->school_id)->first();
+        $dean = Deans::where('school_id','=',$school->school_id)->first();
+        $email = $dean->email;
+        return $email;
+    }
+    protected function sendEmailToDean(Request $request, $name, $department, $application)
+    {
+        Notification::route('mail',
+                $this->email($request))
+                        ->notify(new CoDDeanResponse($name, $department, $application));
     }
 }

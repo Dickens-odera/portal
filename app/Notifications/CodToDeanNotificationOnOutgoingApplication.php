@@ -31,10 +31,10 @@ class CodToDeanNotificationOnOutgoingApplication extends Notification
      *
      * @return void
      */
-    public function __construct($name, $email, $department, $application)
+    public function __construct($name,$department, $application)
     {
         $this->name = $name;
-        $this->email = $email;
+        // $this->email = $email;
         $this->department = $department;
         $this->application = $application;
     }
@@ -61,7 +61,7 @@ class CodToDeanNotificationOnOutgoingApplication extends Notification
         return (new MailMessage)
                     ->greeting('Hello!'.' '.$this->name)
                     ->subject('Transfer Application Request for Approval')
-                    ->line('You have reveived a request from the COD to the '.' '.$this->department.' '.'department to act on to application serial no:'.' '.$this->application)
+                    ->line('You have reveived a request from the COD to the '.' '.$this->department->name.' '.'department to act on to application serial no:'.' '.$this->application)
                     ->line('Please click the button bellow to check the application')
                     ->action('Go To My Portal', route('dean.application.outgoing.view',['app_id'=>$this->application]))
                     ->line('Incase of any challenges, please contact the system administrator!');

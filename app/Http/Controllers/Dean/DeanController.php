@@ -118,7 +118,10 @@ class DeanController extends Controller
         else
         {
             $this->validateApplication();
+            //get the comments
             $application = Applications::where('app_id','=',$app_id)->first();
+            $dean = Deans::where('id','=',Auth::user()->id)->first();
+            $school = Schools::where('school_id','=',$dean->school_id)->first();
             if(!$application)
             {
                 request()->session()->flash('error','The requested application could not be found');
@@ -126,7 +129,7 @@ class DeanController extends Controller
             }
             else
             {
-                return view('dean.applications.outgoing-single-view',compact('application'));
+                return view('dean.applications.outgoing-single-view',compact('application','school'));
             }
         }
     }
