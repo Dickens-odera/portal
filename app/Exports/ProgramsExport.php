@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 class ProgramsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
     /**
-    *Crreta a n
+    *Create a collection instance
     */
     /**
     * @return \Illuminate\Support\Collection
@@ -31,7 +31,7 @@ class ProgramsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
     }
     public function headings(): array
     {
-        return array('#','NAME','DESCRIPTION','SCHOOL','DEPARTMENT');
+        return array('SR/NO:','NAME','DESCRIPTION','SCHOOL','DEPARTMENT');
     }
     /**
      * @return array

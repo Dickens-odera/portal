@@ -211,7 +211,14 @@ Route::prefix('cod')->group(function()
         //Application approval
         Route::prefix('approval')->group(function()
         {
-            Route::post('/approve','COD\CODController@approveAnOutgoingApplication')->name('cod.applications.approval.approve');
+            Route::prefix('outgoing')->group(function()
+            {
+                Route::post('/approve','COD\CODController@approveAnOutgoingApplication')->name('cod.applications.approval.approve');
+            });
+            Route::prefix('incoming')->group(function()
+            {
+                Route::post('/approve','COD\CODController@approveAnIncomingApplication')->name('cod.applications.incoming.approval.approve');
+            });
         });
     });
     //password reset routes

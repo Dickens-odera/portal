@@ -192,6 +192,9 @@ class CODController extends Controller
         {
             $this->validate($request,array('app_id'=>'required'));
             $application = Applications::where('app_id','=',$app_id)->first();
+            $program = Programs::where('name','=',$application->preffered_program)->first();
+            $department = Departments::where('dep_id','=',$program->dep_id)->first();
+            //dd($department->name);
             //dd($application);
             if(!$application)
             {
@@ -200,7 +203,7 @@ class CODController extends Controller
             }
             else
             {
-                return view('cod.applications.incoming.single-view',compact('application'));
+                return view('cod.applications.incoming.single-view',compact('application','department'));
             }
         }
     }
@@ -379,10 +382,10 @@ class CODController extends Controller
                                                 ->where('app_type','=','outgoing')
                                                 ->where('user_id','=',$user->id)
                                                 ->where('user_type','=','cod')
-                                                ->get();
+                                                ->first();
                 if($existing_comment)
                 {
-                    $request->session()->flash('error','You had previously forwadred this application to '.' '.$name);
+                    $request->session()->flash('error','You had previously forwarded this application to '.' '.$name);
                     return redirect()->back()->withInput($request->only('comment','message_channel'));
                 }
                 $comment->comment = $request->comment;
@@ -391,7 +394,7 @@ class CODController extends Controller
                 $comment->app_id = $application->app_id;
                 $comment->app_type = 'outgoing';
                 $message = "Dear"." ".$name." "."you have received a notification from the cod"." ".$dep_name." "."to act on application serial no: ".
-                " ".$app_id." "."kindly";
+                " ".$app_id." "."kindly check your dashboard on the portal for more action";
                 //dd($message);
                 if($comment->save())
                 {
@@ -401,22 +404,114 @@ class CODController extends Controller
                         $this->sendSmsMessageToDean($message, $phone);
                       break;
                       case 'email':
-                        $this->sendEmailToDean($request, $name, $department,$app_id);
+                        $this->sendEmailToDeanForAnOutgoingApp($request, $name, $department,$app_id);
                       break;
                       case 'both':
                             $this->sendSmsMessageToDean($message, $phone);
-                            $this->sendEmailToDean($request, $name, $department,$app_id);
+                            $this->sendEmailToDeanForAnOutgoingApp($request, $name, $department,$app_id);
                         break;
                       default:
                         return 0;
                       break;
                   }
+                  $request->session()->flash('success','Application No:'.' '.$application->app_id.' '.'forwarded successfully to'.' '.$name);
+                  return redirect()->route('cod.applications.outgoing.all');
                 }
                 else
                 {
                     $request->session()->flash('error','Something went wrong, please try again');
                     return redirect()->back()->withInput($request->only('comment','message_channel'));
                 }
+            }
+        }
+    }
+    /**
+     * Approve an incoming application
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param int $pp_id
+     * @return \Illuminate\Http\Response
+     */
+    public function approveAnIncomingApplication(Request $request, $app_id = NULL,Applications $application)
+    {
+        $app_id = $request->app_id;
+        if(!$app_id)
+        {
+            $request->session()->flash('error','Invalid Request Format');
+            return redirect()->back();
+        }
+        else
+        {
+            //$this->validate($request,array('app_id'=>'required','comment'=>'required','message_channel'=>'required'));
+            $validator = Validator::make($request->all(),array(
+                'comment'=>'required',
+                'message_channel'=>'required'
+            ));
+            if($validator->fails())
+            {
+                $request->session()->flash('error',$validator->errors());
+                return redirect()->back()->withInput($request->only('comment','message_channel'));
+            }
+            $application = $application->where('app_id','=',$app_id)->first();
+            $programs = Programs::where('name','=',$application->preffered_program)->first();
+            $school = Schools::where('school_id','=',$programs->school_id)->first();
+            $dean = Deans::where('school_id','=',$school->school_id)->first();
+            $name = $dean->name;
+            $email = $dean->email;
+            $phone = $dean->phone;
+            $channel = $request->message_channel;
+            $comment = $request->comment;
+            $user = CODS::where('id','=',Auth::user()->id)->first();
+            //dd($user->name);
+            $department = Departments::where('dep_id','=',$user->dep_id)->first();
+            $dep_name = $department->name;
+            //dd($dep_name);
+            $existing_comment = Comments::where('app_type','=','incoming')
+                                            ->where('app_id','=',$application->app_id)
+                                            ->where('user_id','=',$user->id)
+                                            ->where('user_type','=','cod')
+                                            ->first();
+            if($existing_comment)
+            {
+                $request->session()->flash('error','You had previously forwarded this application to '.' '.$name);
+                return redirect()->back()->withInput($request->only('comment','message_channel'));
+            }
+            $message = "Dear"." ".$name." "."you have received a notification from the cod"." ".$dep_name." "."to act on application serial no: ".
+            " ".$app_id." "."kindly check your dashboard on the portal for more action";
+
+            if(Comments::create(array(
+                'comment'=>$comment,
+                'user_id'=>$user->id,
+                'user_type'=>'cod',
+                'app_id'=>$application->app_id,
+                'app_type'=>'incoming'
+            )))
+            {
+                //upon successfull forwading(send sms and email)
+                switch($channel)
+                {
+                    case 'sms':
+                        $this->sendSmsMessageToDean($message, $phone);
+                      break;
+                      case 'email':
+                        $this->sendEmailToDeanForAnIncomingApp($request, $name, $department,$app_id);
+                      break;
+                      case 'both':
+                            $this->sendSmsMessageToDean($message, $phone);
+                            $this->sendEmailToDeanForAnIncomingApp($request, $name, $department,$app_id);
+                        break;
+                      default:
+                        return 0;
+                      break;
+                }
+                $request->session()->flash('success','Application No:'.' '.$application->app_id.' '.'forwarded successfully to'.' '.$name);
+                return redirect()->route('cod.applications.incoming.all');
+            }
+            else
+            {
+                //upoon failure
+                $request->session()->flash('error','Something went wrong, try again');
+                return redirect()->back()->withInput($request->only('comment','message_channel'));
             }
         }
     }
@@ -483,6 +578,24 @@ class CODController extends Controller
         $email = $dean->email;
         return $email;
     }
+        /**
+     * Retrieve the dean email address based on the programs school
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Htt\Response
+     */
+    protected function IncomingApplicationDeanEmail(Request $request)
+    {
+        $app_id = $request->app_id;
+        $app = Applications::where('app_id','=',$app_id)->first();
+        $preffered_program = $app->preffered_program;
+        $programs = Programs::where('name','=',$preffered_program)->first();
+        // $department = Departments::where('dep_id','=',$programs->dep_id)->first();
+        $school = Schools::where('school_id','=',$programs->school_id)->first();
+        $dean = Deans::where('school_id','=',$school->school_id)->first();
+        $email = $dean->email;
+        return $email;
+    }
     /**
      * Send email notification to the dean of school with application details
      *
@@ -492,9 +605,23 @@ class CODController extends Controller
      * @param int $application
      * @return \Illuminate\Support\Facades\Notification
      */
-    protected function sendEmailToDean(Request $request, $name, $department, $application)
+    protected function sendEmailToDeanForAnOutgoingApp(Request $request, $name, $department, $application)
     {
         Notification::route('mail',$this->email($request))
+                        ->notify(new CoDDeanResponse($name, $department, $application));
+    }
+        /**
+     * Send email notification to the dean of school with application details
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $name
+     * @param string $department
+     * @param int $application
+     * @return \Illuminate\Support\Facades\Notification
+     */
+    protected function sendEmailToDeanForAnIncomingApp(Request $request, $name, $department, $application)
+    {
+        Notification::route('mail',$this->IncomingApplicationDeanEmail($request))
                         ->notify(new CoDDeanResponse($name, $department, $application));
     }
 }
