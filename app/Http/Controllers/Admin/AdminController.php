@@ -401,6 +401,7 @@ class AdminController extends Controller
      */
     public function showGradeNewForm()
     {
+        //show the form to add a new grade
         return view('admin.settings.gradings.new');
     }
     /**
