@@ -3,10 +3,17 @@
 namespace App\Http\Controllers\Staff\Schools;
 
 use App\Http\Controllers\Controller;
+use App\Services\School\SchoolService;
 use Illuminate\Http\Request;
 use App\Schools;
+use App\Services\School\SchoolService as SchoolServiceSchoolService;
+
 class SchoolsController extends Controller
 {
+    // public function __construct(SchoolServiceSchoolService $schoolService)
+    // {
+    //     $this->schoolService = $schoolService;
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,7 @@ class SchoolsController extends Controller
      */
     public function index()
     {
-        //
+        //return $schoolService->getAllSchools();
     }
 
     /**
