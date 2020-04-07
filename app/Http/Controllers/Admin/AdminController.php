@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use App\Grades;
 use App\Subjects;
+use Illuminate\Console\Scheduling\ScheduleFinishCommand;
+
 class AdminController extends Controller
 {
     public function __construct()
@@ -127,7 +129,7 @@ class AdminController extends Controller
                      ->select('cods.*','departments.name as department','schools.school_name as school')
                     //  ->latest()
                      ->paginate(5);
-        return view('admin.settings.cods.all', compact('cods','query'));
+        return view('admin.settings.cods.all', compact('query'));
     }
     /**
      * Show the form to add a new Chairperson to the departent
