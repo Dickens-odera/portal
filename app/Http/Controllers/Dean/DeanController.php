@@ -46,7 +46,7 @@ class DeanController extends Controller
         }
         else
         {
-            return view('dean.applications.incoming', compact('applications','count'));
+            return view('dean.applications.incoming', compact('applications'));
         }
     }
     /**
