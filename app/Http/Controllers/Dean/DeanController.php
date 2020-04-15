@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dean;
 
 use App\Applications;
+use App\CODs;
 use App\Deans;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,6 +11,13 @@ use App\Schools;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
+use App\Comments;
+use App\Departments;
+use App\Programs;
+use Egulias\EmailValidator\Warning\Comment;
+use Exception;
+use Illuminate\Support\Facades\DB;
+
 class DeanController extends Controller
 {
     public function __construct()
@@ -26,19 +34,34 @@ class DeanController extends Controller
 
     /******************************** START OF APPLICATIONS MODULE  *************/
     /**
+     * List all the incoming applications
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Comments $comments
      * @return \Illuminate\Http\Response
      */
-    public function getAllIncomingApplications()
+    public function getAllIncomingApplications(Request $request,Comments $comments)
     {
         $dean = Deans::where('id','=',Auth::user()->id)->first();
         $school = $dean->school->school_name;
+        $cod = CODs::where('school_id','=',$dean->school_id)->first();
+        //dd($cod->id);
         //dd($school);
         //get the application status
-        $applications = Applications::where('preffered_school','=',$school)
-                                        ->latest()
-                                        ->paginate(3);
-        //dd($applications);
-        // $count = $applications->get()->all();
+        try{
+        $applications = DB::table('comments')
+                        ->join('applications','comments.app_id','=','applications.app_id')
+                        ->join('cods','comments.user_id','=','cods.id')
+                        ->select('comments.*','applications.*','cods.*')
+                        ->where('comments.app_type','=','incoming')
+                        ->where('cods.school_id','=',Auth::user()->school->school_id)
+                        ->orderBy('comment_id','DESC')
+                        ->paginate(5);
+        }catch(Exception $exception)
+        {
+            $request->session()->flash('error','No incoming applications available yet');
+            return redirect()->route('dean.dashboard');
+        }
         if(!$applications)
         {
             request()->session()->flash('error','Applications Not Found');
@@ -78,21 +101,40 @@ class DeanController extends Controller
         }
     }
     /**
+     * Send the registrar feedback on incoming applications
+     * 
      * @return \Illuminate\Http\Response
      */
     public function submitFeedbackOnIncomingApp()
     {
-
+        //get the school
+        //get the programs
+        //get the applications
+        //send registrar email|sms 
+        
     }
     /**
+     * List all the outgoing applicatins that have been acted upon by the COD
+     * 
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getAllOutgoingApplications()
+    public function getAllOutgoingApplications(Request $request)
     {
-        $dean = Deans::where('id','=',Auth::user()->id)->first();
-        $applications = Applications::where('present_school','=',$dean->school->school_name)
-                                        ->latest()
-                                        ->paginate(5);
+        try{
+        $applications = DB::table('comments')
+                            ->join('applications','comments.app_id','=','applications.app_id')
+                            ->join('cods','comments.user_id','=','cods.id')
+                            ->select('comments.*','applications.*','cods.*')
+                            ->where('comments.app_type','=','outgoing')
+                            ->where('cods.school_id','=',Auth::user()->school->school_id)
+                            ->orderBy('comment_id','DESC')
+                            ->paginate(5);
+        }catch(Exception $exception)
+        {
+            $request->session()->flash('error','No incoming applications yet');
+            return redirect(route('dean.dashboard'));     
+        }
         if(!$applications)
         {
             request()->session()->flash('error','Applications not found');
@@ -122,6 +164,27 @@ class DeanController extends Controller
             $application = Applications::where('app_id','=',$app_id)->first();
             $dean = Deans::where('id','=',Auth::user()->id)->first();
             $school = Schools::where('school_id','=',$dean->school_id)->first();
+            $programs = Programs::where('name','=',$application->present_program)->first();
+            $cods = CODs::where('dep_id','=',$programs->dep_id)->first();
+            $department = Departments::where('dep_id','=',$cods->dep_id)->first();
+            $comments = Comments::where('user_id','=',$cods->id)
+                                    ->where('app_id','=',$app_id)
+                                    ->where('app_type','=','outgoing')
+                                    ->where('user_type','=','cod')
+                                    ->first();
+            $dean_comment = Comments::where('user_id','=',$dean->id)
+                                        ->where('user_type','=','dean')
+                                        ->where('app_id','=',$app_id)
+                                        ->where('app_type','=','outgoing')
+                                        ->first();
+            // $comments = DB::table('comments')
+            //                 ->join('applications','comments.app_id','=','applications.app_id')
+            //                 ->join('cods','comments.user_id','=','cods.id')
+            //                 ->join('departments','cods.dep_id','=','departments.dep_id')
+            //                 ->select('comments.*','applications.*','cods.name as cod_name','departments.name as department')
+            //                 ->where('comments.app_id','=',$app_id)
+            //                 ->where('comments.app_type','=','outgoing')
+            //                 ->get();
             if(!$application)
             {
                 request()->session()->flash('error','The requested application could not be found');
@@ -129,16 +192,67 @@ class DeanController extends Controller
             }
             else
             {
-                return view('dean.applications.outgoing-single-view',compact('application','school'));
+                return view('dean.applications.outgoing-single-view',compact('application','school', 'comments','department','cods','dean_comment','dean'));
             }
         }
     }
     /**
+     * Dean Aproval/Disapproval of an outgoing application
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param int $app_id
      * @return \Illuminate\Http\Response
      */
-    public function submitFeedbackOnOutgoingApp()
+    public function submitFeedbackOnOutgoingApp(Request $request, $app_id = NULL)
     {
         //do something here
+        $app_id = $request->app_id;
+        if(!$app_id)
+        {
+            $request->session()->flash('error','Invalid request format');
+            return redirect()->back()->withInput($request->only('comment'));
+        }
+        else
+        {
+            $validator = Validator::make($request->all(), array('comment'=>'required'));
+            if($validator->fails())
+            {
+                $request->session()->flash('error',$validator->errors());
+                return redirect()->back()->withInput($request->all());
+            }
+            else
+            {
+                $user = Auth::user();
+                $dean = Deans::where('id','=',$user->id)->first();
+                $existing_comment = Comments::where('app_id','=',$app_id)
+                                            ->where('app_type','=','outgoing')
+                                            ->where('user_type','=','dean')
+                                            ->where('user_id','=',$dean->id)
+                                            ->first();
+                if($existing_comment)
+                {
+                    $request->session()->flash('error','You had submitted feedback to this application earlier on, no action needed');
+                    return redirect()->back();
+                }
+                if(Comments::create(array(
+                    'comment'=>$request->comment,
+                    'user_id'=>$dean->id,
+                    'user_type'=>'dean',
+                    'app_id'=>$app_id,
+                    'app_type'=>'outgoing'
+                ))){
+                    //send mail or sms to registrar
+                    $request->session()->flash('success','Feedback sent successfully');
+                    return redirect()->back();
+                }
+                else
+                {
+                    //on failure to submit feedback
+                    $request->session()->flash('error','Failed to perform action, try again later');
+                    return redirect()->back()->withInput($request->only('comment'));
+                }
+            }
+        }
     }
     /******************************** END OF APPLICATIONS MODULE ********************/
     /**

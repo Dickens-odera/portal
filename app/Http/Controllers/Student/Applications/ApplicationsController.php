@@ -638,6 +638,7 @@ class ApplicationsController extends Controller
                             ->join('schools','programs.school_id','=','schools.school_id')
                             ->join('departments','programs.dep_id','=','departments.dep_id')
                             ->select('programs.program_id as program_id','programs.name as program','schools.school_id as school_id','schools.school_name as school','departments.name as department')
+                            ->orderBy('programs.name','ASC')
                             ->get();
         return $programs;
     }

@@ -23,7 +23,7 @@ Route::delete('/deleteSchool/{school_id}','Staff\Schools\SchoolsController@destr
 Route::prefix('admin')->group(function()
 {
     //Account routes
-    Route::prefix('account')->group(function()
+    Route::group(['prefix'=>'account'], function()
     {
         Route::get('/admin-superuser/v1/login','Auth\Admins\AdminLoginController@showLoginForm')->name('admin.login');
         Route::post('/login','Auth\Admins\AdminLoginController@login')->name('admin.login.submit');
@@ -143,12 +143,23 @@ Route::prefix('dean')->group(function()
     //Applications routes
     Route::prefix('applications')->group(function()
     {
-        Route::get('/incoming','Dean\DeanController@getAllIncomingApplications')->name('dean.applications.incoming.all');
-        Route::get('/outgoing','Dean\DeanController@getAllOutgoingApplications')->name('dean.applications.outgoing.all');
-        Route::get('/incoming/single-view','Dean\DeanController@getAnIncomingApplication')->name('dean.application.incoming.view');
-        Route::get('/outgoing/single-view','Dean\DeanController@getAnOutGoingApplication')->name('dean.application.outgoing.view');
-        Route::post('/incoming/comment','Dean\DeanController@submitFeedbackOnIncomingApp')->name('dean.application.incoming.comment.submit');
-        Route::post('/outgoing/comment','Dean\DeanController@submitFeedbackOnOutgoingApp')->name('dean.application.outgoing.comment.submit');
+        Route::group(['prefix'=>'incoming'], function(){
+            Route::get('/all','Dean\DeanController@getAllIncomingApplications')->name('dean.applications.incoming.all');
+            Route::get('/single-view','Dean\DeanController@getAnIncomingApplication')->name('dean.application.incoming.view');
+
+            Route::group(['prefix'=>'approval'], function(){
+                Route::post('/comment','Dean\DeanController@submitFeedbackOnIncomingApp')->name('dean.application.incoming.comment.submit');
+            });
+        });
+
+        Route::group(['prefix'=>'outgoing'], function(){
+            Route::get('/all','Dean\DeanController@getAllOutgoingApplications')->name('dean.applications.outgoing.all');
+            Route::get('/single-view','Dean\DeanController@getAnOutGoingApplication')->name('dean.application.outgoing.view');
+
+            Route::group(['prefix'=>'approval'], function(){
+                Route::post('/comment','Dean\DeanController@submitFeedbackOnOutgoingApp')->name('dean.application.outgoing.comment.submit');
+            });
+        });
     });
     //password reset routes
     Route::prefix('password')->group(function()
@@ -237,6 +248,7 @@ Route::prefix('cod')->group(function()
             Route::post('/import','COD\CODController@importPrograms')->name('cod.programs.import');
             Route::get('/export','COD\CODController@exportPrograms')->name('cod.programs.export');
             Route::get('/all','COD\CODController@viewAllPrograms')->name('cod.programs.view.all');
+            Route::get('/donwloads/excel/sample','COD\CODController@downloadSample')->name('cod.downoalds.excel.sample');
         });
 });
 

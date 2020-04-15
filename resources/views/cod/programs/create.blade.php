@@ -26,7 +26,7 @@
                     <div class="form-group row hidden">
                         {!! Form::label('school_id','School', ['class'=>'form-label text-md-right col-md-4']) !!}
                         <div class="col-md-8">
-                            {!! Form::text('school_is', old('school_is'), ['class'=>'form-control']) !!}
+                            {!! Form::text('school_id', old('school_is'), ['class'=>'form-control']) !!}
                         </div>
                     </div>
                 {!! Form::close() !!}
@@ -34,6 +34,12 @@
                     <div class="form-group col-md-8 col-md-offset-4">
                         {!! Form::file('excel_program_file') !!} <br>
                         <button class="btn btn-sm btn-primary">{{ __('Import Excel File') }}</button>
+                        <a href="/downloads/sample/SamplePrograms.xlsx" class="btn btn-sm btn-success pull-right"><i class="fa fa-arrow-down"></i> Download Sample</a>
+                    </div>
+                {!! Form::close() !!}
+                {!! Form::open(['action'=>'COD\CODController@downloadSample','method'=>'post','enctype'=>'multipart/form-data']) !!}
+                    <div class="form-group col-md-8 col-md-offset-4">
+                        {{-- {!! Form::file('excel_program_file') !!} <br> --}}
                     </div>
                 {!! Form::close() !!}
             </div>

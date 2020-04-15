@@ -20,7 +20,10 @@ use App\Schools;
 use App\Deans;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Notifications\CodToDeanNotificationOnOutgoingApplication as CoDDeanResponse;
+use Exception;
 use Illuminate\Support\Facades\Notification;
+use Maatwebsite\Excel\Exceptions\LaravelExcelException;
+
 class CODController extends Controller
 {
     public function __construct()
@@ -59,11 +62,17 @@ class CODController extends Controller
                             ->join('departments','programs.dep_id','=','departments.dep_id')
                             ->select('programs.name as program','departments.dep_id as dep_id','departments.name as department')
                             ->first();
+        try{
         $applications = Applications::whereIn('present_program',(array)$program)
                                     ->orwhereIn('preffered_program',(array)$program)
                                     ->latest()
                                     ->paginate(10);
         //dd($applications);
+        }catch(Exception $exception)
+        {
+            request()->session()->flash('error','No applications yet');
+            return redirect()->back();
+        }
         if(!$applications)
         {
             request()->session()->flash('error','No applications found');
@@ -77,7 +86,7 @@ class CODController extends Controller
     /**
      * Show a single application
      *
-     * @param string $application_id
+     * @param int $application_id
      * @return \Illuminate\Http\Response
      */
     public function getApplication($application_id = null)
@@ -127,10 +136,16 @@ class CODController extends Controller
         $department = Departments::where('dep_id','=',Auth::user()->dep_id)->first();
         $program = Programs::where('dep_id','=',$department->dep_id)->pluck('name');
         //$p = Programs::where('dep_id','=',Auth::user()->department->dep_id)->pluck('name');
+        try{
         $applications = Applications::where('present_school','=',$school)
                                         ->whereIn('present_program',(array)$program)
                                         ->latest()
                                         ->paginate(5);
+        }catch(Exception $exception)
+        {
+            request()->session()->flash('error','No outgoing applications yet');
+            return redirect()->back();
+        }
         //dd($applications);
         //dd($p);
         if(!$applications)
@@ -157,10 +172,16 @@ class CODController extends Controller
         $program = Programs::where('dep_id','=',$department->dep_id)
                                 //->first()
                                 ->pluck('name');
+        try{
         $applications = Applications::where('preffered_school','=',$school)
                                         ->whereIn('preffered_program',(array)$program)
                                         ->latest()
                                         ->paginate(5);
+        }catch(Exception $exception)
+        {
+            request()->session()->flash('error','No incoming applications have been forwarded');
+            return redirect()->back();
+        }
         //dd($applications);
         //dd($p);
         if(!$applications)
@@ -190,7 +211,13 @@ class CODController extends Controller
         }
         else
         {
-            $this->validate($request,array('app_id'=>'required'));
+            //$this->validate($request,array('app_id'=>'required'));
+            $validator = Validator::make($request->all(), array('app_id'=>'required'));
+            if($validator->fails())
+            {
+                $request->session()->flash('error',$validator->errors());
+                return redirect()->back();
+            }
             $application = Applications::where('app_id','=',$app_id)->first();
             $program = Programs::where('name','=',$application->preffered_program)->first();
             $department = Departments::where('dep_id','=',$program->dep_id)->first();
@@ -224,7 +251,13 @@ class CODController extends Controller
         }
         else
         {
-            $this->validate($request,array('app_id'=>'required'));
+            //$this->validate($request,array('app_id'=>'required'));
+            $validator = Validator::make($request->all(), array('app_id'=>'required'));
+            if($validator->fails())
+            {
+                $request->session()->flash('error',$validator->errors());
+                return redirect()->back();
+            }
             $application = Applications::where('app_id','=',$app_id)->first();
             $user = Auth::user();
             $programs = Programs::where('name','=',$application->present_program)->first();
@@ -301,12 +334,16 @@ class CODController extends Controller
      */
     public function importPrograms()
     {
-        if(Excel::import(new ProgramsImport, request()->file('excel_program_file')))
+        $validator = Validator::make(request()->all(),array('excel_program_file'=>'required|mimes:xlsx, xls|max:5000'));
+        if($validator->fails())
         {
-            request()->session()->flash('success','Programs uploaded successfully via the excel file');
+            request()->session()->flash('error',$validator->errors()->all());
             return redirect()->back();
         }
-        else
+        try{
+            Excel::import(new ProgramsImport, request()->file('excel_program_file'));
+            }
+        catch(LaravelExcelException $exception)
         {
             request()->session()->flash('error','Failed to upload excel file, kindly check on the format');
             return redirect()->back();
@@ -318,7 +355,24 @@ class CODController extends Controller
      */
     public function exportPrograms()
     {
-        return Excel::download(new ProgramsExport, 'school-programs.xlsx');
+        $department = Departments::where('dep_id','=',Auth::user()->dep_id)->first();
+        try{
+            return Excel::download(new ProgramsExport, $department->name.' '.'Programs.xlsx');
+            }
+        catch(LaravelExcelException $exception)
+        {
+            request()->session()->flash('error','Something went wrong, try again');
+            return redirect()->back();
+        }
+
+    }
+    /**
+     * Enable the COD to dowload a sample of the excel sheet for the programs and edit before upload
+     * 
+     */
+    public function downloadSample()
+    {
+
     }
     /** Enable the cod of the department to view all the available programs
      * .
@@ -404,11 +458,22 @@ class CODController extends Controller
                         $this->sendSmsMessageToDean($message, $phone);
                       break;
                       case 'email':
-                        $this->sendEmailToDeanForAnOutgoingApp($request, $name, $department,$app_id);
+                        try{
+                                $this->sendEmailToDeanForAnOutgoingApp($request, $name, $department,$app_id);
+                            }catch(Exception $exception)
+                            {
+                                $request->session()->flash('error','No internet connection, could not send email to'.' '.$this->email($request));
+                            }
                       break;
                       case 'both':
                             $this->sendSmsMessageToDean($message, $phone);
-                            $this->sendEmailToDeanForAnOutgoingApp($request, $name, $department,$app_id);
+                            try{
+                                    $this->sendEmailToDeanForAnOutgoingApp($request, $name, $department,$app_id);
+                                }
+                                catch(Exception $exception)
+                                {
+                                    $request->session()->flash('error','No internet connection, could not send email to'.' '.$this->email($request));
+                                }
                         break;
                       default:
                         return 0;
@@ -494,11 +559,20 @@ class CODController extends Controller
                         $this->sendSmsMessageToDean($message, $phone);
                       break;
                       case 'email':
-                        $this->sendEmailToDeanForAnIncomingApp($request, $name, $department,$app_id);
+                        try{
+                            $this->sendEmailToDeanForAnIncomingApp($request, $name, $department,$app_id);
+                        }catch(Exception $exception){
+                            $request->session()->flash('error','No internet connection, could not send email to'.' '.$this->IncomingApplicationDeanEmail($request));
+                        }
                       break;
                       case 'both':
                             $this->sendSmsMessageToDean($message, $phone);
-                            $this->sendEmailToDeanForAnIncomingApp($request, $name, $department,$app_id);
+                            try{
+                                $this->sendEmailToDeanForAnIncomingApp($request, $name, $department,$app_id);
+                            }catch(Exception $exception)
+                            {
+                                $request-session()->flash('error','No internet connection, could not send email to'.' '.$this->IncomingApplicationDeanEmail($request));
+                            }
                         break;
                       default:
                         return 0;

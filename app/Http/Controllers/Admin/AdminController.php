@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use App\Grades;
 use App\Subjects;
+use Exception;
 use Illuminate\Console\Scheduling\ScheduleFinishCommand;
 
 class AdminController extends Controller
@@ -56,7 +57,7 @@ class AdminController extends Controller
      */
     public function getAllDeans()
     {
-        $deans = Deans::paginate(5);
+        $deans = Deans::latest()->paginate(5);
         return view('admin.settings.deans.all',compact('deans'));
     }
     /**
@@ -104,7 +105,12 @@ class AdminController extends Controller
         {
             //send the dean their credentials (email notification)
             $school = Schools::where('school_id','=',$school_id)->first();
-            $this->sendAccountCreatedNotification($request->email, $request->password,$school->school_name,$request->name);
+            try{
+                $this->sendAccountCreatedNotification($request->email, $request->password,$school->school_name,$request->name);
+            } catch(Exception $exception)
+            {
+                $request->session()->flash('error','No internet access, could not send email to'.' '.$request->email);
+            }
             $request->session()->flash('success','Dean Added successfully');
             return redirect()->back();
         }
@@ -127,7 +133,7 @@ class AdminController extends Controller
                      ->join('departments','cods.dep_id','=','departments.dep_id')
                      ->join('schools','cods.school_id','=','schools.school_id')
                      ->select('cods.*','departments.name as department','schools.school_name as school')
-                    //  ->latest()
+                     ->latest()
                      ->paginate(5);
         return view('admin.settings.cods.all', compact('query'));
     }
@@ -189,7 +195,12 @@ class AdminController extends Controller
         if($cod->save())
         {
             Departments::where('dep_id','=',$dep)->update(array('chair'=>$request->name,'cod_id'=>$cod->id));
-            $this->sendNotificationToNewCod($request->email, $request->password, $_dep->name,$request->name);
+            try{
+                $this->sendNotificationToNewCod($request->email, $request->password, $_dep->name,$request->name);
+            }catch(Exception $exception)
+            {
+                $request->session()->flash('error','No internet conenction, could not send mail to'.' '.$request->email);
+            }
             $request->session()->flash('success','COD'.' '.$request->name.' '.'added successfully');
             return redirect()->back();
         }
@@ -371,8 +382,13 @@ class AdminController extends Controller
             }
             if($registrar->save())
             {
+                try{
                 //send email to the registrar with login url and credentials
-                $this->sendEmailNotificationToNewRegistrarAccount($request,$request->name, $request->email, $request->password);
+                    $this->sendEmailNotificationToNewRegistrarAccount($request,$request->name, $request->email, $request->password);
+                }catch(Exception $exception)
+                {
+                    $request->session()->flash('error','No Internet connection, could not send email to'.' '.$request->email);
+                }
                 $request->session()->flash('success','Registrar'.' '.$request->name.' '.'added successfully');
                 return redirect(route('admin.registrars.view.all'));
             }

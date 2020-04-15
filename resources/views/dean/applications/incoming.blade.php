@@ -3,11 +3,6 @@
 @section('content')
     <div class="box">
         <div class="box-header bg-warning text-center text-uppercase">{{ __('applications for transfer') }} {{ __('receiving school')}} ({{ Auth::user()->school->school_name}})
-            {{-- <div class="pull-right">
-                @if(isset($count))
-                 <p> Total:<h5 style="color:red">{{$count }}</h5></p>
-                @endif
-            </div> --}}
         </div>
         <div class="box-body">
             <div class="col-md-12 table-responsive">
