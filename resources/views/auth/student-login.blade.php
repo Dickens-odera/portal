@@ -97,7 +97,8 @@
 				</div>
 				<div class="d-flex justify-content-center form_container">
                     <form action="{{ route('student.login.submit') }}" method="POST">
-                        {{ csrf_field() }}
+						{{ csrf_field() }}
+						@include('includes.errors.custom')
 						<div class="input-group mb-3">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-envelope"></i></span>

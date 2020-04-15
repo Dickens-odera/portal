@@ -86,6 +86,20 @@
 </style>
 <!--Coded with love by Mutiullah Samim-->
 <body>
+	<div class="col-md-12">
+		@if(session('success'))
+			<button class="alert alert-sucess">
+				{{ session('success') }}
+			</button>
+		@endif
+
+		@if(session('error'))
+				<p class="alert-alert-danger">
+					{{ session('error') }}
+				</p>
+		@endif
+	</div>
+
 	<div class="container h-100">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
@@ -97,7 +111,8 @@
 				</div>
 				<div class="d-flex justify-content-center form_container">
                     <form action="{{ route('student.login.submit') }}" method="POST">
-                        {{ csrf_field() }}
+						{{ csrf_field() }}
+						{{-- @include('includes.errors.custom') --}}
 						<div class="input-group mb-3">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-envelope"></i></span>

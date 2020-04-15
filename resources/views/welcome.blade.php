@@ -90,6 +90,7 @@
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
+					
 					<div class="brand_logo_container">
 						{{-- <img src="https://cdn.freebiesupply.com/logos/large/2x/pinterest-circle-logo-png-transparent.png" class="brand_logo" alt="Logo"> --}}
 						<img src="{!! asset('login-page/Login_v1/images/logo/MMUST.jpg" alt="IMG') !!}" class="brand_logo" alt="Logo">
