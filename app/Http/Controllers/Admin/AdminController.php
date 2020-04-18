@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use App\Grades;
+use App\Services\Admin\AdminService;
 use App\Subjects;
 use Exception;
 use Illuminate\Console\Scheduling\ScheduleFinishCommand;
@@ -34,20 +35,9 @@ class AdminController extends Controller
      * show the admin dasboard
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(AdminService $adminService)
     {
-        $cods_queries = DB::table('cods')
-                    ->join('departments','cods.dep_id','=','departments.dep_id')
-                    ->join('schools','cods.school_id','=','schools.school_id')
-                    ->select('cods.*','departments.name as department','schools.school_name as school')
-                    ->take(3)
-                    ->get();
-        $cod_count = count(CODs::all());
-        $dean_count = count(Deans::all());
-        $registrar_count = count(Registrar::all());
-        $school_count = count(Schools::all());
-        $student_count = count(Student::all());
-        return view('admin.dashboard', compact(['cods_queries','cod_count','dean_count','registrar_count','school_count','student_count']));
+        return $adminService->data();
     }
     //SETTINGS
     /**************************** Deans Module   ****************************** */
