@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">{{ __('applications for transfer') }} {{ __('receiving department')}} ({{ $department->name}})</div>
+        <div class="box-header bg-warning text-center text-uppercase">{{ __('incoming applications for transfer') }} {{ __('receiving department')}} ({{ $department->name}})</div>
         <div class="box-body">
             <div class="col-md-12 table-responsive">
                 <div class="col-md-12 row">

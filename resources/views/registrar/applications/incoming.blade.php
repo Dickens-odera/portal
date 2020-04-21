@@ -3,7 +3,7 @@
     <div class="box">
         {{-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css"> --}}
-        <div class="box-header bg-warning text-center text-uppercase">{{ __('Forwarded applications for approval by deans of schools') }}</div>
+        <div class="box-header bg-warning text-center text-uppercase">{{ __('Forwarded incoming applications for approval by deans of schools') }}</div>
         <div class="box-body">
             <div class="col-md-12 row table-responsive">
                 @include('includes.errors.custom')

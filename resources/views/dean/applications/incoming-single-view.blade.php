@@ -1,4 +1,3 @@
-<!--git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/mastergit fetch --prunegit gc-->
 {{-- <div class="hidden">
     $email = null;
     @if($application->students->email)
@@ -11,9 +10,15 @@
 
 @section('content')
     <div class="box">
-        <div class="box-header bg-warning text-center text-uppercase">Incoming application sr no: {{ $application->app_id }} - {{ Auth::user()->school->school_name}}</div>
+        <div class="box-header bg-warning text-center text-uppercase">
+            incoming application sr no: {{ $application->app_id }} - {{ $school->school_name}} -
+            @if(isset($department))
+                            {{ $department->name }} department
+            @endif
+        </div>
         <div class="box-body">
             <div class="col-md-12 row">
+                @include('includes.errors.custom')
                 <div class="col-md-4">
                     <div class="box">
                         <div class="box-header bg-success text-center text-uppercase">{{ __('student information') }}</div>
@@ -46,7 +51,7 @@
                                 <div class="form-group row">
                                     {!! Form::label('student_email','Email Addres:', ['class'=>'form-label text-md-right col-md-4 ']) !!}
                                     <div class="col-md-8">
-                                        {!! Form::text('student_phone',$application->students->email, ['class'=>'form-control','disabled']) !!}
+                                        {!! Form::text('student_email',$application->students->email, ['class'=>'form-control','disabled']) !!}
                                     </div>
                                 </div>
                             {!! Form::close() !!}
@@ -145,21 +150,29 @@
                 <div class="box">
                     <div class="box-header bg-success text-center text-uppercase">{{ __('cod and dean comments section') }}</div>
                     <div class="box-body">
-                        <div class="col-md-3 row">
+                        <div class="col-md-6 row">
                             <div class="box">
-                                <div class="box-header bg-warning text-center text-uppercase">{{ __('current cod') }}</div>
+                                <div class="box-header bg-warning text-center text-uppercase">{{ __('receiving cod') }}</div>
                                 <div class="box-body">
                                     {!! Form::open() !!}
                                     <div class="form-group row">
-                                        {!! Form::label('status','Status', ['class'=>'col-md-4 form-label text-md-right']) !!}
-                                        <div class="col-md-8">
-                                            {!! Form::select('status',['','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control','disabled']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
+                                        {{-- <div class="form-group row">
+                                            {!! Form::label('status','Status', ['class'=>'col-md-4 form-label text-md-right']) !!}
+                                            <div class="col-md-8">
+                                                {!! Form::select('status',['','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control','disabled']) !!}
+                                            </div>
+                                        </div> --}}
                                         {!! Form::label('comment','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
+                                            @if(isset($comments))
+                                                {{-- @foreach($comments as $key=>$value) --}}
+                                                    {!! Form::textarea('comments',$comments->comment, ['class'=>'form-control','disabled']) !!}<br>
+                                            @endif
+                                                    By
+                                                    @if(isset($cods))
+                                                        {!! Form::text('', $cods->name, ['class'=>'form-control','disabled']) !!}
+                                                    @endif
+                                                {{-- @endforeach --}}
                                         </div>
                                     </div>
                                     {!! Form::close() !!}
@@ -167,81 +180,77 @@
                                 {{-- <div class="box-footer"></div> --}}
                             </div>
                     </div>
-                    <div class="col-md-3 row">
+                    {{-- <div class="col-md-3 row">
                         <div class="box">
                             <div class="box-header bg-warning text-center text-uppercase">{{ __('receiving cod') }}</div>
                             <div class="box-body">
                                 {!! Form::open() !!}
                                 <div class="form-group row">
-                                    {!! Form::label('status','Status', ['class'=>'col-md-4 form-label text-md-right']) !!}
-                                    <div class="col-md-8">
-                                        {!! Form::select('status',['','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control','disabled']) !!}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     {!! Form::label('comments','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
                                     <div class="col-md-8">
                                         {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-md-offset-4">
-                                    {{-- {!! Form::submit('submit', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!} --}}
                                 </div>
                                 {!! Form::close() !!}
                             </div>
-                            {{-- <div class="box-footer"></div> --}}
                         </div>
-                    </div>
-                    <div class="col-md-3 row">
+                    </div> --}}
+                    <div class="col-md-6 row">
                         <div class="box">
-                            <div class="box-header bg-warning text-center text-uppercase">{{ __('current dean') }}</div>
+                            <div class="box-header bg-warning text-center text-uppercase">{{ __('receiving dean') }}</div>
                             <div class="box-body">
-                                {!! Form::open() !!}
-                                <div class="form-group row">
+                                {!! Form::open(['action'=>['Dean\DeanController@submitFeedbackOnIncomingApp','app_id'=>$application->app_id]]) !!}
+                                {{-- <div class="form-group row">
                                     {!! Form::label('status','Status', ['class'=>'col-md-4 form-label text-md-right']) !!}
                                     <div class="col-md-8">
-                                        {!! Form::select('status',['','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control','disabled']) !!}
+                                        {!! Form::select('status',['Select ...','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control']) !!}
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="form-group row">
-                                    {!! Form::label('comments','Comments', ['class'=>'col-md-4 form-label text-md-right']) !!}
+                                    {!! Form::label('comment','Comment', ['class'=>'col-md-4 form-label text-md-right']) !!}
                                     <div class="col-md-8">
-                                        {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
+                                        @if(isset($dean_comment))
+                                            {!! Form::textarea('comment',$dean_comment->comment, ['class'=>'form-control','id'=>'comment','disabled']) !!}
+                                        @else
+                                            {!! Form::textarea('comment',old('comment'), ['class'=>'form-control','id'=>'comment','placeholder'=>'eg. Approved/Not Approved']) !!}
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-md-offset-4">
-                                    {{-- {!! Form::submit('submit', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!} --}}
+                                    @if(!(isset($dean_comment)))
+                                        <button type="submit" class="btn btn-sm btn-success text-uppercase"><i class="fa fa-send"></i> {{ __('Forward to academic affairs registrar') }}</button>
+                                        {{-- {!! Form::submit('forward to registrar', ['class'=>'btn btn-success btn-sm text-center text-uppercase','i'=>'f']) !!} --}}
+                                    @endif <br>
+                                    @if(isset($dean_comment) && isset($dean))
+                                    By
+                                        {!! Form::text('', $dean->name, ['class'=>'form-control','disabled']) !!}
+                                    @endif
                                 </div>
                                 {!! Form::close() !!}
                             </div>
                             {{-- <div class="box-footer"></div> --}}
                         </div>
                     </div>
-                    <div class="col-md-3 row">
+                    {{-- <div class="col-md-3 row">
                         <div class="box">
                             <div class="box-header bg-warning text-center text-uppercase">{{ __('receiving dean') }}</div>
                             <div class="box-body">
                                 {!! Form::open() !!}
                                     <div class="form-group row">
-                                        <div class="form-group row">
-                                            {!! Form::label('status','Status', ['class'=>'col-md-4 form-label text-md-right']) !!}
-                                            <div class="col-md-8">
-                                                {!! Form::select('status',['Select ...','Aproved','Not Approved','Approved But No Capacity'],old('status'), ['class'=>'form-control']) !!}
-                                            </div>
-                                        </div>
                                         {!! Form::label('comments','Comments', ['class'=>'form-label col-md-4 text-md-right']) !!}
                                         <div class="col-md-8">
-                                            {!! Form::textarea('comments',old('comments'), ['class'=>'form-control']) !!}
+                                            {!! Form::textarea('comments',old('comments'), ['class'=>'form-control','disabled']) !!}
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-md-offset-4">
-                                        {!! Form::submit('submit', ['class'=>'text-center text-uppercase btn btn-sm btn-success']) !!}
                                     </div>
                                 {!! Form::close() !!}
                             </div>
                             <div class="box-footer"></div>
                         </div>
-                    </div>
+                    </div> --}}
                     </div>
                     {{-- <div class="box-footer"></div> --}}
                 </div>

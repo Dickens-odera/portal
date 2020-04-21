@@ -41,7 +41,7 @@
               <!-- User image -->
               <li class="user-header">
                 {{-- <img src="{!! asset('admin/dist/img/user2-160x160.jpg') !!}" class="img-circle" alt="User Image"> --}}
-                <img src="{{ asset('/storage/uploads/logo/admin.jpg') }}" alt="COD's Photo" style="">
+                <img src="{{ asset('/uploads/images/logo/admin.jpg') }}" alt="COD's Photo" style="">
                 <p>
                   {{-- {{ Auth::user()->surname }} --}}
                   <small>COD</small>
