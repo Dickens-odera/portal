@@ -14,7 +14,8 @@ use Illuminate\Support\Collection;
 use App\Comments;
 use App\Departments;
 use App\Programs;
-use Egulias\EmailValidator\Warning\Comment;
+use App\Notifications\DeanToRegistrarNotification;
+use App\Registrar;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -170,7 +171,15 @@ class DeanController extends Controller
                     'app_type'=>'incoming'
                 ))){
                     //send mail or sms to registrar
-                    $request->session()->flash('success','Feedback sent successfully');
+                    $registrar = Registrar::first();
+                    $name = $registrar->name;
+                    try{
+                        $this->sendEmailNotificationToRegistrar($registrar,$app_id, $name, $dean->school->school_name);
+                    }catch(Exception $exception)
+                    {
+                        $request->session()->flash('error','No internet connection, coild not send email to'.' '.$request->email);
+                    }
+                    $request->session()->flash('success','Feedback sent successfully to'.' '.$name);
                     return redirect()->back();
                 }
                 else
@@ -311,8 +320,16 @@ class DeanController extends Controller
                     'app_id'=>$app_id,
                     'app_type'=>'outgoing'
                 ))){
-                    //send mail or sms to registrar
-                    $request->session()->flash('success','Feedback sent successfully');
+                     //send mail or sms to registrar
+                     $registrar = Registrar::first();
+                     $name = $registrar->name;
+                     try{
+                         $this->sendEmailNotificationToRegistrar($registrar,$app_id, $name, $dean->school->school_name);
+                     }catch(Exception $exception)
+                     {
+                         $request->session()->flash('error','No internet connection, coild not send email to'.' '.$request->email);
+                     }
+                    $request->session()->flash('success','Feedback sent successfully to'.' '.$name);
                     return redirect()->back();
                 }
                 else
@@ -325,6 +342,19 @@ class DeanController extends Controller
         }
     }
     /******************************** END OF APPLICATIONS MODULE ********************/
+    /**
+     * Sends an email notification to the Registrar(Academic Affairs) concerning application approval status
+     * 
+     * @var \App\Registrar $registrar
+     * @var int $application
+     * @var string $name
+     * @var string $school
+     * @return \Illuminate\Notifications\Notifiable
+     */
+    public function sendEmailNotificationToRegistrar(Registrar $registrar,$application, $name, $school)
+    {
+        $registrar->notify(new DeanToRegistrarNotification($application, $name, $school));
+    }
     /**
      * @return array
      */

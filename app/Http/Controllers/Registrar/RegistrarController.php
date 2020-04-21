@@ -10,7 +10,6 @@ use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
-use App\Notifications\DeanToRegistrarNotification;
 use Exception;
 
 class RegistrarController extends Controller
@@ -188,5 +187,4 @@ class RegistrarController extends Controller
             'idNumber'=>'nullable'
         ]);
     }
-
 }

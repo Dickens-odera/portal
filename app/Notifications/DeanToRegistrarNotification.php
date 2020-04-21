@@ -31,9 +31,9 @@ class DeanToRegistrarNotification extends Notification
      *
      * @return void
      */
-    public function __construct($email, $application, $name, $school)
+    public function __construct($application, $name, $school)
     {
-        $this->email = $email;
+        //$this->email = $email;
         $this->application = $application;
         $this->name = $name;
         $this->school = $school;
@@ -61,8 +61,10 @@ class DeanToRegistrarNotification extends Notification
         return (new MailMessage)
                     ->greeting('Hello'.' '.$this->name)
                     ->subject('Transfer Application Approval Request')
-                    ->line('Yoou have received a notification from the dean to the',' ',$this->school)
-                    ->action('Go To Portal', route('registrar.application.single.view',['app_id'=>$this->application]))
+                    ->line('You have received a notification from the dean to the'.' '.$this->school.' '.'to act on the following application:')
+                    ->line('Application Sr/No: '.$this->application)
+                    ->line('Kindly click the buton below to proceed to the applications page.')
+                    ->action('Go To Applications Portal', route('registrar.application.single.view',['app_id'=>$this->application]))
                     ->line('In case of any challenges, please contact the system administrator!');
     }
 
