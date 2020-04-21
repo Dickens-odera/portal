@@ -47,7 +47,8 @@ class DeanToRegistrarNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
+
     }
 
     /**
@@ -77,7 +78,9 @@ class DeanToRegistrarNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'application'=>$this->application,
+            'school'=>$this->school,
+            'name'=>$this->name
         ];
     }
 }

@@ -6,11 +6,14 @@ use App\Applications;
 use App\Comments;
 use App\Http\Controllers\Controller;
 use App\Listeners\RegistrarApplicationApprovalNotification;
+use App\Registrar;
 use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Exception;
+use Illuminate\Support\Facades\Auth;
+use Monolog\Registry;
 
 class RegistrarController extends Controller
 {
@@ -21,7 +24,9 @@ class RegistrarController extends Controller
 
     public function index()
     {
-        return view('registrar.dashboard');
+        $user = Registrar::where('id','=', Auth::user()->id)->first();
+        $notifications = $user->unreadNotifications;
+        return view('registrar.dashboard', compact('notifications'));
     }
     /**
      * @param Illuinate\Http\Request $request
