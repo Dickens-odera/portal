@@ -24,9 +24,7 @@ class RegistrarController extends Controller
 
     public function index()
     {
-        $user = Registrar::where('id','=', Auth::user()->id)->first();
-        $notifications = $user->unreadNotifications;
-        return view('registrar.dashboard', compact('notifications'));
+        return view('registrar.dashboard');
     }
     /**
      * @param Illuinate\Http\Request $request

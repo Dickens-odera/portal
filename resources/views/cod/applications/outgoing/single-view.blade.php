@@ -167,7 +167,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-md-offset-4">
-                                         {!! Form::submit('forward to dean', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!}
+                                         {!! Form::submit('forward to dean of school', ['class'=>'btn btn-success btn-sm text-center text-uppercase']) !!}
                                     </div>
                                     {!! Form::close() !!}
                                 </div>
