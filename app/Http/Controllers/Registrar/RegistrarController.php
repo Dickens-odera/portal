@@ -3,30 +3,26 @@
 namespace App\Http\Controllers\Registrar;
 
 use App\Applications;
-use App\CODs;
-use App\Comments;
-use App\Deans;
-use App\Departments;
 use App\Http\Controllers\Controller;
 use App\Listeners\RegistrarApplicationApprovalNotification;
-use App\Programs;
-use App\Registrar;
-use App\Schools;
 use App\Services\Registrar\RegistrarService;
 use App\Student;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Monolog\Registry;
 
 class RegistrarController extends Controller
 {
-    public function __construct()
+    /**
+     * @var \App\Services\Registrar\RegistrarService
+     */
+    protected $registrarService;
+    /**
+     * create a new controller intance
+     */
+    public function __construct(RegistrarService  $registrarService)
     {
         $this->middleware('auth:registrar');
+        $this->registrarService = $registrarService;
     }
 
     public function index()
@@ -37,21 +33,20 @@ class RegistrarController extends Controller
      * @param Illuinate\Http\Request $request
      * @return Illuminate\Support\Facades\Response
      */
-    public function getAllApplications(Request $request, RegistrarService $registrarService)
+    public function getAllApplications(Request $request)
     {
-        return $registrarService->allApps($request);
+        return $this->registrarService->allApps($request);
     }
     /**
      * View a single application
      * 
      * @var \Illuminate\Http\Request 
      * @var int $applications_id
-     * @var \App\Comments
      * @return \Illuminate\Http\Response
      */
-    public function getSingleApplication(Request $request, $application_id = NULL, RegistrarService $registrarService)
+    public function getSingleApplication(Request $request, $application_id = NULL)
     {
-        return $registrarService->viewApp($request, $application_id);
+        return $this->registrarService->viewApp($request, $application_id);
     }
     /**
      * Lists all the incoming applications
@@ -59,16 +54,16 @@ class RegistrarController extends Controller
      * @var \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getAllIncomingApplications(Request $request, RegistrarService $registrarService)
+    public function getAllIncomingApplications(Request $request)
     {
-        return $registrarService->incomingApps($request);
+        return $this->registrarService->incomingApps($request);
     }
     /**
      * View a single application
      */
-    public function getAnIncomingApplication(Request $request,RegistrarService $registrarService, $app_id = NULL)
+    public function getAnIncomingApplication(Request $request, $app_id = NULL)
     {
-        return $registrarService->incomingApp($request, $app_id);
+        return $this->registrarService->incomingApp($request, $app_id);
     }
     /**
      * Gets the details of a single outgoing application
@@ -77,9 +72,9 @@ class RegistrarController extends Controller
      * @var int $app_id
      * @return \Illuminate\Http\Response
      */
-    public function getAnOutGoingApplication(Request $request, $app_id = NULL, RegistrarService $registrarService)
+    public function getAnOutGoingApplication(Request $request, $app_id = NULL)
     {
-        return $registrarService->outgoingApp($request, $app_id);
+        return $this->registrarService->outgoingApp($request, $app_id);
     }
     /**
      * Lists all the outgoing applications
@@ -87,9 +82,9 @@ class RegistrarController extends Controller
      * @var \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function getAllOutgoingApplications(Request $request, RegistrarService $registrarService)
+    public function getAllOutgoingApplications(Request $request)
     {
-        return $registrarService->outgoingApps($request);
+        return $this->registrarService->outgoingApps($request);
     }
     /**
      * @return \Illuminate\Support\Facades\Response

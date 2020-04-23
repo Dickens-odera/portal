@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Registrar\RegistrarService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
@@ -40,5 +41,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::replacer('domain_email', function($message, $attribute, $rule, $parameters){
             return str_replace(':attribute',$attribute,'This :attribute is an invalid email address');
         });
+
+        $this->app->bind('RegistrarService',RegistrarService::class);
     }
 }
