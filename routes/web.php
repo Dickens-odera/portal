@@ -191,9 +191,11 @@ Route::prefix('registrar')->group(function()
         Route::group(['prefix'=>'incoming'], function()
         {
             Route::get('/all','Registrar\RegistrarController@getAllIncomingApplications')->name('registrar.applications.incoming.all');
+            Route::get('/single-view','Registrar\RegistrarController@getAnIncomingApplication')->name('registrar.applications.incoming.single-view');
         });
         Route::group(['prefix' => 'outgoing'], function () {
             Route::get('/all','Registrar\RegistrarController@getAllOutgoingApplications')->name('registrar.applications.outgoing.all');
+            Route::get('/single-view','Registrar\RegistrarController@getAnOutGoingApplication')->name('registrar.applications.outgoing.single-view');
         });
     });
     Route::post('/student-add',['as'=>'registrar.student.add','uses'=>'Registrar\RegistrarController@addStudent']);

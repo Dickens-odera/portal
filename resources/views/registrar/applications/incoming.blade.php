@@ -30,6 +30,7 @@
                             <th>Dean</th>
                             <th>Comment</th>
                             {{-- <th>Status</th> --}}
+                            <th>Date posted</th>
                             <th>Type</th>
                             <th>Actions</th>
                         </tr>
@@ -56,9 +57,10 @@
                                 <td style="color:lightblue">{{ $value->dean }}</td>
                                 <td style="color:red">{{ $value->comment }}</td>
                                 {{-- <td>{{ $value->status}}</td> --}}
+                                <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d/m/Y') }}</td>
                                 <td>{{ $value->app_type }}</td>
                                  <td class="btn-group btn-group-sm" style="width:100%">
-                                    <a href="{{ route('registrar.application.single.view',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ route('registrar.applications.incoming.single-view',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
                                     <a href="" class="btn btn-sm btn-primary"><i class="fa fa-send"></i></a>
                                     {{-- <form action="" method="post">
                                                {{ csrf_field() }}
