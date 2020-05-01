@@ -107,6 +107,19 @@
               <li><a href="{{ route('admin.subjects.view.all') }}"><i class="fa fa-circle-o"></i> All</a></li>
             </ul>
           </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-bars"></i>
+              <span>Students</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{{ route('admin.students.view.all') }}"><i class="fa fa-circle-o"></i> All</a></li>
+              {{-- <li><a href="{{ route('admin.subjects.view.all') }}"><i class="fa fa-circle-o"></i> All</a></li> --}}
+            </ul>
+          </li>
           </ul>
         </li>
       </ul>

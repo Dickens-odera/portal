@@ -91,6 +91,11 @@ Route::prefix('admin')->group(function()
             Route::get('/all','Admin\AdminController@getAllSubjects')->name('admin.subjects.view.all');
             Route::get('/single-view','Admin\AdminController@viewASingeSubject')->name('admin.subjects.single.view');
         });
+        //STUDENTS
+        Route::group(['prefix'=>'students'], function()
+        {
+            Route::get('/all','Admin\AdminController@viewStudents')->name('admin.students.view.all');
+        });
     });
             /********************************************* END OF ADMIN SETTINGS URLS*****************************/
 });

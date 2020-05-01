@@ -217,6 +217,16 @@ class AdminController extends Controller
         return view('admin.settings.schools.all', compact('_schools'));
     }
     /**
+     * Lists all schools
+     * @var \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function viewStudents(Request $request)
+    {
+        $students = Student::latest()->paginate(10);
+        return view('admin.settings.students.all', compact('students'));
+    }
+    /**
      * Show the page to add new school
      * @return \Illuminate\Http\Response
      */
