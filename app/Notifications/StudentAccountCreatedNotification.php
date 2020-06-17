@@ -57,7 +57,7 @@ class StudentAccountCreatedNotification extends Notification
         return (new MailMessage)
                     ->greeting('Hello!',' '.$this->name)
                     ->subject('Account Login Credentials')
-                    ->line('Thank you for registering with us. Kindly use these credentials to login into your account')
+                    ->line('Thank you for registering with us. Kindly use these credentials to login to  your account')
                     ->line('Email: '.' '.$this->email)
                     ->line('Password: '.' '.$this->password)
                     ->action('Clik Here to Login', route('student.login'))

@@ -54,8 +54,15 @@ class StudentRegisterController extends Controller
             }
             if($student->save())
             {
-                //send mail to confirm email address in the near future
-                $this->sendNotificationToNewStudent($request,$request->reg_Number, $request->email, $request->password);
+                try{
+                    //send mail to confirm email address in the near future
+                    $this->sendNotificationToNewStudent($request,$request->reg_Number, $request->email, $request->password);
+                    $request->session()->flash('success','Please check your email for the account verification link');
+                    return redirect()->route('student.account.verification.message');
+                }catch(Exception $exception)
+                {
+                    $request->session()->flash('error','Something went wrong, could not send credentials to te email'.' '.$request->email);
+                }
                 // {
                 //     $request->session()->flash('success','Account created successfully, please check your email and verify your count before login');
                 //     return redirect(route('student.account.verification.message'))->with(['message'=>'Kindly check your email address for a verification link']);
@@ -65,9 +72,6 @@ class StudentRegisterController extends Controller
                 //     $request->session()->flash('error','Something went wrong, please contact your system administrator');
                 //     return redirect(route('student.account.verification.message'))->with(['error'=>'Something went wrong, we could not send you the verification link, kindly use a valid email address']);
                 // }
-                $request->session()->flash('success','Please check your email for the account verification link');
-                return redirect()->route('student.account.verification.message');
-
             }
             else
             {

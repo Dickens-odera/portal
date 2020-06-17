@@ -96,6 +96,7 @@
 					</div>
 				</div>
 				<div class="d-flex justify-content-center form_container">
+					@Include('includes.errors.custom')
                     <form action="{{ route('student.register') }}" method="POST">
 						{{ csrf_field() }}
 						<div class="input-group mb-3">

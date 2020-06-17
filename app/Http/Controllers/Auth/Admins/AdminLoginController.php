@@ -36,15 +36,10 @@ class AdminLoginController extends Controller
             return redirect()->back()->withInput($request->only('email','password'));
         }
     }
-    /**
-     *@return Illuminate\Http\Response
-     */
     public function logout()
     {
-        if(Auth::guard('admin')->logout())
-        {
-            return redirect(route('admin.login'));
-        }
+        Auth::guard('admin')->logout();
+        return redirect()->route('admin.login');
     }
     /**
      * @return array
