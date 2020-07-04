@@ -385,7 +385,7 @@ class ApplicationsController extends Controller
                    request()->session()->flash('error','You cannot update an already'.' '.$status.' '.'application');
                    return redirect()->back();
                }
-               $image = $application->first()->result_slip;
+               $image = $application->result_slip;
                //dd($image);
                if($application->update($this->requestData(request()),array_merge($this->requestData(request()),['result_slip'=>$this->imageUpload(request()->file('result_slip'))])))
                {
