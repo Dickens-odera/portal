@@ -459,7 +459,7 @@ class ApplicationsController extends Controller
             'current_program'=>'required',
             'current_school'=>'nullable',
             'preffered_program'=>'required',
-            'preffered_school'=>'required',
+            'preffered_school'=>'nullable',
             'kcse_index'=>'required',
             'kcse_year'=>'required',
             'kuccps_password'=>'required',
