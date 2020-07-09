@@ -22,9 +22,74 @@ use App\Schools;
 use App\Subjects;
 //use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Storage;
 
 class ApplicationsController extends Controller
 {
+    protected $rules = array(
+        'company_city' => 'required',
+        'company' => 'required',
+        'fullname' => 'required|array',
+        'fullname.*' => 'required|min:3|max:32',
+        'email' => 'array',
+        'email.*' => 'sometimes|nullable|email|min:6|max:255',
+        'mobile' => 'required|array',
+        'mobile.*' => 'required|numeric|digits_between:7,14',
+        'doi' => 'required|array',
+        'doi.*' => 'required|date',
+        'status' => 'required|array',
+        'status.*' => 'required',
+        'designation' => 'required|array',
+        'designation.*' => 'required',
+        'interview_type' => 'required|array',
+        'interview_type.*' => 'required',
+        'industry' => 'required|array',
+        'industry.*' => 'required',
+        'comment' => 'array',
+        'comment.*' => 'sometimes|nullable|string|min:3|max:255',
+        'resume' => 'sometimes|nullable|mimes:doc,pdf,docx,DOC,PDF,DOCX',
+
+    );
+
+    protected $rulesWithoutArray = array(
+        'company_city' => 'required',
+        'company' => 'required',
+        'fullname' => 'required|min:3|max:32',
+        'email' => 'sometimes|nullable|email|min:6|max:255',
+        'mobile' => 'required|numeric|digits_between:7,14',
+        'doi' => 'required|date',
+        'status' => 'required',
+        'designation' => 'required',
+        'industry' => 'required',
+        'interview_type' => 'required',
+        'comment' => 'sometimes|nullable|string|min:3|max:255',
+        'resume' => 'sometimes|nullable|mimes:doc,pdf,docx,DOC,PDF,DOCX',
+
+    );
+
+    protected $messages = array(
+        'company_city.required' => 'Please Choose Company City/Site',
+        'company.required' => 'Please Choose Company',
+        'fullname.*.required' => 'Full name is Required',
+        'fullname.*.min' => 'Full name  must be at least 3 Character',
+        'fullname.*.max' => 'Full name  must be less than 64 Character',
+        'email.*.email' => 'Provide Valid Email Address',
+        'email.*.min' => 'Email  must be at least 6 Character',
+        'email.*.max' => 'Email  must be less than 255 Character',
+        'mobile.*.required' => 'Mobile is Required',
+        'mobile.*.numeric' => 'Provide Valid Mobile Number',
+        'mobile.*.min' => 'Mobile Number must be 10 Digit',
+        'mobile.*.max' => 'Mobile Number must be 10 Digit',
+        'doi.*.required' => 'Date is Required',
+        'doi.*.date' => 'Invalid Date Format',
+        'status.*.required' => 'Status is Required',
+        'industry.*.required' => 'Industry is Required',
+        'interview_type.*.required' => 'Please Provide the Way Interview will be Conducted',
+        'designation.*.required' => 'Designation is Required',
+        'comment.*.min' => 'Comments must be at least 6 Character',
+        'comment.*.max' => 'Comments must be less than 255 Character',
+        'resume.*' => 'Please upload doc, docx or pdf file',
+    );
     public function __construct()
     {
         $this->middleware('auth:student');
@@ -385,8 +450,15 @@ class ApplicationsController extends Controller
                    request()->session()->flash('error','You cannot update an already'.' '.$status.' '.'application');
                    return redirect()->back();
                }
-               $image = $application->result_slip;
+               //$image = $application->result_slip;
+               //$deleteOldResume = Storage::disk('public')->delete('/documents/user/resume/' . $CandidateDetails->resume);
                //dd($image);
+            //    $validators = Validator::make($request->all(), $rules, $messages);
+            //    if ($validators->fails()) {
+            //        $result['success'] = false;
+            //        $result['message'] = $validators->errors()->first();
+            //        return $result;
+            //    }
                if($application->update($this->requestData(request()),array_merge($this->requestData(request()),['result_slip'=>$this->imageUpload(request()->file('result_slip'))])))
                {
                 request()->session()->flash('success','Application successfully updated');
@@ -410,7 +482,7 @@ class ApplicationsController extends Controller
         $app_id = request()->app_id;
         if(!$app_id)
         {
-            request()->session()->flash('error','Invalid Reqest Format');
+            request()->session()->flash('error','Invalid Request Format');
             return redirect()->back();
         }
         else
@@ -425,7 +497,7 @@ class ApplicationsController extends Controller
             {
                 $application = Applications::where('app_id','=',$app_id)->where('student_id','=',Auth::user()->id);
                 $status = $application->first()->status;
-                //dd($status);
+                dd($status);
                 if($status === "initiated" || $status === "partialy-complete" || $status === "complete")
                 {
                     request()->session()->flash('error','Action not allowed as the tranfer application status is '.' '.$status);
