@@ -20,6 +20,7 @@
         "laravelcollective/html": "^6.0",
         "maatwebsite/excel": "^3.1",
         "phpmailer/phpmailer": "^6.1",
+        "techlab/smartwizard": "^5.1",
         "yajra/laravel-datatables-oracle": "^9.8"
     },
     "require-dev": {
