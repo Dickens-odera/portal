@@ -21,6 +21,8 @@
                             <th>Preffered Program</th>
                             <th>Preffered School</th>
                             <th>KCSE Index</th>
+                            <th>Cut Off Points</th>
+
                             {{-- <th>KCSE Year</th> --}}
                             {{-- <th>KUCCPS Password</th>
                             <th>Mean Grade</th>
@@ -48,6 +50,8 @@
                                 <td>{{ $value->preffered_program}}</td>
                                 <td>{{ $value->preffered_school}}</td>
                                 <td>{{ $value->kcse_index}}</td>
+                                <td>{{ $value->cut_off_points }}</td>
+
                                 {{-- <td>{{ $value->kcse_year}}</td> --}}
                                 {{-- <td>{{ $value->kuccps_password}}</td>
                                 <td>{{ $value->mean_grade}}</td>
