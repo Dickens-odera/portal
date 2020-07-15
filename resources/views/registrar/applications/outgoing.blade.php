@@ -21,7 +21,7 @@
                             <th>Preffered Program</th>
                             <th>Preffered School</th>
                             <th>KCSE Index</th>
-                            <th>KCSE Year</th>
+                            {{-- <th>KCSE Year</th> --}}
                             {{-- <th>KUCCPS Password</th>
                             <th>Mean Grade</th>
                             <th>Aggregate Points</th>
@@ -48,7 +48,7 @@
                                 <td>{{ $value->preffered_program}}</td>
                                 <td>{{ $value->preffered_school}}</td>
                                 <td>{{ $value->kcse_index}}</td>
-                                <td>{{ $value->kcse_year}}</td>
+                                {{-- <td>{{ $value->kcse_year}}</td> --}}
                                 {{-- <td>{{ $value->kuccps_password}}</td>
                                 <td>{{ $value->mean_grade}}</td>
                                 <td>{{ $value->aggregate_points}}</td>
@@ -60,7 +60,7 @@
                                 <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d/m/Y') }}</td>
                                 <td>{{ $value->app_type }}</td>
                                  <td class="btn-group btn-group-sm" style="width:100%">
-                                    <a href="{{ route('registrar.applications.outgoing.single-view',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ route('registrar.applications.outgoing.single-view',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View</a>
                                     <a href="" class="btn btn-sm btn-primary"><i class="fa fa-send"></i> Approve</a>
                                     {{-- <form action="" method="post">
                                                {{ csrf_field() }}

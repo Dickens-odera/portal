@@ -58,7 +58,7 @@
                                 {{-- <td>{{ $value->status}}</td> --}}
                                 <td>{{ $value->app_type }}</td>
                                  <td class="btn-group btn-group-sm" style="width:100%">
-                                    <a href="{{ route('registrar.application.single.view',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ route('registrar.application.single.view',['app_id'=>$value->app_id]) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View</a>
                                     <a href="" class="btn btn-sm btn-primary"><i class="fa fa-send"></i> Approve</a>
                                     {{-- <form action="" method="post">
                                                {{ csrf_field() }}
