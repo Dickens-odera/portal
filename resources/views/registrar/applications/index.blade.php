@@ -53,7 +53,7 @@
                                 <td>{{ $value->aggregate_points}}</td>
                                 <td>{{ $value->cut_off_points }}</td>
                                 <td>{{ $value->weighted_clusters}}</td> --}}
-                                <td style="color:lightblue">{{ $value->dean }}</td>
+                                <td style="color:green">{{ $value->dean }}</td>
                                 <td style="color:red">{{ $value->comment }}</td>
                                 {{-- <td>{{ $value->status}}</td> --}}
                                 <td>{{ $value->app_type }}</td>
